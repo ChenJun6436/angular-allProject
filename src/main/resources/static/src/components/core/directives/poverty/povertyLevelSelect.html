@@ -1,0 +1,10 @@
+<span>
+    <select class="form-control p0 h25 w110 inline-block"
+            ng-if="edit === 'true' || edit"
+            ng-change="vm.changeLevel(defaultLevel)"
+            ng-disabled="isCommiting"
+            ng-options="level for level in vm.levels track by level" ng-model="defaultLevel">
+        <option value="" ng-show="defaultLevel==='未进行'">请选择等级</option>
+    </select>
+    <span ng-if="edit === 'false' || !edit">{{defaultLevel}}</span>
+</span>

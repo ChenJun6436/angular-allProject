@@ -1,0 +1,35 @@
+<div class="gaTitle">
+    助学金配置
+</div>
+<div class="gaTitle">
+    <span class="gatip2">配置助学金类型</span>
+</div>
+<div class="gaBody">
+    <div style="overflow: hidden">
+        <div ng-repeat="nian in vm.classData.gradeConfigs">
+            <p>{{nian.gradeName}}</p>
+            <p>分配年级名额*<input type="text" ng-model="nian.amount">
+                <a  ng-click="vm.saveClassCongif(vm.classData)"  href="javaScript:;">保存</a>
+            </p>
+            <p>分配专业班级名额</p>
+            <ul>
+                <li ng-repeat="zhuan in nian.majorConfigs">
+                    <input type="checkbox" >{{zhuan.majorName}}
+                    <input type="text" ng-model="zhuan.amount">
+                    <span ng-repeat="ban in zhuan.classesConfigs">
+                    <input type="checkbox">{{ban.classesName}}
+                    <input type="text" ng-model="ban.amount">
+                </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <p class="gatip">已配置名额165名，剩余名额15名</p>
+    <div>
+        <button type="button" ng-click="vm.saveClassCongif(vm.classData)" class="btn btn-primary">保存</button>
+        <button type="button" ng-click="vm.cancel()" class="btn btn-cancel">取消</button>
+    </div>
+
+</div>
+
+

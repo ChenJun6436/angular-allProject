@@ -1,0 +1,122 @@
+<div class="person-header">
+    <div ng-include="'build/tpls/header.html'"></div>
+</div>
+<div class="container mt40">
+    <div class="confirm-info pb0">
+        <p>基本信息：</p>
+        <table class="table table-hover table-bordered table-striped table-left-td">
+            <tbody>
+            <tr>
+                <td><span>学号：</span>{{vm.studentDetailInfo.studentInfo.studentId}}</td>
+                <td><span>姓名：</span>{{vm.studentDetailInfo.studentInfo.name}}</td>
+                <td><span>性别：</span>{{vm.studentDetailInfo.studentInfo.gender}}</td>
+                <td><span>身份证号：</span>{{vm.studentDetailInfo.studentInfo.idCard}}</td>
+            </tr>
+            <tr>
+                <td><span>年级：</span>{{vm.studentDetailInfo.studentInfo.gradeName}}</td>
+                <td><span>学院：</span>{{vm.studentDetailInfo.studentInfo.collegeName}}</td>
+                <td><span>专业：</span>{{vm.studentDetailInfo.studentInfo.majorName}}</td>
+                <td><span>班级：</span>{{vm.studentDetailInfo.studentInfo.className}}</td>
+            </tr>
+            <tr>
+                <td><span>民族：</span>{{vm.studentDetailInfo.studentInfo.nationName}}</td>
+                <td><span>政治面貌：</span>{{vm.studentDetailInfo.studentInfo.party}}</td>
+                <td><span>出生年月日：</span>{{vm.studentDetailInfo.studentInfo.birthday | date : 'yyyy-MM-dd'}}</td>
+                <td><span>宿舍号：</span>{{vm.studentDetailInfo.studentInfo.dorm}}</td>
+            </tr>
+            <tr>
+                <td><span>在校联系电话：</span>{{vm.studentDetailInfo.studentInfo.cellphone}}</td>
+                <td><span>家庭联系电话：</span>{{vm.studentDetailInfo.studentInfo.contactPhone}}</td>
+                <td><span>家庭所在地邮编：</span>{{vm.studentDetailInfo.studentInfo.postcode}}</td>
+                <td><span>近亲或邻居联系人：</span>{{vm.studentDetailInfo.studentInfo.contactName}}</td>
+            </tr>
+            <tr>
+                <td><span>近亲或邻居联系电话：</span>{{vm.studentDetailInfo.studentInfo.contactCellPhone}}</td>
+                <td><span>近亲或邻居地：</span>{{vm.studentDetailInfo.studentInfo.contactAddress}}</td>
+                <td><span>近亲或邻居地邮编：</span>{{vm.studentDetailInfo.studentInfo.contactPostcode}}</td>
+                <td><span>银行账户：</span>{{vm.studentDetailInfo.studentInfo.account}}</td>
+            </tr>
+            <tr>
+                <td><span>本人健康状况：</span>{{vm.studentDetailInfo.studentInfo.healthStatus}}</td>
+                <td><span>家庭人口数：</span>{{vm.studentDetailInfo.studentInfo.memberSize}}</td>
+                <td><span>家庭在读学生数：</span>{{vm.studentDetailInfo.studentInfo.studyingSize}}</td>
+                <td><span>家庭负债金额(元)：</span>{{vm.studentDetailInfo.studentInfo.familyLiabilities}}</td>
+            </tr>
+            <tr>
+                <td><span>手机品牌：</span>{{vm.studentDetailInfo.studentInfo.phoneBrand}}</td>
+                <td><span>手机价格(元)：</span>{{vm.studentDetailInfo.studentInfo.phonePrice}}</td>
+                <td><span>电脑品牌：</span>{{vm.studentDetailInfo.studentInfo.computerBrand}}</td>
+                <td><span>电脑价格(元)：</span>{{vm.studentDetailInfo.studentInfo.computerPrice}}</td>
+            </tr>
+            <tr>
+                <td><span>是否残疾：</span>{{vm.studentDetailInfo.studentInfo.isDisability}}</td>
+                <td><span>是否单亲：</span>{{vm.studentDetailInfo.studentInfo.isSole}}</td>
+                <td><span>是否烈士子女：</span>{{vm.studentDetailInfo.studentInfo.isMartyr}}</td>
+                <td><span>是否是低保家庭：</span>{{vm.studentDetailInfo.studentInfo.isLowField}}</td>
+            </tr>
+            <tr>
+                <td><span>是否办理生源地贷款：</span>{{vm.studentDetailInfo.studentInfo.isLoad}}</td>
+                <td><span>是否在当地政府建档立卡：</span>{{vm.studentDetailInfo.studentInfo.isFilingCard}}</td>
+                <td colspan="2"><span>近三年家庭是否遭受自然灾害等突发意外情况：</span>{{vm.studentDetailInfo.studentInfo.isAccident}}</td>
+            </tr>
+            <tr>
+                <td><span>家庭人均年收入(元)：</span>{{vm.studentDetailInfo.studentInfo.income}}</td>
+                <td><span>家庭可提供的每月生活费：</span>{{vm.studentDetailInfo.studentInfo.monthlyCost}}</td>
+                <td colspan="2"><span>家庭地址：</span>{{vm.studentDetailInfo.studentInfo.address}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="table table-hover table-bordered table-striped table-left-td">
+            <caption>资助情况</caption>
+            <thead>
+            <tr>
+                <th>资助名称</th>
+                <th>资助金额(元)</th>
+                <th>资助等级</th>
+                <th>资助时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="subsidy in vm.studentDetailInfo.subsidyList">
+                <td>{{subsidy.name}}</td>
+                <td>{{subsidy.amount}}</td>
+                <td>{{subsidy.level}}</td>
+                <td>{{subsidy.date | date : 'yyyy-MM-dd'}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="table table-hover table-bordered table-striped table-left-td">
+            <caption>家庭成员</caption>
+            <thead>
+            <tr>
+                <th>姓名</th>
+                <th>关系</th>
+                <th>年龄</th>
+                <th>月收入(元)</th>
+                <th>联系电话</th>
+                <th>工作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="family in vm.studentDetailInfo.familyMembers">
+                <td>{{family.name}}</td>
+                <td>{{family.relation}}</td>
+                <td>{{family.age}}</td>
+                <td>{{family.income}}</td>
+                <td>{{family.cellphone}}</td>
+                <td>{{family.work}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="family-desc-title">家庭情况说明：</p>
+        <p class="family-desc-content">{{vm.studentDetailInfo.description}}</p>
+    </div>
+
+    <div class="confirm-info pb0">
+        <p>提交的材料：</p>
+        <ul>
+            <li ng-repeat="upload in vm.studentDetailInfo.stuMaterialRequire">{{upload.materialName}}<a href="{{upload.url}}">下载</a>
+            </li>
+        </ul>
+    </div>
+</div>

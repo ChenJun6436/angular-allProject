@@ -1,0 +1,490 @@
+<div ng-show="vm.started === 1" class="pb20"
+     ng-class="{apply: vm.activeTabs === 'updateMaterial'|| vm.activeTabs === 'confirmSubmit'}">
+    <ul class="stu-base-info clearfix" ng-if="vm.status.status!=='000'">
+        <li ng-class="{active: vm.activeTabs === 'updateMaterial'|| vm.activeTabs === 'confirmSubmit'||vm.activeTabs === 'submitSuccess'}">
+            <a href="javascript:;" data-name="updateMaterial">step1：上传材料</a></li>
+        <li ng-class="{active: vm.activeTabs === 'confirmSubmit'||vm.activeTabs === 'submitSuccess'}"><a
+                href="javascript:;"
+                data-name="confirmSubmit">step2：提交确认</a>
+        </li>
+        <li class="last-child" ng-class="{active2: vm.activeTabs === 'submitSuccess'}">
+            <a href="javascript:;"
+               data-name="submitSuccess">step3：提交成功</a>
+        </li>
+    </ul>
+    <p class="pl20 lh40 h40" ng-if="vm.activeTabs === 'updateMaterial' || vm.activeTabs === 'confirmSubmit'">
+        <span>申请截止时间：{{vm.lastTime | date : 'yyyy-MM-dd'}}</span>
+        <span ng-if="vm.reApply" class="text-danger">您的申请信息被辅导员驳回，请重新修改后申请</span>
+    </p>
+    <div ng-if="vm.activeTabs === 'updateMaterial'">
+        <div class="upload-wrap">
+            <div class="row" ng-show="upload_classes == null">
+                <div class="text-center mb20 relative">
+                    <input type="button" value="上传贫困证明材料" class="file-upload-btn">
+                    <input type="file" id="file" class="upload-file" nv-file-select multiple uploader="uploader"/>
+                    <p class="mt30 text-muted">请上传大小不超过20MB的附件</p>
+                </div>
+                <div ng-repeat="item in uploader.queue" class="student-progress-bar">
+                    <div>{{ item.file.name }}</div>
+                    <div class="progress">
+                        <span class="progress-bar" role="progressbar"
+                              ng-style="{ 'width': item.progress + '%' }"></span>
+                    </div>
+                    <span class="progress-percent">{{item.progress}}%</span>
+                </div>
+            </div>
+            <table ng-if="vm.uploadsList.length>0" class="table table-hover table-bordered table-striped stu-base-form">
+                <thead>
+                <tr>
+                    <th>附件名</th>
+                    <th>上传时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="upload in vm.uploadsList">
+                    <td>{{upload.filename}}</td>
+                    <td>{{upload.uploadTime | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+                    <td><a href="javascript:;" title="删除" ng-click="removeUpload(upload.id)" class="text-danger">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="text-danger text-center mt20">家庭经济困难证明需加盖当地民政部门或者社会事务的公章</p>
+    </div>
+    <div ng-if="vm.activeTabs === 'confirmSubmit'">
+        <h3 class="confirm-info-title">提交材料确认 <a href="javascript:;" ng-click="reUpload()">返回编辑材料</a></h3>
+        <div class="confirm-info">
+            <p>请确认以下材料：</p>
+            <ul class="mt25">
+                <li ng-repeat="upload in vm.uploadsList">
+                    <a href="{{upload.url}}">{{upload.filename}}</a>
+                </li>
+            </ul>
+        </div>
+        <h3 class="confirm-info-title">基本信息确认 <a href="#/main/personInfo">重新编辑基本信息</a></h3>
+        <div class="confirm-info">
+            <p>请确认以下基本信息：</p>
+            <table class="table table-hover table-bordered table-striped table-left-td">
+                <tbody>
+                <tr>
+                    <td><span>学号：</span>{{vm.viewModifyList.studentInfo.studentId}}</td>
+                    <td><span>姓名：</span>{{vm.viewModifyList.studentInfo.name}}</td>
+                    <td><span>性别：</span>{{vm.viewModifyList.studentInfo.gender}}</td>
+                    <td><span>身份证号：</span>{{vm.viewModifyList.studentInfo.idCard}}</td>
+                </tr>
+                <tr>
+                    <td><span>年级：</span>{{vm.viewModifyList.studentInfo.gradeName}}</td>
+                    <td><span>学院：</span>{{vm.viewModifyList.studentInfo.collegeName}}</td>
+                    <td><span>专业：</span>{{vm.viewModifyList.studentInfo.majorName}}</td>
+                    <td><span>班级：</span>{{vm.viewModifyList.studentInfo.className}}</td>
+                </tr>
+                <tr>
+                    <td><span>民族：</span>{{vm.viewModifyList.studentInfo.nationName}}</td>
+                    <td><span>政治面貌：</span>{{vm.viewModifyList.studentInfo.party}}</td>
+                    <td><span>出生年月日：</span>{{vm.viewModifyList.studentInfo.birthday | date : 'yyyy-MM-dd'}}</td>
+                    <td><span>宿舍号：</span>{{vm.viewModifyList.studentInfo.dorm}}</td>
+                </tr>
+                <tr>
+                    <td><span>在校联系电话：</span>{{vm.viewModifyList.studentInfo.cellphone}}</td>
+                    <td><span>家庭联系电话：</span>{{vm.viewModifyList.studentInfo.contactPhone}}</td>
+                    <td><span>家庭所在地邮编：</span>{{vm.viewModifyList.studentInfo.postcode}}</td>
+                    <td><span>近亲或邻居联系人：</span>{{vm.viewModifyList.studentInfo.contactName}}</td>
+                </tr>
+                <tr>
+                    <td><span>近亲或邻居联系电话：</span>{{vm.viewModifyList.studentInfo.contactCellPhone}}</td>
+                    <td><span>近亲或邻居地：</span>{{vm.viewModifyList.studentInfo.contactAddress}}</td>
+                    <td><span>近亲或邻居地邮编：</span>{{vm.viewModifyList.studentInfo.contactPostcode}}</td>
+                    <td><span>银行账户：</span>{{vm.viewModifyList.studentInfo.account}}</td>
+                </tr>
+                <tr>
+                    <td><span>本人健康状况：</span>{{vm.viewModifyList.studentInfo.healthStatus}}</td>
+                    <td><span>家庭人口数：</span>{{vm.viewModifyList.studentInfo.memberSize}}</td>
+                    <td><span>家庭在读学生数：</span>{{vm.viewModifyList.studentInfo.studyingSize}}</td>
+                    <td><span>家庭负债金额(元)：</span>{{vm.viewModifyList.studentInfo.familyLiabilities}}</td>
+                </tr>
+                <tr>
+                    <td><span>手机品牌：</span>{{vm.viewModifyList.studentInfo.phoneBrand}}</td>
+                    <td><span>手机价格(元)：</span>{{vm.viewModifyList.studentInfo.phonePrice}}</td>
+                    <td><span>电脑品牌：</span>{{vm.viewModifyList.studentInfo.computerBrand}}</td>
+                    <td><span>电脑价格(元)：</span>{{vm.viewModifyList.studentInfo.computerPrice}}</td>
+                </tr>
+                <tr>
+                    <td><span>是否残疾：</span>{{vm.viewModifyList.studentInfo.isDisability}}</td>
+                    <td><span>是否单亲：</span>{{vm.viewModifyList.studentInfo.isSole}}</td>
+                    <td><span>是否烈士子女：</span>{{vm.viewModifyList.studentInfo.isMartyr}}</td>
+                    <td><span>是否是低保家庭：</span>{{vm.viewModifyList.studentInfo.isLowField}}</td>
+                </tr>
+                <tr>
+                    <td><span>是否办理生源地贷款：</span>{{vm.viewModifyList.studentInfo.isLoad}}</td>
+                    <td><span>是否在当地政府建档立卡：</span>{{vm.viewModifyList.studentInfo.isFilingCard}}</td>
+                    <td colspan="2"><span>近三年家庭是否遭受自然灾害等突发意外情况：</span>{{vm.viewModifyList.studentInfo.isAccident}}</td>
+                </tr>
+                <tr>
+                    <td><span>家庭人均年收入(元)：</span>{{vm.viewModifyList.studentInfo.income}}</td>
+                    <td><span>家庭提供的每月生活费(元)：</span>{{vm.viewModifyList.studentInfo.monthlyCost}}</td>
+                    <td colspan="2"><span>家庭地址：</span>{{vm.viewModifyList.studentInfo.address}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table table-hover table-bordered table-striped table-left-td">
+                <caption>资助情况</caption>
+                <thead>
+                <tr>
+                    <th>资助名称</th>
+                    <th>资助金额(元)</th>
+                    <th>资助等级</th>
+                    <th>资助时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="subsidy in vm.viewModifyList.subsidyList">
+                    <td>{{subsidy.name}}</td>
+                    <td>{{subsidy.amount}}</td>
+                    <td>{{subsidy.level}}</td>
+                    <td>{{subsidy.date}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table table-hover table-bordered table-striped table-left-td">
+                <caption>家庭成员</caption>
+                <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>关系</th>
+                    <th>年龄</th>
+                    <th>月收入(元)</th>
+                    <th>联系电话</th>
+                    <th>工作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="family in vm.viewModifyList.familyMembers">
+                    <td>{{family.name}}</td>
+                    <td>{{family.relation}}</td>
+                    <td>{{family.age}}</td>
+                    <td>{{family.income}}</td>
+                    <td>{{family.cellphone}}</td>
+                    <td>{{family.work}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <p class="family-desc-title">家庭情况说明：</p>
+            <p class="family-desc-content">{{vm.viewModifyList.description}}</p>
+        </div>
+    </div>
+    <div ng-if="vm.activeTabs === 'submitSuccess'" class="submit-success">
+        <div ng-if="vm.status.status==='000'" class="text-center">
+            <div class="fs16">{{processName}}<span ng-if="lastTime">,截止时间：</span>{{lastTime}}，您在本次助学金申请时间内并未提交相应材料，</div>
+            <div class="fs16">您可以查看学生名单公示或在消息提醒中 <a href="#/main/noticeList">查看更多通知公告</a>。</div>
+        </div>
+        <div ng-if="vm.status.status==='100'" class="text-center">
+            <div class="fs16 h50">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-wancheng"></use>
+                </svg>
+                提交成功
+            </div>
+            <div class="fs16">您已提交相关材料，正在等待辅导员确认您的申请信息</div>
+            <div class="text-muted">在辅导员审核状态下，您的个人信息和上传的材料将不允许修改，若您需要修改信息则自行联系辅导员</div>
+        </div>
+        <div class="text-center"
+             ng-if="vm.status.status===1||vm.status.status===2||vm.status.status===3||vm.status.status===4">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-wancheng"></use>
+            </svg>
+            <span>您已提交相关材料，正在进行民主评议</span>
+        </div>
+        <div class="text-center" ng-if="vm.status.status===5||vm.status.status===6">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-wancheng"></use>
+            </svg>
+            <span>您已提交相关材料，正在辅导员审核</span>
+        </div>
+        <div class="text-center"
+             ng-if="(vm.bigStatus===4&&vm.status.status===9)||vm.status.status===7||vm.status.status===8||vm.status.status===101">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-wancheng"></use>
+            </svg>
+            <span>您已提交相关材料，正在学院审核</span>
+        </div>
+        <div class="text-center"
+             ng-if="(vm.bigStatus===5&&(vm.status.status===9||vm.status.status===11))||vm.status.status===102||vm.status.status===103">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-wancheng"></use>
+            </svg>
+            <span>您已提交相关材料，正在进行学院公示，请到“学院公示”查看</span>
+        </div>
+        <div class="text-center"
+             ng-if="(vm.bigStatus===6&&(vm.status.status===11||vm.status.status===12))||vm.status.status===104||vm.status.status===107||vm.status.status===108||vm.status.status===109||vm.status.status===110">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-wancheng"></use>
+            </svg>
+            <span>您已提交相关材料，正在进行学校审核</span>
+        </div>
+        <div class="text-center"
+             ng-if="vm.bigStatus===7&&vm.status.status===12||vm.status.status===105||vm.status.status===106||vm.status.status===111||vm.status.status===112||vm.status.status===113||vm.status.status===114||vm.status.status===115||vm.status.status===116">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-wancheng"></use>
+            </svg>
+            <span>您已提交相关材料，正在进行学校公示，请到“学校公示”查看</span>
+        </div>
+        <div class="text-center" ng-if="vm.bigStatus===0&&vm.level!=''&&vm.level!=null">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-wancheng"></use>
+            </svg>
+            <span>您已完成此次认定，认定结果为</span>
+            <p>{{vm.level}}</p>
+        </div>
+        <div class="text-center mt20" ng-if="vm.status.status!=='000'">
+            <input type="button" value="查看已提交材料" class="btn btn-primary" ng-click="viewInfo()">
+        </div>
+    </div>
+    <div class="footer-bar" ng-if="vm.activeTabs === 'updateMaterial' || vm.activeTabs === 'confirmSubmit'">
+        <ul class="clearfix">
+            <li ng-class="{active: vm.activeTabs === 'updateMaterial'|| vm.activeTabs === 'confirmSubmit'||vm.activeTabs === 'submitSuccess'}"></li>
+            <li ng-class="{active: vm.activeTabs === 'confirmSubmit'||vm.activeTabs === 'submitSuccess'}"></li>
+            <li class="last-child" ng-class="{active2: vm.activeTabs === 'submitSuccess'}"></li>
+        </ul>
+        <div class="text-center mt20">
+            <button ng-if="vm.activeTabs === 'updateMaterial' && vm.uploadsList"
+                    ng-click="goNext()" class="btn btn-warning h40">提交材料 <svg class="icon go-next" aria-hidden="true">
+                <use xlink:href="#icon-1-copy-copy"></use>
+            </svg></button>
+            <button ng-if="vm.activeTabs === 'confirmSubmit'" ng-click="confirmSubmit()"
+                    class="btn btn-warning h40">提交至辅导员审核 <svg class="icon go-next" aria-hidden="true">
+                <use xlink:href="#icon-1-copy-copy"></use>
+            </svg></button>
+        </div>
+    </div>
+</div>
+<div ng-show="vm.started===2" class="pt20">
+    <h2 class="text-center text-muted">流程未开始</h2>
+</div>
+<div ng-show="vm.started===3" class="p20">
+    <h3 class="text-center mt40">承诺书</h3>
+    <p class=" w510 center pt20">
+        本人郑重承诺：
+        在系统里所提供的基本信息、证明材料，真实准确，若因上述信息、材料不真实造成的一切后果由本人承担。虚假信息、材料一经发现，将会被取消评定资格。
+        您所填写的所有信息我们将严格保密，只用作于学校困难情况认定。
+    </p>
+    <div class="text-center mt40">
+        <input type="button" class="btn btn-primary w110" value="同意" ng-click="setAgreeToLocalStorage()">
+    </div>
+</div>
+
+<!-- addFamilyMember -->
+<div class="modal fade" id="addFamilyMember" tabindex="-1" role="dialog" aria-labelledby="myModalLabelfamily">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabelfamily">添加家庭成员</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" name="vm.familyForm" novalidate>
+                    <div class="form-group">
+                        <label for="familyName" class="col-sm-3 control-label">姓名</label>
+                        <div class="col-sm-8" ng-class="{'has-error':vm.familyForm.name.$invalid&&vm.familySubmit}">
+                            <input type="text" class="form-control" ng-model="vm.addFamilyMember.name" name="name"
+                                   maxlength="10"
+                                   id="familyName"
+                                   placeholder="请输入家庭成员姓名" required>
+                            <span class="text-error" ng-if="vm.familyForm.name.$invalid&&vm.familySubmit">必填*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="relation" class="col-sm-3 control-label">关系</label>
+                        <div class="col-sm-8"
+                             ng-class="{'has-error':vm.familyForm.relation.$invalid&&vm.familySubmit}">
+                            <input type="text" class="form-control" ng-model="vm.addFamilyMember.relation"
+                                   maxlength="10"
+                                   name="relation"
+                                   placeholder="如：父子" required id="relation">
+                                <span class="text-error"
+                                      ng-if="vm.familyForm.relation.$invalid&&vm.familySubmit">必填*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthdays" class="col-sm-3 control-label">生日</label>
+                        <div class="col-sm-8"
+                             ng-class="{'has-error':vm.familyForm.birthday.$invalid&&vm.familySubmit}">
+                            <input type="text" placeholder="请选择日期" id="birthdays" class="form-control laydate-icon"
+                                   name="birthday" ng-click="birthdaysLaydate()"
+                                   ng-model="vm.addFamilyMember.birthday" readonly required>
+                                <span class="text-error"
+                                      ng-if="vm.familyForm.birthday.$invalid&&vm.familySubmit">必填*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="income" class="col-sm-3 control-label">月收入</label>
+                        <div class="col-sm-8"
+                             ng-class="{'has-error':vm.familyForm.income.$invalid&&vm.familySubmit}">
+                            <input type="text" class="form-control" ng-model="vm.addFamilyMember.income"
+                                   name="income"
+                                   ng-pattern="/^[0-9]+$/" maxlength="10"
+                                   placeholder="如：1000" required id="income"><span class="yuans">元</span>
+                            <span class="text-error"
+                                  ng-if="vm.familyForm.income.$error.required && vm.familySubmit">必填*</span>
+                            <span class="text-error"
+                                  ng-if="vm.familyForm.income.$error.pattern && vm.familySubmit">只能为数字*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cellphone" class="col-sm-3 control-label">联系电话</label>
+                        <div class="col-sm-8"
+                             ng-class="{'has-error':vm.familyForm.cellphone.$invalid&&vm.familySubmit}">
+                            <input type="text" class="form-control" ng-model="vm.addFamilyMember.cellphone"
+                                   name="cellphone" ng-pattern="/^[0-9]+$/" maxlength="20"
+                                   placeholder="请填写联系电话" required id="cellphone">
+                            <span class="text-error"
+                                  ng-if="vm.familyForm.cellphone.$error.required &&vm.familySubmit">必填*</span>
+                            <span class="text-error"
+                                  ng-if="vm.familyForm.cellphone.$error.pattern && vm.familySubmit">只能为数字*</span>
+                        </div>
+                    </div>
+                    <div class="form-group hidden">
+                        <label for="address" class="col-sm-3 control-label">地址</label>
+                        <div class="col-sm-8"
+                             ng-class="{'has-error':vm.familyForm.address.$invalid&&vm.familySubmit}">
+                            <input type="text" class="form-control" ng-model="vm.addFamilyMember.address"
+                                   name="address"
+                                   id="address" maxlength="20"
+                                   placeholder="请输入地址">
+                                <span class="text-error"
+                                      ng-if="vm.familyForm.address.$invalid&&vm.familySubmit">必填*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="work" class="col-sm-3 control-label">工作</label>
+                        <div class="col-sm-8" ng-class="{'has-error':vm.familyForm.work.$invalid&&vm.familySubmit}">
+                            <input type="text" class="form-control" ng-model="vm.addFamilyMember.work" name="work"
+                                   id="work" maxlength="10"
+                                   placeholder="如：XX公司业务员" required>
+                            <span class="text-error" ng-if="vm.familyForm.work.$invalid&&vm.familySubmit">必填*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="heathStatus" class="col-sm-3 control-label">健康状况</label>
+                        <div class="col-sm-8"
+                             ng-class="{'has-error':vm.familyForm.heathStatus.$invalid&&vm.familySubmit}">
+                            <input type="text" class="form-control" ng-model="vm.addFamilyMember.heathStatus"
+                                   name="heathStatus" id="heathStatus" maxlength="10"
+                                   placeholder="如：健康" required>
+                                <span class="text-error"
+                                      ng-if="vm.familyForm.heathStatus.$invalid&&vm.familySubmit">必填*</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="addFamily()" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- addSubsidy -->
+<div class="modal fade" id="addSubsidy" tabindex="-1" role="dialog" aria-labelledby="myModalSubsidy">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalSubsidy">添加资助信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" name="vm.subsidyForm" novalidate>
+                    <div class="form-group">
+                        <label for="subsidyName" class="col-sm-3 control-label">认定名称</label>
+                        <div class="col-sm-8"
+                             ng-class="{ 'has-error' : vm.subsidyForm.name.$invalid &&vm.subsidySubmit }">
+                            <input type="text" class="form-control" ng-model="vm.addSubsidy.name" name="name"
+                                   id="subsidyName" maxlength="20"
+                                   placeholder="如：国家助学金" required>
+                                <span class="text-error"
+                                      ng-if="vm.subsidyForm.name.$invalid&&vm.subsidySubmit">必填*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount" class="col-sm-3 control-label">发放金额</label>
+                        <div class="col-sm-8 relative"
+                             ng-class="{ 'has-error' : vm.subsidyForm.amount.$invalid&&vm.subsidySubmit }">
+                            <input type="text" class="form-control" ng-model="vm.addSubsidy.amount" name="amount"
+                                   ng-pattern="/^[0-9]+$/" maxlength="10"
+                                   placeholder="如：3000" required id="amount"><span class="yuans">元</span>
+                            <span class="text-error"
+                                  ng-if="vm.subsidyForm.amount.$error.required&&vm.subsidySubmit">必填*</span>
+                            <span class="text-error"
+                                  ng-if="vm.subsidyForm.amount.$error.pattern&&vm.subsidySubmit">只能为数字*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="level" class="col-sm-3 control-label">认定等级</label>
+                        <div class="col-sm-8"
+                             ng-class="{ 'has-error' : vm.subsidyForm.level.$invalid&&vm.subsidySubmit  }">
+                            <input type="text" class="form-control" ng-model="vm.addSubsidy.level" name="level"
+                                   id="level" maxlength="10"
+                                   placeholder="如：特别困难" required>
+                                <span class="text-error"
+                                      ng-if="vm.subsidyForm.level.$invalid&&vm.subsidySubmit ">必填*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="date" class="col-sm-3 control-label">认定时间</label>
+                        <div class="col-sm-8"
+                             ng-class="{ 'has-error' : vm.subsidyForm.date.$invalid&&vm.subsidySubmit }">
+                            <input type="text" placeholder="请选择时间" id="date" class="form-control laydate-icon"
+                                   name="date" ng-click="dateLaydate()"
+                                   ng-model="vm.addSubsidy.date" readonly required>
+                                <span class="text-error"
+                                      ng-if="vm.subsidyForm.date.$invalid&&vm.subsidySubmit">必填*</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="addSubsidy()" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 是否上传对话框 -->
+<div class="modal fade" id="ensureNext" tabindex="-1" role="dialog" aria-labelledby="myModalensureNext">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalensureNext">确认提交到下一步？</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-danger">警告：您没有上传任何材料，是否继续提交到下一步？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="insureUpload()" class="btn btn-primary w110">是</button>
+                <button type="button" ng-click="cancelUpload()" class="btn w110">否</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 是否提交到辅导员审核 -->
+<div class="modal fade" id="ensureSubmit" tabindex="-1" role="dialog" aria-labelledby="myModalensureSubmit">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalensureSubmit">是否确认提交到辅导员审核？</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-danger">警告：所有材料一经提交将不允许自行修改，若要修改请联系辅导员。<br>是否确认信息正确，并提交至辅导员审核？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="insureSubmit()" class="btn btn-primary w110">是</button>
+                <button type="button" ng-click="cancelSubmit()" class="btn w110">否</button>
+            </div>
+        </div>
+    </div>
+</div>

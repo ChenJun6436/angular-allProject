@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xdbigdata.subsidize_zjut.mapper.PovertyCollegeMapper">
+
+
+    <select id="listDissent" resultType="dissent">
+        select * from t_dissent WHERE defendant IN
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        <if test="isStatus != null">
+            and status = 0
+        </if>
+        <choose>
+            <when test="type==2">
+                AND `type` is null
+            </when>
+            <when test="type==1">
+                AND `type` == 1
+            </when>
+        </choose>
+    </select>
+
+    <select id="listDissentSchool" resultType="dissent">
+        select * from t_dissent
+        <where>
+            <if test="isStatus != null">
+                status = 0
+            </if>
+            AND `type` = 1
+        </where>
+    </select>
+
+    <update id="dealOpenDissent" parameterType="dissent">
+        update t_dissent set status = 1,deal_opinion = #{dealOpinion} where id = #{id}
+    </update>
+
+    <insert id="saveCollegeOpen" parameterType="povertyApplyDto">
+        <foreach collection="list" index="index" item="item" separator=";">
+            REPLACE INTO t_public_poverty
+            <set>
+                student_id = #{item.studentId},
+                `name` = #{item.name},
+                class_name = #{item.className},
+                college_name = #{item.collegeName},
+                grade_name = #{item.gradeName},
+                major_name = #{item.majorName},
+                result = #{item.collegeResult}
+            </set>
+        </foreach>
+    </insert>
+
+    <insert id="saveSchoolOpen" parameterType="povertyApplyDto">
+        <foreach collection="list" index="index" item="item" separator=";">
+            REPLACE INTO t_public_poverty
+            <set>
+                student_id = #{item.studentId},
+                `name` = #{item.name},
+                class_name = #{item.className},
+                college_name = #{item.collegeName},
+                grade_name = #{item.gradeName},
+                major_name = #{item.majorName},
+                result = #{item.collegeResult},
+                is_school = 1
+            </set>
+        </foreach>
+    </insert>
+
+    <select id="findOpenTimeByCollegeId" resultType="povertyOpenTime">
+        SELECT
+        id,
+        college_id AS collegeId,
+        college_user_sn as collegeUserSn,
+        open_end_time AS openEndTime,
+        open_start_time AS openStartTime,
+        IFNULL(started,0) AS started
+        FROM t_poverty_open_time
+        WHERE college_id = #{collegeId}
+    </select>
+
+    <select id="findOpenTimeByCollegeUser" resultType="povertyOpenTime">
+        SELECT
+        id,
+        college_id AS collegeId,
+        college_user_sn as collegeUserSn,
+        open_end_time AS openEndTime,
+        open_start_time AS openStartTime,
+        IFNULL(started,0) AS started
+        FROM t_poverty_open_time
+        WHERE college_user_sn = #{collegeUserSn}
+    </select>
+
+    <select id="findOpenTimeAll" resultType="povertyOpenTime">
+      SELECT
+        id,
+        college_id AS collegeId,
+        college_user_sn as collegeUserSn,
+        open_end_time AS openEndTime,
+        open_start_time AS openStartTime,
+        IFNULL(started,0) AS started
+        FROM t_poverty_open_time
+    </select>
+
+    <insert id="saveOpenTime" parameterType="povertyOpenTime">
+        INSERT INTO t_poverty_open_time(college_id,college_user_sn,open_end_time,open_start_time)
+        VALUES (#{collegeId},#{collegeUserSn},#{openEndTime},#{openStartTime})
+    </insert>
+
+    <update id="updateOpenTime" parameterType="povertyOpenTime">
+        UPDATE t_poverty_open_time SET open_end_time=#{openEndTime},open_start_time=#{openStartTime}
+        WHERE college_id=#{collegeId}
+    </update>
+
+    <update id="openTimeStart">
+        UPDATE t_poverty_open_time SET started=#{status} WHERE college_id=#{collegeId}
+    </update>
+
+    <update id="updateOpenTimeByCollegeUser">
+        UPDATE t_poverty_open_time SET open_end_time=#{openEndTime},open_start_time=#{openStartTime}
+        WHERE college_user_sn=#{collegeUserSn}
+    </update>
+</mapper>

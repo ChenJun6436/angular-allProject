@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xdbigdata.subsidize_zjut.mapper.PovertyCommonMapper">
+
+    <!--<select id="listDynamicManagement" resultType="dynamicManagementDto">-->
+        <!--select-->
+        <!--sfo.name,-->
+        <!--sfo.student_id as studentId,-->
+        <!--prt.poverty_index as 'index',-->
+        <!--sfo.current_status as currentLevel,-->
+        <!--sfo.last_status as lastLevel,-->
+        <!--CASE-->
+        <!--WHEN prt.poverty_index &gt;= 0 and prt.poverty_index &lt; 0.25 THEN '不困难'-->
+        <!--WHEN prt.poverty_index &gt;= 0.25 and prt.poverty_index &lt; 0.5 THEN '一般困难'-->
+        <!--WHEN prt.poverty_index &gt;= 0.5 and prt.poverty_index &lt; 0.75 THEN '困难'-->
+        <!--WHEN prt.poverty_index &gt;= 0.75 and prt.poverty_index &lt; 1 THEN '特别困难'-->
+        <!--END AS recommendedLevel-->
+        <!--from poverty_alert prt-->
+        <!--RIGHT JOIN student_info sfo ON sfo.student_id = prt.student_id-->
+        <!--WHERE sfo.student_id IN-->
+        <!--<foreach collection="list" close=")" index="index" item="item" open="(" separator=",">-->
+            <!--#{item}-->
+        <!--</foreach>-->
+    <!--</select>-->
+
+    <!--<select id="listStudentIds" resultType="betweenTableDto">-->
+        <!--select id,studentId,povertyInstanceId as procInstId from student_and_povertyInstance where povertyInstanceId in-->
+        <!--<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">-->
+            <!--#{item}-->
+        <!--</foreach>-->
+    <!--</select>-->
+
+    <select id="getMaxStatus" resultType="int">
+        select
+        IFNULL(CASE
+        WHEN CURRENT_DATE BETWEEN school_start and school_end THEN 6
+        WHEN CURRENT_DATE BETWEEN college_open_start and college_open_end THEN 5
+        WHEN CURRENT_DATE BETWEEN college_start and college_end THEN 4
+        WHEN CURRENT_DATE BETWEEN advisor_start and advisor_end THEN 3
+        WHEN CURRENT_DATE BETWEEN class_start and class_end THEN 2
+        WHEN CURRENT_DATE BETWEEN apply_start and apply_end THEN 1
+        ELSE 0 END,0) as tmpStatus
+        from t_poverty_process
+    </select>
+
+    <select id="getStudentMaxStatus" resultType="int">
+        select IFNULL(MAX(status),0) from t_student_info WHERE student_id IN
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="listNotice" resultMap="noticeResultMap">
+        select n.id,n.content,n.notice_time,n.title,p.id as aid,p.name,p.url from t_notice n LEFT JOIN t_poverty_attachment p on n.id = p.notice_id
+        <if test="noticeId != null">
+            WHERE n.id = #{noticeId}
+        </if>
+    </select>
+    <resultMap id="noticeResultMap" type="notice">
+        <id column="id" property="id"/>
+        <result column="content" property="content"/>
+        <result column="notice_time" property="noticeTime"/>
+        <result column="title" property="title"/>
+        <collection property="povertyAttachments" ofType="povertyAttachment">
+            <id column="aid" property="id"/>
+            <result column="name" property="name"/>
+            <result column="url" property="url"/>
+        </collection>
+    </resultMap>
+
+    <select id="getCountByStatus" resultType="int">
+        select COUNT(1) from t_student_info WHERE status in
+        <foreach collection="status" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        AND student_id IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="lastYearApply" resultType="historyResult">
+        SELECT `name`,
+        student_id as studentId,
+        college_name as collegeName,
+        grade_name as gradeName,
+        major_name as majorName,
+        `year`,
+        poverty_level as povertyLevel
+        FROM t_history_result
+        WHERE student_id IN
+        <foreach collection="ids" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

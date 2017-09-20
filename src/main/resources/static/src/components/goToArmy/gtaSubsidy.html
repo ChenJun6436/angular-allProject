@@ -1,0 +1,156 @@
+<div class="h50 lh50 pl20">
+    <search-btn show="vm.showFilter"></search-btn>
+    <input type="button" class="btn btn-primary pull-right mr10 mt10" value="新增" ng-click="addSubModalShow()">
+    <input type="button" class="btn btn-danger pull-right mr10 mt10" ng-if="checkboxes.choosedStudent.length>0" ng-disabled="vm.isDealingAll" value="批量删除" ng-click="dealAll()">
+    <div class="upload-container" style="float: left">
+        <input type="button" value="批量导入" class="btn btn-primary">
+        <input type="file" id="file" nv-file-select multiple uploader="uploader"/>
+    </div>
+</div>
+<div ng-switch="vm.tableFlag" class="p20 pt0">
+    <div class="text-center" ng-switch-when="0">加载中……</div>
+    <script type="text/ng-template" id="headerCheckbox.html">
+        <label for="select-all">
+            <input type="checkbox" id="select-all" style="vertical-align: -2px;" ng-disabled="vm.isDealOne || vm.isDealingAll" ng-model="checkboxes.checked" class="select-all"
+                   value="">全选
+        </label>
+    </script>
+    <div ng-switch-when="1">
+
+        <table ng-table="tableParams" class="table table-bordered table-striped table-hover "
+               show-filter="vm.showFilter">
+            <tr ng-repeat="student in $data" >
+                <td header="'headerCheckbox.html'" style="width:60px">
+                    <input type="checkbox" ng-model="checkboxes.items[student.id]" ng-disabled="vm.isDealOne || vm.isDealingAll">
+                </td>
+                <td title="'姓名'" filter="{ studentName: 'text'}" sortable="'studentName'">
+                    {{student.studentName }}
+                </td>
+                <td title="'学号'" filter="{ studentSn: 'text'}" sortable="'studentSn'">
+                    {{student.studentSn}}
+                </td>
+                <td title="'专业'" filter="{ specialty: 'text'}" sortable="'specialty'">
+                    {{student.specialty}}
+                </td>
+                <td title="'班级'" filter="{ classAndGrade: 'text'}" sortable="'classAndGrade'">
+                    {{student.classAndGrade}}
+                </td>
+                <td title="'补助金额'" filter="{ amount: 'text'}" sortable="'amount'">
+                    {{student.amount}}
+                </td>
+                <td title="'补助原因'" filter="{ reason: 'text'}" sortable="'reason'">
+                    {{student.reason}}
+                </td>
+                <td title="'操作时间'" filter="{ handleTime: 'text'}" sortable="'handleTime'">
+                    {{student.handleTime}}
+                </td>
+                <td title="'操作'">
+                    <a  href="javascript:;" ng-click="editSubModalShow(student)">编辑</a>
+                    <a  href="javascript:;" ng-click="deleteStu(student.id)" class="ml10 text-danger">删除</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div ng-switch-when="2" class="text-center">暂无记录</div>
+</div>
+
+<!-- 新增 -->
+<div class="modal fade add-grants-modal" id="addSub" tabindex="-1" role="dialog"
+     aria-labelledby="addSubModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addSubModal">{{vm.temporarySub.title}}</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" name="vm.subForm" novalidate>
+
+                    <div class="form-group">
+                        <label for="sn" class="col-sm-3 control-label">学号：</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="sn" placeholder="学号" required
+                                   ng-model="vm.temporarySub.studentSn"
+                                   name="sn"
+                                   ng-class="{'border-error':vm.subForm.sn.$invalid&&vm.addSubSubmit}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="money" class="col-sm-3 control-label">金额：</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="money" placeholder="金额" required
+                                   ng-model="vm.temporarySub.amount"
+                                   name="money"
+                                   ng-class="{'border-error':vm.subForm.money.$invalid&&vm.addSubSubmit}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="reason" class="col-sm-3 control-label">补助原因：</label>
+                        <div class="col-sm-9">
+                                <textarea class="form-control" id="reason" placeholder="补助原因" cols="30"
+                                          ng-model="vm.temporarySub.reason"
+                                          rows="5"
+                                          name="reason"
+                                          ng-class="{'border-error':vm.subForm.reason.$invalid&&vm.addSubSubmit}"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer tc">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default">取消
+                </button>
+                <button type="button" ng-click="addSub()" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade add-grants-modal" id="editSub" tabindex="-1" role="dialog"
+     aria-labelledby="editSubModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="editSubModal">编辑临时困难补助</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" name="vm.editSubForm" novalidate>
+
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">学号：</label>
+                        <div class="col-sm-9">
+                            <span>{{vm.temporaryEditSub.studentSn}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">金额：</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="金额" required
+                                   ng-model="vm.temporaryEditSub.amount"
+                                   name="money"
+                                   ng-class="{'border-error':vm.editSubForm.money.$invalid&&vm.editSubSubmit}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">补助原因：</label>
+                        <div class="col-sm-9">
+                                <textarea class="form-control" placeholder="补助原因" cols="30"
+                                          ng-model="vm.temporaryEditSub.reason"
+                                          rows="5"
+                                          name="reason"
+                                          ng-class="{'border-error':vm.editSubForm.reason.$invalid&&vm.editSubSubmit}"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer tc">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default">取消
+                </button>
+                <button type="button" ng-disabled="vm.editSubSubmit" ng-click="editSub()" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

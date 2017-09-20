@@ -1,0 +1,59 @@
+<p class="gaTitle">
+    助学金申请
+</p>
+<div class="gaBody">
+    <from name="myForm">
+        <p >申请截止时间：————</p>
+        <div class="gaFstep">
+            <p class="smallTitle">第一步：填写银行卡信息<span class="redTip">*</span></p>
+            <div class="gaCardInput">
+                <input ng-model="vm.applyInfos.bankcard" type="text" placeholder="请填写银行卡号" id="mybankCar" required>
+                <span style="color:red" ng-show="myForm.bankcard.$dirty && myForm.bankcard.$invalid">
+                <span ng-show="myForm.bankcard.$error.required">银行卡信息不能为空。</span>
+            </div>
+            <div class="gaOneList">
+                <input type="radio" ng-value='daiLing'  ng-click="changeRadio()">是否需要代领{{daiLing}}
+            </div>
+            <div ng-if="daiLing">
+                <div class="gaOneList4" >
+                    <span class="gaSomeName">请填写代领人学号：</span>
+                    <div class="gaCardInput">
+                        <input type="text" ng-model="vm.applyInfos.agentSn" required>
+                        <span style="color:red" ng-show="myForm.agentSn.$dirty && myForm.agentSn.$invalid">
+                        <span ng-show="myForm.agentSn.$error.required">带领人学号不能为空。</span>
+                    </div>
+                    <span class="gaCardName">我是谁？</span>
+                </div>
+                <span class="gaSomeName">请填写代领人银行卡号：</span>
+                <div class="gaCardInput">
+                    <input type="text" ng-model="vm.applyInfos.agentBankcard" id="otherBankCar">
+                    <span style="color:red" ng-show="myForm.agentSn.$dirty && myForm.agentSn.$invalid">
+                    <span ng-show="myForm.agentSn.$error.required">银行卡信息不能为空。</span>
+                </div>
+            </div>
+        </div>
+        <div class="gaFstep ">
+            <p class="smallTitle">第二步：填写申请理由<span class="redTip">*</span></p>
+            <textarea ng-model="vm.applyInfos.applyReason" class="gaAsarea" placeholder="申请理由不少于100字" rows="3" cols="100"></textarea>
+            <span style="color:red" ng-show="myForm.agentSn.$dirty && myForm.agentSn.$invalid">
+            <span ng-show="myForm.agentSn.$error.required">银行卡信息不能为空。</span>
+            <p class="haveRela"><span class="gatip inGaAsarea">100</span></p>
+        </div>
+        <div class="gaFstep">
+            <p class="smallTitle3">第三步：上传附件</p>
+            <span class="gatip">若有相关资料，请上传</span>
+
+            <div style="height: 50px; overflow: hidden">
+                <a style="position: absolute;left:60px;display: inline-block" class="gaUpFileBtn" href="javaScript:" ng-click="vm.upFile()">上传附件</a>
+                <p style="opacity: 0;z-index: 5;"><input style="width: 160px;cursor: pointer" type="file"  nv-file-select  uploader ="uploader" ng-click="vm.che"/></p>
+            </div>
+            <div class="gaOneList" ng-repeat="file in vm.comFileList">
+                <a href="{{file.url}}">{{file.fileName}}</a> <a href="javaScript:;" class="gaDelEle" ng-click="vm.delFile(file.id)">删除</a>
+            </div>
+        </div>
+        <div class="gaFoot">
+            <a class="gaUpApplyBtn" href="javaScript:;" ng-click="vm.applyGrants()">提交申请</a>
+            <span class="gatip">申请提交后，不可再自行修改信息</span>
+        </div>
+    </from>
+</div>

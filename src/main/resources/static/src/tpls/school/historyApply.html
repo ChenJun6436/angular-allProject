@@ -1,0 +1,48 @@
+<div class="h50 lh50 pl20">
+    <search-btn show="vm.showFilter"></search-btn>
+    <input type="button" class="btn btn-primary pull-right mr10 mt10" value="下载名单" ng-click="download()">
+</div>
+<div ng-switch="vm.tableFlag" class="p20 pt0">
+    <div class="text-center" ng-switch-when="0">加载中……</div>
+    <div ng-switch-when="1">
+
+        <table ng-table="tableParams" class="table table-bordered table-striped table-hover " show-filter="vm.showFilter">
+            <tr ng-repeat="history in $data">
+                <td title="'姓名'" filter="{ name: 'text'}" sortable="'name'">
+                    {{history.name}}
+                </td>
+                <td title="'学号'" filter="{ studentId: 'text'}" sortable="'studentId'">
+                    {{history.studentId}}
+                </td>
+                <td title="'年级'" filter="{ gradeName: 'text'}" sortable="'gradeName'">
+                    {{history.gradeName}}
+                </td>
+                <td title="'学院'" filter="{ collegeName: 'text'}" sortable="'collegeName'">
+                    {{history.collegeName}}
+                </td>
+                <td title="'专业'" filter="{ majorName: 'text'}" sortable="'majorName'">
+                    {{history.majorName}}
+                </td>
+                <td title="'班级'" filter="{ className: 'text'}" sortable="'className'">
+                    {{history.className}}
+                </td>
+                <td title="'民主评议结果'" filter="{ discussResult: 'text'}" sortable="'discussResult'">
+                    {{history.discussResult}}
+                </td>
+                <td title="'辅导员审核结果'" filter="{ advisorResult: 'text'}" sortable="'advisorResult'">
+                    {{history.advisorResult}}
+                </td>
+                <td title="'学院审核结果'" filter="{ collegeResult: 'text'}" sortable="'collegeResult'">
+                    {{history.collegeResult}}
+                </td>
+                <td title="'学校审核结果'" filter="{ schoolResult: 'text'}" sortable="'schoolResult'">
+                    {{history.schoolResult}}
+                </td>
+                <td title="'本次认定名称'" filter="{ processName: 'text'}" sortable="'processName'">
+                    {{history.processName}}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div ng-switch-when="2" class="text-center">暂无记录</div>
+</div>

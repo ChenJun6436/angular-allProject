@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xdbigdata.subsidize_zjut.mapper.AllowanceHistoryMapper">
+
+    <select id="countNumberAndMoney" resultType="com.xdbigdata.subsidize_zjut.common.dto.SubsidizeGroupLevelDto">
+        SELECT
+            count(DISTINCT student_id) AS number,
+            IFNULL(sum(money),0) AS money
+        FROM
+            t_allowance_history h
+        WHERE h.school_pass = 1
+        AND h.student_id IN
+        <foreach collection="studentSns" index="index" item="studentSn" open="(" separator="," close=")">
+            #{studentSn}
+        </foreach>
+        <if test="dataAmountQueryCondititonDto.collegeName != '-1'">
+            AND h.college_name = #{dataAmountQueryCondititonDto.collegeName}
+        </if>
+        <if test="dataAmountQueryCondititonDto.majorName != '-1'">
+            AND h.major_name = #{dataAmountQueryCondititonDto.majorName}
+        </if>
+        <if test="dataAmountQueryCondititonDto.gradeName != '-1'">
+            AND h.grade_name = #{dataAmountQueryCondititonDto.gradeName}
+        </if>
+        <if test="dataAmountQueryCondititonDto.className != '-1'">
+            AND h.class_name = #{dataAmountQueryCondititonDto.className}
+        </if>
+        AND CAST(LEFT(`year`, 4) AS SIGNED)
+        BETWEEN CAST(LEFT(#{dataAmountQueryCondititonDto.startSchoolYear}, 4) AS SIGNED)
+        AND CAST(LEFT(#{dataAmountQueryCondititonDto.endSchoolYear},4) AS SIGNED)
+    </select>
+
+</mapper>

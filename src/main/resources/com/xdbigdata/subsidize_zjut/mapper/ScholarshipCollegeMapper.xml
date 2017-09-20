@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xdbigdata.subsidize_zjut.mapper.ScholarshipCollegeMapper">
+    <insert id="saveCollegeConfig" parameterType="com.xdbigdata.subsidize_zjut.common.dto.ScholarshipCollegeDto">
+        INSERT INTO `t_scholarship_to_college` (
+        `collegeId`,
+        `amount`,
+        `schoolYear`,
+        `grantsLeavel`,
+        `scholarship_id`,
+        `startDate`,
+        `endDate`
+        )
+        VALUES
+        <foreach collection="configs" index="index" item="item" separator=",">
+            (#{item.id},
+            #{item.amount},
+            #{schoolYear},
+            #{grantsLeavel},
+            #{scholarshipid},
+            #{startDate},
+            #{endDate})
+        </foreach>
+    </insert>
+
+    <update id="updateScholarshipCollege" parameterType="com.xdbigdata.subsidize_zjut.common.dto.ScholarshipCollegeDto">
+        <foreach collection="configs" index="index" item="item" separator=";">
+            UPDATE t_scholarship_to_college
+            <set>
+                amount = #{item.amount},
+                schoolYear = {schoolYear},
+                schoolYear = {grantsLeavel},
+                schoolYear = {startDate},
+                schoolYear = {endDate}
+            </set>
+            <where>
+                id = #{item.recordId}
+            </where>
+        </foreach>
+    </update>
+
+
+
+    <select id="findScholarshipConfig" parameterType="Long" resultType="com.xdbigdata.subsidize_zjut.domain.Scholarship2College">
+        SELECT * from t_scholarship_to_college WHERE collegeId = #{collegeId}
+    </select>
+
+
+</mapper>

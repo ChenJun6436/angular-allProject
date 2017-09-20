@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xdbigdata.subsidize_zjut.mapper.ScholarshipApplyBankInfoMapper">
+
+    <insert id="saveApplyBankInfo" parameterType="com.xdbigdata.subsidize_zjut.domain.ScholarshipApplyBankInfo">
+        INSERT INTO t_scholarship_apply_bankinfo (
+        `bankcard`,
+        `is_agent`,
+        `agent_sn`,
+        `agent_bankcard`,
+        `apply_reason`,
+        `is_commit`,
+        `scholarship_id`,
+        `student_sn`
+        )
+        VALUES
+        (
+        #{bankcard},
+        #{isAgent},
+        #{agentSn},
+        #{agentBankcard},
+        #{applyReason},
+        #{isCommit},
+        #{scholarshipId},
+        #{studentSn}
+        )
+    </insert>
+
+    <update id="updateApplyBankInfo" parameterType="com.xdbigdata.subsidize_zjut.domain.ScholarshipApplyBankInfo">
+       UPDATE t_scholarship_apply_bankinfo
+       SET
+        bankcard=#{bankcard},
+        is_agent=#{isAgent},
+        agent_sn=#{agentSn},
+        agent_bankcard=#{agentBankcard},
+        apply_reason=#{applyReason},
+        student_sn=#{studentSn}
+        WHERE
+        id=#{id}
+   </update>
+
+
+</mapper>

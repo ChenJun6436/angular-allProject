@@ -1,0 +1,15 @@
+<div ng-switch="vm.tableFlag" class="p20">
+    <div class="text-center" ng-switch-when="0">加载中……</div>
+    <div ng-switch-when="1">
+        <div class="notice-list">
+            <h3 class="page-header mt5">消息</h3>
+            <ul>
+                <li ng-repeat="message in vm.messageList">{{message.content}}<span
+                        class="pull-right text-muted">{{message.createDate | date : 'yyyy-MM-dd HH:mm:ss'}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <tm-pagination conf="paginationConf"></tm-pagination>
+    <div ng-switch-when="2" class="text-center">暂无记录</div>
+</div>

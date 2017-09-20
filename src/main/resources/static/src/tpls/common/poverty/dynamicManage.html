@@ -1,0 +1,53 @@
+<div class="h50 lh50 pl20">
+    <search-btn show="vm.showFilter"></search-btn>
+    <input type="button" class="btn btn-primary pull-right mr10 mt10" value="下载名单" ng-click="download()">
+</div>
+<div ng-switch="vm.tableFlag" class="p20 pt0">
+    <div class="text-center" ng-switch-when="0">加载中……</div>
+    <div ng-switch-when="1">
+
+        <table ng-table="tableParams" class="table table-bordered table-striped table-hover " show-filter="vm.showFilter">
+            <tr ng-repeat="dynamic in $data">
+                <td title="'姓名'" filter="{ name: 'text'}" sortable="'name'">
+                    {{dynamic.name}}
+                </td>
+                <td title="'学号'" filter="{ studentId: 'text'}" sortable="'studentId'">
+                    {{dynamic.studentId}}
+                </td>
+                <td title="'年级'" filter="{ gradeName: 'text'}" sortable="'gradeName'">
+                    {{dynamic.gradeName}}
+                </td>
+                <td title="'学院'" filter="{ collegeName: 'text'}" sortable="'collegeName'">
+                    {{dynamic.collegeName}}
+                </td>
+                <td title="'专业'" filter="{ majorName: 'text'}" sortable="'majorName'">
+                    {{dynamic.majorName}}
+                </td>
+                <td title="'班级'" filter="{ className: 'text'}" sortable="'className'">
+                    {{dynamic.className}}
+                </td>
+                <td title="'申请材料'" class="col-md-1">
+                    <one-person-info id="{{dynamic.studentId}}"></one-person-info>
+                </td>
+                <td title="'困难指数'" filter="{ povertyLevel: 'text'}" sortable="'povertyLevel'">
+                    {{dynamic.povertyLevel}}
+                </td>
+                <td title="'建议状态'" filter="{ suggestionPoverty: 'text'}" sortable="'suggestionPoverty'">
+                    {{dynamic.suggestionPoverty}}
+                </td>
+                <td title="'上次认定等级'" filter="{ lastPoverty: 'text'}" sortable="'lastPoverty'">
+                    {{dynamic.lastPoverty}}
+                </td>
+                <td title="'当前状态'" filter="{ nowPoverty: 'text'}" sortable="'nowPoverty'">
+                    {{dynamic.nowPoverty}}
+                </td>
+                <td title="'修改等级'">
+                    <select class="form-control p0 h25 w110 inline-block"  ng-change="changeLevel(dynamic.studentId,dynamic.selected.name)"
+                            ng-options="option.name for option in vm.povertyLevelList track by option.name"
+                            ng-model="dynamic.selected"></select>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div ng-switch-when="2" class="text-center">暂无记录</div>
+</div>

@@ -1,0 +1,32 @@
+<feed-back ng-if="vm.canFeedBack&&vm.canFeedBack1" action="feedbackCollegeNotice"></feed-back>
+<notice-dissent type="0"></notice-dissent>
+<search-btn show="vm.showFilter"></search-btn>
+<div ng-switch="vm.tableFlag" class="p20">
+    <div class="text-center" ng-switch-when="0">加载中……</div>
+    <div ng-switch-when="1">
+        <table ng-table="tableParams" class="table table-bordered table-striped table-hover "
+               show-filter="vm.showFilter">
+            <tr ng-repeat="collegeNotice in $data">
+                <td title="'学号'" filter="{ studentId: 'text'}" sortable="'studentId'">
+                    {{collegeNotice.studentId}}
+                </td>
+                <td title="'年级'" filter="{ gradeName: 'text'}" sortable="'gradeName'">
+                    {{collegeNotice.gradeName}}
+                </td>
+                <td title="'学院'" filter="{ collegeName: 'text'}" sortable="'collegeName'">
+                    {{collegeNotice.collegeName}}
+                </td>
+                <td title="'专业'" filter="{ majorName: 'text'}" sortable="'majorName'">
+                    {{collegeNotice.majorName}}
+                </td>
+                <td title="'班级'" filter="{ className: 'text'}" sortable="'className'">
+                    {{collegeNotice.className}}
+                </td>
+                <td title="'认定结果'" filter="{ result: 'text'}" sortable="'result'">
+                    {{collegeNotice.result}}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div ng-switch-when="2" class="text-center">暂无记录</div>
+</div>

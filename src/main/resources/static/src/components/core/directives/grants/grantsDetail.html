@@ -1,0 +1,111 @@
+<div class="modal fade add-grants-modal" tabindex="-1" role="dialog" aria-labelledby="addGrantsModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addGrantsModal">助学金详情</h4>
+            </div>
+            <div class="modal-body max-height-600">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">是否分等级</label>
+                        <div class="col-sm-10 pt7">
+                            {{grants.levels[0].level ? '是' : '否'}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">助学金名称：</label>
+                        <div class="col-sm-10 pt7">
+                            {{grants.name}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">设立机构：</label>
+                        <div class="col-sm-10 pt7">
+                            {{grants.organization}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">发放时间：</label>
+                        <div class="col-sm-10 pt7">
+                            {{grants.startTime | date: 'yyyy-MM-dd'}}&nbsp;&nbsp;-&nbsp;&nbsp;{{grants.endTime
+                            | date: 'yyyy-MM-dd'}}
+                        </div>
+                    </div>
+                    <div ng-if="grants.levels[0].level">
+                        <div ng-repeat="level in grants.levels track by $index" class="slide-top">
+                            <div class="clearfix mt20">
+                                <span class="fs16">等级{{$index+1}}</span>
+                            </div>
+                            <div class="form-group form-group-sp">
+                                <label class="col-sm-2 control-label">助学金等级：</label>
+                                <div class="col-sm-1 pt7">
+                                    {{level.level}}
+                                </div>
+                                <label class="col-sm-1 control-label tr">助学金金额：</label>
+                                <div class="col-sm-2 pt7 w100s">
+                                    {{level.money}}元
+                                </div>
+                                <label class="col-sm-2 control-label tr w80s">获奖人数：</label>
+                                <div class="col-sm-1 pt7">
+                                    {{level.amount}}
+                                </div>
+                                <label class="col-sm-1 control-label tr w80s">总金额：</label>
+                                <div class="col-sm-2 pt7">
+                                    {{level.money * level.amount || 0}}元
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">评定条件：</label>
+                                <div class="col-sm-10 pt7">
+                                    {{level.evaluateCondition}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">申请表格</label>
+                                <div class="col-sm-10 pt7">
+                                    <a ng-if="level.name" href="{{level.url}}" target="_blank">{{level.name}}</a>
+                                    <span ng-if="!level.name">无材料</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="!grants.levels[0].level">
+                        <div class="form-group form-group-sp">
+                            <label class="col-sm-2 control-label">助学金金额：</label>
+                            <div class="col-sm-2 pt7">
+                                {{grants.levels[0].money}}元
+                            </div>
+                            <label class="col-sm-2 control-label tr">获奖人数：</label>
+                            <div class="col-sm-1 pt7">
+                                {{grants.levels[0].amount}}
+                            </div>
+                            <label class="col-sm-2 control-label tr">总金额：</label>
+                            <div class="col-sm-2 pt7">
+                                {{grants.levels[0].money * grants.levels[0].amount || 0}}元
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">评定条件：</label>
+                            <div class="col-sm-10 pt7">
+                                {{grants.levels[0].evaluateCondition}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">申请表格</label>
+                            <div class="col-sm-10 pt7">
+                                <a ng-if="grants.levels[0].name" href="{{grants.levels[0].url}}" target="_blank">{{grants.levels[0].name}}</a>
+                                <span ng-if="!grants.levels[0].name">无材料</span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer tc">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

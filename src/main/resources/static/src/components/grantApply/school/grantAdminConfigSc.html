@@ -1,0 +1,59 @@
+<p class="gaTitle">
+    助学金配置 <span class="gatip2">({{vm.classData.collegeName}})</span>
+</p>
+<div class="gaBody">
+    <div class="gaTop">
+        <p class="gaFillLeft">配置助学金类型</p>
+    </div>
+    <div class="gaMain">
+        <table ng-table="vm.tableParams" class="table" show-filter="false">
+            <tr ng-repeat="des in $data">
+                <td title="'序号'">
+                    {{des.index}}</td>
+                <td title="'助学金名称'">
+                    {{des.name}}</td>
+                <td title="'助学金等级'">
+                    {{des.levelName}}</td>
+                <td title="'助学金设立机构'">
+                    {{des.organization}}</td>
+                <td title="'学年'">
+                    {{des.schoolYear}}</td>
+                <td title="'资助金额'">
+                    {{des.subsidizeMoney}}</td>
+                <td title="'可配置名额'">
+                    {{des.collegeAmount?des.collegeAmount:'0'}}</td>
+                <td title="'预留名额'">
+                    {{des.reserveNum? des.reserveNum:'配置'}}</td>
+                <td title="'已配置名额'">
+                    {{des.allot}}</td>
+                <td title="'配置名额'">
+                    <a href="javaScript:;" ng-click="vm.mannerClassMount(des)">{{des.isDistribute? "编辑": "开始配置"}}</a></td>
+                <td title="'操作'">
+                    <a href="javaScript:;" ng-click="vm.modalShow(des)">{{newApplys.length!==0?'已申请':'申请名额'}}</a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!--添加助学金-->
+<div class="modal fade" id="motai" tabindex="-1" role="dialog"
+     aria-labelledby="addGrantsModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addGrantsModal">{{vm.modal.title}}</h4>
+            </div>
+            <div class="modal-body">
+                <p>请输入您想申请的名额：<input type="text" ng-model="vm.NewApplyAmount"></p>
+            </div>
+            <div class="modal-footer tc">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default">取消
+                </button>
+                <button type="button" ng-click="vm.ComNewApply()" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

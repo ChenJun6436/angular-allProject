@@ -1,0 +1,174 @@
+/**
+*ALERT COMPONENT
+*/
+.alert-success,
+.alert-error {
+	position: fixed;
+	top: 40px;
+	left: 50%;
+	min-width: 200px;
+	padding: 10px 20px;
+	background: $success-color;
+	z-index: 9999;
+	color: $fff;
+	font-size: 22px;
+	text-align: center;
+	transform: translate(-50%, 0);
+	animation: move 2s ease-out;
+}
+
+.alert-error {
+	background: $error-color;
+}
+
+@keyframes move {
+
+	0% {
+		top: -40px;
+	}
+	10%, 100% {
+		top: 40px;
+	}
+}
+
+/**
+*PAGER COMPONENT
+*/
+.page-list {
+	&:after {
+		display: table;
+		content: '';
+		clear: both;
+	}
+	.pagination {
+		float: left;
+		margin: 0;
+		span {
+			cursor: pointer;
+		}
+		a {
+			color: $active-color;
+		}
+		.active a {
+			background: $active-color;
+			border-color: $active-color;
+			color: #fff;
+		}
+		.separate span {
+			cursor: default;
+			border-top: none;
+			border-bottom: none;
+			&:hover {
+				background: none;
+			}
+		}
+	}
+	.page-total {
+		float: right;
+		margin: 5px 0;
+		input, select {
+			height: 26px;
+			border: 1px solid #ddd;
+		}
+		input {
+			width: 40px;
+			padding-left: 3px;
+		}
+		select {
+			width: 50px;
+		}
+	}
+}
+
+/**
+*404 COMPONENT
+*/
+#beastainer {
+	float: right;
+	padding: 20px 0 20px 20px;
+	position: relative
+}
+
+#beast404le, #beast404re {
+	position: absolute;
+	animation-delay: 6s;
+	animation-duration: 7s;
+	animation-iteration-count: infinite;
+	animation-play-state: running
+}
+
+#beast404re {
+	left: 231px;
+	top: 68px;
+	animation-name: crazyrighteye
+}
+
+#beast404le {
+	left: 125px;
+	top: 65px;
+	animation-name: crazylefteye
+}
+
+@keyframes crazylefteye {
+	0% {
+		left: 125px;
+		top: 65px
+	}
+
+	10%, 20% {
+		left: 118px;
+		top: 56px
+	}
+
+	40% {
+		left: 148px;
+		top: 62px
+	}
+
+	50% {
+		left: 145px;
+		top: 72px
+	}
+
+	60% {
+		left: 121px;
+		top: 70px
+	}
+
+	100%, 70% {
+		left: 125px;
+		top: 65px
+	}
+}
+
+@keyframes crazyrighteye {
+	0% {
+		left: 231px;
+		top: 68px
+	}
+
+	10%, 20% {
+		left: 212px;
+		top: 62px
+	}
+
+	40% {
+		left: 239px;
+		top: 64px
+	}
+
+	50% {
+		left: 240px;
+		top: 80px
+	}
+
+	60% {
+		left: 215px;
+		top: 73px
+	}
+
+	100%, 70% {
+		left: 231px;
+		top: 68px
+	}
+}

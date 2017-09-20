@@ -1,0 +1,202 @@
+<div class="grants-manage-header">
+    <ul class="list-inline">
+        <li>
+            <span class="pull-left">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-suyaniconchanpinleibufenzuodaohangbufen84"></use>
+                </svg>
+            </span>
+            <div class="pull-left">
+                <p>助学金总数</p>
+                <p class="main-color">{{vm.data.grantsTotalNum}}</p>
+            </div>
+        </li>
+        <li>
+            <span class="pull-left bg-yellow">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-iconfont"></use>
+                </svg>
+            </span>
+            <div class="pull-left">
+                <p>助学金总名额</p>
+                <p class="yellow">{{vm.data.grantsMemberNum}}</p>
+            </div>
+        </li>
+        <li>
+            <span class="pull-left bg-yellow">
+               <svg class="icon" aria-hidden="true">
+                   <use xlink:href="#icon-qian"></use>
+               </svg>
+            </span>
+            <div class="pull-left">
+                <p>助学金总额</p>
+                <p class="yellow">{{vm.data.grantsTotalMoney}}</p>
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="h50 lh50 pl20 mt30">
+    助学金列表
+    <search-btn show="vm.showFilter"></search-btn>
+    <input type="button" class="btn btn-primary pull-right mr10 mt10" value="添加助学金" ng-click="addGrantsModal()">
+</div>
+<div ng-switch="vm.tableFlag" class="p20 pt0">
+    <div class="text-center" ng-switch-when="0">加载中……</div>
+    <div ng-switch-when="1">
+
+        <table ng-table="tableParams" class="table table-bordered table-striped table-hover "
+               show-filter="vm.showFilter">
+            <tr ng-repeat="grants in $data">
+                <td title="'序号'" filter="{ index: 'text'}" sortable="'index'">
+                    {{grants[0].index}}
+                </td>
+                <td title="'助学金名称'" filter="{ name: 'text'}" sortable="'name'">
+                    {{grants[0].name}}
+                </td>
+                <td title="'助学金等级'" filter="{ level: 'text'}" sortable="'level'">
+                    <span ng-if="grants[0].level.length>0" ng-repeat="item in grants[0].level">{{item.name}} <span
+                            ng-if="$index+1!==grants[0].level.length">，</span></span>
+                    <span ng-if="grants[0].level.length===0">未分级</span>
+                </td>
+                <td title="'设立机构'" filter="{ institutions: 'text'}" sortable="'institutions'">
+                    {{grants[0].institutions}}
+                </td>
+                <td title="'学年'" filter="{ year: 'text'}" sortable="'year'">
+                    {{grants[0].year}}
+                </td>
+                <td title="'获奖人数'" filter="{ num: 'text'}" sortable="'num'">
+                    {{grants[0].num}}
+                </td>
+                <td title="'总金额'" filter="{ totalMoney: 'text'}" sortable="'totalMoney'">
+                    {{grants[0].totalMoney}}
+                </td>
+                <td title="'发放时间'" filter="{ endTime: 'text'}" sortable="'endTime'">
+                    {{grants[0].startTime | date : 'yyyy-MM-dd'}}至{{grants[0].endTime | date: 'yyyy-MM-dd'}}
+                </td>
+                <td title="'操作'" filter="{ majorName: 'text'}">
+                    <a href="javascript:;" ng-click="edit(grants[0])">修改</a>
+                    <a href="javascript:;" ng-click="delete(grants.index)">删除</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div ng-switch-when="2" class="text-center">暂无记录</div>
+</div>
+<!-- 添加助学金 -->
+<div class="modal fade add-grants-modal modal-fixed" id="addGrants" tabindex="-1" role="dialog" aria-labelledby="addGrantsModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addGrantsModal">添加助学金</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">是否分等级</label>
+                        <div class="col-sm-10">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="type" value="1" ng-model="vm.currentGrants.type" ng-checked="vm.currentGrants.type === 1"> 是
+                                </label>
+                                <label>
+                                    <input type="radio" name="type" value="0" ng-model="vm.currentGrants.type" ng-checked="vm.currentGrants.type === 0"> 否
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="grantsName" class="col-sm-2 control-label">助学金名称：</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="grantsName" placeholder="助学金名称" ng-model="vm.currentGrants.name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="institutions" class="col-sm-2 control-label">设立机构：</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="institutions" placeholder="设立机构" ng-model="vm.currentGrants.institutions">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="institutions" class="col-sm-2 control-label">发放时间：</label>
+                        <div class="col-sm-5">
+                            <input placeholder="请选择开始日期" id="applyStart" class="form-control laydate-icon"  ng-model="vm.currentGrants.startTime">
+                        </div>
+                        <div class="col-sm-5"><input
+                                placeholder="请选择结束日期" id="applyEnd" class="form-control laydate-icon"  ng-model="vm.currentGrants.endTime">
+                        </div>
+                    </div>
+                    <div ng-if="vm.currentGrants.type==1" class="slide-top">
+                        <div ng-repeat="item in vm.currentGrants.level track by $index"  class="slide-top">
+                            <div class="clearfix mt20">
+                                <span class="fs16">等级{{$index+1}}</span>
+                                <a class="pull-right" href="javascript:;" ng-click="removeLevel($index)">删除</a>
+                            </div>
+                            <div class="form-group form-group-sp">
+                                <label class="col-sm-2 control-label">助学金等级：</label>
+                                <div class="col-sm-1">
+                                    <select class="form-control" ng-model="item.name">
+                                        <option value="1" ng-selected = "item.name === '一等'">一等</option>
+                                        <option value="2" ng-selected = "item.name === '二等'">二等</option>
+                                        <option value="3" ng-selected = "item.name === '三等'">三等</option>
+                                    </select>
+                                </div>
+                                <label for="grantsMoney{{$index+1}}" class="col-sm-2 control-label tr">助学金金额：</label>
+                                <div class="col-sm-1">
+                                    <input type="text" class="form-control" id="grantsMoney{{$index+1}}" ng-model="item.num"
+                                           placeholder="助学金金额">
+                                </div>
+                                <label for="grantsMember{{$index+1}}" class="col-sm-2 control-label tr">获奖人数：</label>
+                                <div class="col-sm-1">
+                                    <input type="text" class="form-control" id="grantsMember{{$index+1}}" ng-model="item.member"
+                                           placeholder="获奖人数">
+                                </div>
+                                <label class="col-sm-2 control-label tr">总金额：</label>
+                                <div class="col-sm-1 pt7">
+                                    {{item.num*item.member||0}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="conditions{{$index+1}}" class="col-sm-2 control-label">评定条件：</label>
+                                <div class="col-sm-10">
+                                    <textarea name="" class="form-control" id="conditions{{$index+1}}" ng-model="item.conditions"
+                                              placeholder="评定条件" cols="30" rows="5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="javascript:;" class="fs16" ng-click="addLevel()">+添加等级</a>
+                    </div>
+                    <div ng-if="vm.currentGrants.type==0" class="slide-top">
+                        <div class="form-group form-group-sp">
+                            <label for="grantsMoney" class="col-sm-2 control-label">助学金金额：</label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" id="grantsMoney" placeholder="助学金金额" ng-model="item.num">
+                            </div>
+                            <label for="totalMember" class="col-sm-2 control-label tr">总获奖人数：</label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" id="totalMember" placeholder="总获奖人数" ng-model="item.member">
+                            </div>
+                            <label class="col-sm-2 control-label tr">总金额：</label>
+                            <div class="col-sm-2 pt7">
+                                {{item.num*item.member||0}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="conditions" class="col-sm-2 control-label">评定条件：</label>
+                            <div class="col-sm-10">
+                                <textarea name="" class="form-control" id="conditions" placeholder="评定条件" cols="30" ng-model="vm.currentGrants.conditions"
+                                          rows="5"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer tc">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default w110 h40">取消
+                </button>
+                <button type="button" ng-click="addGrants()" class="btn btn-primary w110 h40">保存</button>
+            </div>
+        </div>
+    </div>
+</div>

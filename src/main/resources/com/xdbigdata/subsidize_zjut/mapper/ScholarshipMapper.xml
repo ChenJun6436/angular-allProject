@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xdbigdata.subsidize_zjut.mapper.ScholarshipMapper">
+
+    <insert id="saveScholarship" parameterType="com.xdbigdata.subsidize_zjut.domain.Scholarship">
+        INSERT INTO t_scholarship (
+        `name`,
+        `instructions`,
+        `school_year`,
+        `money`,
+        `endDate`
+        )
+        VALUES
+        (
+        #{name},
+        #{instructions},
+        #{schoolYear},
+        #{money},
+        #{endDate}
+        )
+    </insert>
+
+    <delete id="getScholarshipBySchoolYear" parameterType="String">
+        SELECT * FROM t_scholarship WHERE school_year = #{schoolYear}
+    </delete>
+
+</mapper>

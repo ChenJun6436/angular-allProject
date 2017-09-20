@@ -1,0 +1,117 @@
+<div class="gaTopst">
+    <a href="javaScript:" class="{{vm.showEditTime?'huibtn':'gaTopAgBtn'}}" ng-click="vm.activityPulic()" ng-disabled='vm.showEditTime'>提交至学校公示</a>
+    <a href="javaScript:" class="gaTopReBtn" style="background: #f5785f" ng-click="vm.showRejectTasks()">驳回学生材料</a>
+</div>
+<select ng-model='aaa'>
+                        <option selected="selected">1</option>
+                        <option >2</option>
+                        <option >3</option>
+                    </select>{{aaa}}
+
+<div class="gaTitle">
+    助学金评定 <span class="gatip2"> (正在进行{{vm.isPublic.stage}})</span>
+</div>
+<div class="gaBody">
+    <div class="gaYouLv" style="float: left" ng-if="vm.showEditTime">
+        公示时间:<span>&nbsp;&nbsp;{{vm.isPublic.startTime}}—{{vm.isPublic.endTime}}</span>
+        <a href="javeScript:;" ng-click="vm.editTime()">编辑</a>
+    </div>
+    <div class="gaDo">
+        <a class="gaSearch" href="javaScript:" ng-click="vm.doShowFilter()">搜索</a>
+    </div>
+    <div>
+        <table ng-table="vm.tableParams" class="table" show-filter="vm.showFilter">
+            <tr ng-repeat="user in $data">
+                <td title="">
+                    <input ng-if="user.taskId" type="checkbox" ng-model="user.checked" ng-change="vm.checkOne()"></td>
+                <td title="'姓名'" filter="{ studentName: 'text'}">
+                    {{user.studentName}}</td>
+                <td title="'学号'" filter="{ sn: 'number'}">
+                    {{user.sn}}</td>
+                <td title="'学院'" filter="{ college: 'text'}">
+                    {{user.college}}</td>
+                <td title="'困难认定等级'" filter="{ povertyLevel: 'text'}">
+                    {{user.povertyLevel}}</td>
+                <td title="'上学年申请等级'" filter="{ lastYearGrantsLevel: 'text'}">
+                    <span ng-repeat="last in user.lastYearGrantsLevel">{{last>1?last:"未申请"}};</span></td>
+                <td title="'本学年申请次数'" filter="{ currentGrantsNum: 'text'}">
+                    {{user.currentGrantsNum[0]?'u':'0'}}</td>
+                <td title="'申请助学金名称'" filter="{ applyGrantsName: 'text'}">
+                    {{user.applyGrantsName}}</td>
+                <td title="'辅导员审核'" filter="{ grants: 'text'}">
+                    {{user.advisorResult?user.advisorResult:"未进行"}}
+                </td>
+                <td title="'学院审核'" filter="{ collegeResult: 'text'}">
+                    {{user.collegeResult?user.collegeResult:"未进行"}}
+                </td>
+                <td title="'学院公示'" filter="{ collegePublicityResult: 'text'}">
+                    {{user.collegePublicityResult?user.collegePublicityResult:"未进行"}}</td>
+                <td title="'学校审核'" filter="{ schoolResult: 'text'}">
+                    <select ng-if="user.taskId" ng-model="vm.levelName" ng-change="vm.saveLevelName(user)"
+                            ng-options="a.grantsName for a in user.grants">
+                        <option selected="selected">{{user.schoolResult}}</option>
+                    </select>
+                    <span ng-if="!user.taskId" ng-show="vm.showSelect">{{user.schoolResult?user.schoolResult:'未进行'}}</span>
+                </td>
+                <td title="'学校公示'" filter="{ schoolPublicityResult: 'text'}">
+                    {{user.schoolPublicityResult?user.schoolPublicityResult:"未进行"}}</td>
+                <td title="'认定结果'" filter="{ finalResult: 'text'}">
+                    {{user.finalResult?user.finalResult:"未认定"}}</td>
+                <td title="'当前状态'" filter="{ finalResult: 'text'}">
+                    {{user.materialStatus=='1'?'状态正常':"材料被驳回"}}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="modal fade modal-open" id="upScPulic" tabindex="-1" role="dialog"
+     aria-labelledby="addGrantsModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title border-bottom fs20 lh40" id="addGrantsModal">提交学校公示</h4>
+                <div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label fs16 lh70">公示时间：</label>
+                        <div class=" lh70">
+                            <p class="input-group inline-block vertical-middle">
+                                <input type="text" class="form-control"
+                                       uib-datepicker-popup placeholder="请选择时间" datepicker-options="vm.startTimeOptions"
+                                       ng-model="vm.startTime" is-open="startTime"
+                                       readonly ng-click="startTime = true" required show-button-bar="false"
+                                       name="startTime"
+                                       ng-class="{'border-error':vm.startTime.$invalid&&vm.grantsSubmit}">
+                                <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-icon" ng-click="startTime = true">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                            </span>
+                            </p>
+                            &nbsp;&nbsp;~&nbsp;&nbsp;
+                            <p class="input-group inline-block vertical-middle">
+                                <input type="text" class="form-control" uib-datepicker-popup placeholder="请选择时间"
+                                       ng-model="vm.endTime" is-open="endTime"
+                                       datepicker-options="vm.endTimeOptions"
+                                       readonly ng-click="endTime = true" required show-button-bar="false"
+                                       name="endTime"
+                                       ng-class="{'border-error':vm.endTime.$invalid&&vm.grantsSubmit}">
+                                <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-icon" ng-click="endTime = true">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                            </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer tc">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default">取消
+                </button>
+                <button type="button" ng-click="vm.openScPublic()" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>

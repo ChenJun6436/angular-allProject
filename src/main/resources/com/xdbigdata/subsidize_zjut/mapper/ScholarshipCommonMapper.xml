@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xdbigdata.subsidize_zjut.mapper.ScholarshipCommonMapper">
+
+    <insert id="savePublicityConfig" parameterType="com.xdbigdata.subsidize_zjut.domain.ScholarshipPublicity">
+        INSERT INTO t_scholarship_publicity (
+            `scholarship_id`,
+            `start_time`,
+            `end_time`,
+            `stage`,
+            `college_id`
+        )
+        VALUES
+            (
+                #{scholarshipId},
+                #{startTime},
+                #{endTime},
+                #{collegeId},
+                #{stage}
+            )
+    </insert>
+
+
+
+
+    <update id="updatePublicityTimeConfig" parameterType="com.xdbigdata.subsidize_zjut.domain.ScholarshipPublicity">
+        UPDATE t_scholarship_publicity
+        SET
+        `start_time` = #{startTime},
+        `end_time` = #{endTime}
+        WHERE `id` = #{id}
+    </update>
+
+    <select id="findGrantsPublicityTimeConfig" resultType="com.xdbigdata.subsidize_zjut.domain.ScholarshipPublicity">
+         SELECT
+            id AS id,
+            start_time AS startTime,
+            end_time AS endTime,
+            stage AS stage,
+            grants_uuid AS uuid
+        FROM
+            `t_grants_publicity`
+        WHERE grants_uuid = #{grantsUuid}
+        AND stage =  #{stage}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,222 @@
+<div class="left-top-bar clearfix">
+    <select class="form-control w180 pull-left">
+        <option value="0">国家助学金批次</option>
+    </select>
+</div>
+<div class="text-center pb10">
+    <p style="margin-top: 150px;">助学金已经开启，申请截止时间：<span class="fs16 text-status">2017-03-29</span></p>
+    <ul style="width:340px;margin:0 auto;">
+        <li class="clearfix h40 lh40" ng-repeat="grants in vm.grantsList">
+            <span class="pull-left">
+                {{grants.name}}
+                <a href="javascript:;" ng-click="showGrantsDetail(grants)">详情</a>
+            </span>
+            <span class="pull-right" ng-if="grants.status === 1">
+                已申请
+                <a href="javascript:;" ng-click="showDetail()">查看资料</a>
+            </span>
+            <span class="pull-right" ng-if="grants.status === 0">
+                <a href="javascript:;" ng-click="doApply(grants)">申请</a>
+            </span>
+            <span class="pull-right" ng-if="grants.status === -1">
+                材料被驳回，重新
+                <a href="javascript:;" ng-click="doApply(grants)">申请</a>
+            </span>
+        </li>
+    </ul>
+    <div class="applying mb20" ng-if="vm.currentApply" style="width:900px; margin:0 auto;">
+        <div class="upload-wrap grants-upload-wrap relative">
+            <p>您正在申请 {{vm.checkedLevel}}{{vm.currentApply.name}}，请下载申请表，如实填写并上传。上传大小不超过15MB附件</p>
+            <div class="row">
+                <div class="text-center mb20 relative">
+                    <input type="button" value="下载申请表格"  class="file-upload-btn">
+                    <input type="button" value="上传申请表格" class="file-upload-btn btn-primary">
+                    <input type="file" id="file" class="upload-file" nv-file-select multiple uploader="uploader"/>
+                </div>
+                <div ng-repeat="item in uploader.queue" class="student-progress-bar">
+                    <div>{{ item.file.name }}</div>
+                    <div class="progress">
+                        <span class="progress-bar" role="progressbar"
+                              ng-style="{ 'width': item.progress + '%' }"></span>
+                    </div>
+                    <span class="progress-percent">{{item.progress}}%</span>
+                </div>
+            </div>
+            <table ng-if="vm.uploadsList.length>0" class="table table-hover table-bordered table-striped stu-base-form">
+                <thead>
+                <tr>
+                    <th>附件名</th>
+                    <th>上传时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="upload in vm.uploadsList">
+                    <td>{{upload.filename}}</td>
+                    <td>{{upload.uploadTime | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+                    <td><a href="javascript:;" title="删除" ng-click="removeUpload(upload.id)" class="text-danger">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="text-center" style="    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    left: 0;">
+                <input type="button" class="btn btn-default h40 w110" value="取消" ng-click="cancelApply()">
+                <input type="button" class="btn btn-primary h40 w110" value="提交材料" ng-click="confirmSubmit()">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 添加助学金 -->
+<div class="modal fade add-grants-modal" id="addGrants" tabindex="-1" role="dialog" aria-labelledby="addGrantsModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addGrantsModal">助学金详情</h4>
+            </div>
+            <div class="modal-body max-height-600">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">是否分等级</label>
+                        <div class="col-sm-10 pt7">
+                            {{vm.type==1?'是':'否'}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">助学金名称：</label>
+                        <div class="col-sm-10 pt7">
+                            {{vm.grantsDetail.name}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">设立机构：</label>
+                        <div class="col-sm-10 pt7">
+                            中央政府
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">发放时间：</label>
+                        <div class="col-sm-10 pt7">
+                            2017-02-01至2017-09-01
+                        </div>
+                    </div>
+                    <div ng-if="vm.type==1">
+                        <div ng-repeat="item in vm.grantsDetail.list track by $index" class="slide-top">
+                            <div class="clearfix mt20">
+                                <span class="fs16">等级{{$index+1}}</span>
+                            </div>
+                            <div class="form-group form-group-sp">
+                                <label class="col-sm-2 control-label">助学金等级：</label>
+                                <div class="col-sm-1 pt7">
+                                    {{item}}
+                                </div>
+                                <label class="col-sm-2 control-label tr">助学金金额：</label>
+                                <div class="col-sm-1 pt7">
+                                    3000
+                                </div>
+                                <label class="col-sm-2 control-label tr">获奖人数：</label>
+                                <div class="col-sm-1 pt7">
+                                    200
+                                </div>
+                                <label class="col-sm-2 control-label tr">总金额：</label>
+                                <div class="col-sm-1 pt7">
+                                    600000
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">评定条件：</label>
+                                <div class="col-sm-10 pt7">
+                                    XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="vm.type==0">
+                        <div class="form-group form-group-sp">
+                            <label class="col-sm-2 control-label">助学金金额：</label>
+                            <div class="col-sm-2 pt7">
+                                5000
+                            </div>
+                            <label class="col-sm-2 control-label tr">总获奖人数：</label>
+                            <div class="col-sm-2 pt7">
+                                2500
+                            </div>
+                            <label class="col-sm-2 control-label tr">总金额：</label>
+                            <div class="col-sm-2 pt7">
+                                15020000
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">评定条件：</label>
+                            <div class="col-sm-10 pt7">
+                                XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer tc">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default w110 h40">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 申请助学金 -->
+<div class="modal fade" id="applyGrants" tabindex="-1" role="dialog" aria-labelledby="grantsListModal">
+    <div class="modal-dialog" role="document" style="width:320px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="grantsListModal">选择助学金等级</h4>
+            </div>
+            <div class="modal-body max-height-600">
+                <div class="radio" style="margin-bottom: 20px;" ng-repeat="level in vm.currentApply.list">
+                    <label>
+                        <input type="radio" name="optionsRadios"  value="{{level}}" ng-model="vm.checkedLevel" ng-checked="vm.checkedLevel === level">
+                        {{level}}{{vm.currentApply.name}}
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer tc">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default w110 h40">关闭
+                </button>
+                <button type="button" class="btn btn-primary w110 h40" ng-click="addApply()">提交
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 是否提交到辅导员审核 -->
+<div class="modal fade" id="ensureSubmit" tabindex="-1" role="dialog" aria-labelledby="myModalensureSubmit">
+    <div class="modal-dialog" role="document" style="width: 520px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalensureSubmit">提交材料</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-danger" ng-if="vm.uploadsList.length<1">您还没有上传材料</p>
+                <p ng-if="vm.uploadsList.length>0">您上传的材料为：</p>
+                <ul ng-if="vm.uploadsList.length>0">
+                    <li ng-repeat="upload in vm.uploadsList">
+                        <a href="{{upload.url}}" target="_blank">{{upload.filename}}</a>
+                    </li>
+                </ul>
+                <p>确认提交吗？提交后将不能修改。</p>
+            </div>
+            <div class="modal-footer tc">
+                <button type="button" ng-click="cancelSubmit()" class="btn  w110 h40">取消</button>
+                <button type="button" ng-click="insureSubmit()" class="btn btn-primary  w110 h40">提交</button>
+            </div>
+        </div>
+    </div>
+</div>

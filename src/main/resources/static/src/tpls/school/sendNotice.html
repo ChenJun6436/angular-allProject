@@ -1,0 +1,30 @@
+<div class="p20">
+    <h3 class="page-header mt5">发布公告</h3>
+    <form>
+        <input class="form-control mb20" type="text" placeholder="请输入公告标题" ng-model="vm.issueNotice.title">
+        <textarea class="form-control" ckeditor  ng-model="vm.issueNotice.content"  placeholder="内容"></textarea>
+        <div class="mt10 relative">
+            <input type="button" class="btn btn-primary btn-sm " value="上传附件">
+            <input type="file" id="file" class="upload-file-notice" nv-file-select="" multiple uploader="uploader"/>
+            <div class="upload-file-notice-progress">
+                <div ng-repeat="item in uploader.queue" class="clearfix ">
+                    <span class="col-md-4 col-sm-offset-1 pull-left p0 text-right">{{ item.file.name }}</span>
+                    <span class="progress col-md-6 p0 mb5 ml10">
+                    <span class="progress-bar" role="progressbar"
+                          ng-style="{ 'width': item.progress + '%' }"></span>
+                    </span>
+                </div>
+            </div>
+
+            <ul>
+                <li ng-repeat="upload in vm.uploadList">
+                    {{upload.name}}<a href="javascript:;" title="删除" ng-click="deleteFile(upload.id)" class="text-danger">删除</a>
+                </li>
+            </ul>
+        </div>
+        <div class="text-center">
+            <input type="button" value="发布" class="btn btn-primary w180 h40 mt20" ng-click="issueNotice()">
+            <p class="text-muted small mt20">*一经发布，不可更改，请谨慎发布</p>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xdbigdata.subsidize_zjut.mapper.AllowanceMapper">
+
+    <!--获取配置-->
+    <select id="getAllowanceConfig" resultType="allowanceConfig">
+        SELECT id,start_time as startTime,end_time as endTime,money,year,year_id as yearId FROM `t_allowance_config` LIMIT 1
+    </select>
+
+    <!--插入配置-->
+    <insert id="insertAllowanceConfig" parameterType="allowanceConfig">
+        INSERT INTO t_allowance_config(start_time,end_time,money,year,year_id)
+        VALUES(#{startTime},#{endTime},#{money},#{year},#{yearId})
+    </insert>
+
+    <!--更新配置-->
+    <update id="updateAllowanceConfig" parameterType="allowanceConfig">
+        UPDATE t_allowance_config SET start_time=#{startTime},end_time=#{endTime},money=#{money},year=#{year},year_id=#{yearId}
+        WHERE id=#{id}
+    </update>
+
+    <!--查看学生是否已申请-->
+    <select id="findAllowanceApplyBySn" parameterType="string" resultType="int">
+        SELECT count(0) FROM t_allowance_apply where student_id = #{sn}
+    </select>
+
+    <!--插入申请-->
+    <insert id="insertAllowanceApply" parameterType="allowanceApply">
+        INSERT INTO t_allowance_apply (student_id,apply_time,bank_num,has_deputy,deputy_sn,deputy_bank_num,year,year_id,money,reason,step,class_name,college_name,grade_name,major_name)
+        VALUES(#{studentId},#{applyTime},#{bankNum},#{hasDeputy},#{deputySn},#{deputyBankNum},#{year},#{yearId},#{money},#{reason},#{step},#{className},#{collegeName},#{gradeName},#{majorName})
+    </insert>
+
+    <!--插入历史-->
+    <insert id="insertAllowanceHistory" parameterType="list">
+        INSERT INTO t_allowance_history (student_id,apply_time,bank_num,has_deputy,deputy_sn,deputy_bank_num,year,year_id,money,class_name,college_name,grade_name,major_name,reason)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.studentId},#{item.applyTime},#{item.bankNum},#{item.hasDeputy},#{item.deputySn},#{item.deputyBankNum},#{item.year},#{item.yearId},#{item.money},#{item.className},#{item.collegeName},#{item.gradeName},#{item.majorName},#{item.reason})
+        </foreach>
+    </insert>
+
+    <!--修改审核状态-->
+    <update id="updateCheckResult" parameterType="updateCheckResultDto">
+        <if test="step == 1">
+            UPDATE t_allowance_apply
+            SET instructor_pass = #{pass},college_pass = #{pass},school_pass = #{pass}
+            WHERE id=#{applyId}
+        </if>
+        <if test="step == 2">
+            UPDATE t_allowance_apply
+            SET college_pass = #{pass},school_pass = #{pass}
+            WHERE id=#{applyId}
+        </if>
+        <if test="step == 3">
+            UPDATE t_allowance_apply
+            SET school_pass = #{pass}
+            WHERE id=#{applyId}
+        </if>
+    </update>
+
+    <!--<select id="getAllowanceApplyList" resultType="allowanceApply" parameterType="list">-->
+        <!--SELECT a.id,s.name FROM t_allowance_apply a-->
+        <!--LEFT JOIN t_student_info s ON a.student_id = s.student_id-->
+        <!--WHERE student_id in-->
+        <!--<foreach collection="snList" item="sn" open="(" separator="," close=")">-->
+            <!--#{sn}-->
+        <!--</foreach>-->
+    <!--</select>-->
+    <!--<resultMap id="applyResultMap" type="applyListDto">-->
+        <!--<id property="applyId" column="id"/>-->
+    <!--</resultMap>-->
+
+    <select id="getAllowanceApplyList" resultType="applyListDto">
+        SELECT
+            a.id as applyId,
+            a.student_id as studentId,
+            a.`year`,
+            a.instructor_pass as instructorPass,
+            a.college_pass as collegePass,
+            a.school_pass as schoolPass,
+            a.school_pass as finalPass,
+            a.step,
+            (select count(0) from t_allowance_history where student_id = a.student_id) applyCount
+        FROM t_allowance_apply a
+        <where>
+            <if test="snList != null">
+                student_id in
+                <foreach collection="snList" item="sn" open="(" separator="," close=")">
+                    #{sn}
+                </foreach>
+            </if>
+            <if test="step != null">
+                <if test="checked">
+                    AND IFNULL(step,0) &gt;= #{step}
+                </if>
+                <if test="!checked">
+                    AND IFNULL(step,0) = #{step}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!--<select id="getAllowanceApplyListChecked" resultType="applyListDto">-->
+        <!--SELECT-->
+        <!--a.id as applyId,-->
+        <!--a.student_id as studentId,-->
+        <!--a.`year`,-->
+        <!--a.instructor_pass as instructorPass,-->
+        <!--a.college_pass as collegePass,-->
+        <!--a.school_pass as schoolPass,-->
+        <!--a.school_pass as finalPass,-->
+        <!--a.step,-->
+        <!--(select count(0) from t_allowance_history where student_id = a.student_id) applyCount-->
+        <!--FROM t_allowance_apply a-->
+        <!--<if test="snList != null">-->
+            <!--WHERE student_id in-->
+            <!--<foreach collection="snList" item="sn" open="(" separator="," close=")">-->
+                <!--#{sn}-->
+            <!--</foreach>-->
+        <!--</if>-->
+        <!--<if test="step != null">-->
+            <!--AND step = #{step}-->
+        <!--</if>-->
+    <!--</select>-->
+
+    <select id="getAllowanceApplyListBySn" resultType="allowanceApply">
+        SELECT
+            a.id,
+            a.student_id as studentId,
+            a.`year`,
+            a.`year_id` as yearId,
+            a.instructor_pass as instructorPass,
+            a.college_pass as collegePass,
+            a.school_pass as schoolPass,
+            a.school_pass as finalPass,
+            a.apply_time as applyTime,
+            a.bank_num as bankNum,
+            a.step,
+            a.has_deputy as hasDeputy,
+            a.deputy_sn as deputySn,
+            a.deputy_bank_num as deputyBankNum,
+            a.money
+        FROM t_allowance_apply a
+        WHERE a.step = 3
+        <if test="snList != null">
+            AND student_id in
+            <foreach collection="snList" item="sn" open="(" separator="," close=")">
+                #{sn}
+            </foreach>
+        </if>
+    </select>
+
+    <update id="batchUpdateStep">
+        UPDATE t_allowance_apply SET step=#{step}
+        WHERE student_id IN
+        <foreach collection="snList" item="sn" open="(" separator="," close=")">
+            #{sn}
+        </foreach>
+        AND step=#{step}-1
+    </update>
+
+    <delete id="deleteAllowanceApply" parameterType="list">
+        DELETE FROM t_allowance_apply WHERE step=3
+        AND id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+
+    <select id="getStudentInfo" resultType="FiveClassDto">
+        SELECT
+        is_disability,
+        is_low_field,
+        is_martyr,
+        is_rural_infirm,
+        is_orphan
+        FROM `t_student_info`
+        WHERE (is_disability=1 OR is_low_field=1 OR is_martyr=1 OR is_rural_infirm=1 OR is_orphan=1)
+        AND student_id=#{sn}
+    </select>
+
+</mapper>

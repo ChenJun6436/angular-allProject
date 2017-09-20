@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xdbigdata.subsidize_zjut.mapper.GrantsCollegeMapper">
+
+    <insert id="saveApplyQuota">
+        INSERT INTO `t_grants_apply_quota` (
+            `college_id`,
+            `apply_amount`,
+            `grants_id`
+        )
+        VALUES
+            (#{collegeId},
+             #{applyNum},
+             #{grantsId})
+    </insert>
+
+    <update id="updateReturnQuotas2School">
+        UPDATE t_grants tg
+        LEFT JOIN t_grants_to_college gtc ON tg.id = gtc.grants_id
+        SET tg.reserve_num = tg.reserve_num + #{quotas},
+         gtc.amount = gtc.amount - #{quotas}
+        WHERE
+            tg.id = #{grantsId}
+        AND gtc.college_id = #{collegeId}
+    </update>
+
+    <select id="findGradeConfig" resultMap="gradeConfigMap">
+        SELECT
+            gtc.id AS collegeRecordId,
+            gtc.grants_id AS grantsId,
+            gtc.college_id AS collegeId,
+            gtc.amount AS collegeAmount,
+            gtg.id AS gradeRecordId,
+            gtg.grade_id AS gradeId,
+            gtg.grade_amount AS gradeAmount,
+            gtm.id AS majorRecordId,
+            gtm.major_id AS majorId,
+            gtm.major_amount AS majorAmount,
+            gtcs.id AS classesRecordId,
+            gtcs.classes_id AS classesId,
+            gtcs.classes_amount AS classesAmount
+        FROM
+            t_grants_to_college gtc
+        LEFT JOIN t_grants_to_grade gtg ON gtg.college_quota_id = gtc.id
+        LEFT JOIN t_grants_to_major gtm ON gtm.grade_quota_id = gtg.id
+        LEFT JOIN t_grants_to_classes gtcs ON gtcs.major_quota_id = gtm.id
+        WHERE
+            gtc.grants_id = #{grantsId}
+        AND gtc.college_id = #{collegeId}
+    </select>
+    
+    <resultMap id="gradeConfigMap" type="com.xdbigdata.subsidize_zjut.common.dto.GrantsCollegeConfigDto">
+        <id property="recordId" column="collegeRecordId"/>
+        <id property="grantsId" column="grantsId"/>
+        <id property="collegeId" column="collegeId"/>
+        <id property="collegeAmount" column="collegeAmount"/>
+        <collection property="gradeConfigs" javaType="java.util.List"
+                    ofType="com.xdbigdata.subsidize_zjut.common.dto.GrantsCollegeConfigDto$GradeConfigs">
+            <result property="recordId" column="gradeRecordId"/>
+            <result property="gradeId" column="gradeId"/>
+            <result property="amount" column="gradeAmount"/>
+            <collection property="majorConfigs" javaType="java.util.List"
+                        ofType="com.xdbigdata.subsidize_zjut.common.dto.GrantsCollegeConfigDto$GradeConfigs$MajorConfigs">
+                <result property="recordId" column="majorRecordId"/>
+                <result property="majorId" column="majorId"/>
+                <result property="amount" column="majorAmount"/>
+                <collection property="classesConfigs" javaType="java.util.List"
+                            ofType="com.xdbigdata.subsidize_zjut.common.dto.GrantsCollegeConfigDto$GradeConfigs$MajorConfigs$ClassesConfigs">
+                    <result property="recordId" column="classesRecordId"/>
+                    <result property="classesId" column="classesId"/>
+                    <result property="amount" column="classesAmount"/>
+                </collection>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <insert id="saveQuota2Grade" parameterType="com.xdbigdata.subsidize_zjut.domain.Grants2Grade" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO `t_grants_to_grade` (
+            `grants_id`,
+            `grade_id`,
+            `grade_amount`,
+            `college_quota_id`
+        )
+        VALUES
+            (#{grantsId},
+              #{gradeId},
+              #{gradeAmount},
+              #{collegeQuotaId})
+
+    </insert>
+
+    <insert id="saveQuota2Major" parameterType="com.xdbigdata.subsidize_zjut.domain.Grants2Major" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO `t_grants_to_major` (
+            `grade_quota_id`,
+            `major_id`,
+            `major_amount`
+        )
+        VALUES
+            (#{gradeQuotaId},
+            #{majorId},
+             #{majorAmount})
+    </insert>
+
+    <insert id="saveQuota2Classes" parameterType="com.xdbigdata.subsidize_zjut.domain.Grants2Classes" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `t_grants_to_classes` (
+            `major_quota_id`,
+            `classes_id`,
+            `classes_amount`
+        )
+        VALUES
+            (#{majorQuotaId},
+             #{classesId},
+            #{classesAmount})
+    </insert>
+
+    <update id="updateQuota2Grade" parameterType="com.xdbigdata.subsidize_zjut.domain.Grants2Grade">
+        UPDATE `t_grants_to_grade`
+        SET
+         `grade_amount` = #{gradeAmount}
+        WHERE
+            `id` = #{id}
+    </update>
+
+    <update id="updateQuota2Major" parameterType="com.xdbigdata.subsidize_zjut.domain.Grants2Major">
+        UPDATE `t_grants_to_major`
+        SET
+         `major_amount` = #{majorAmount}
+        WHERE
+            `id` = #{id}
+    </update>
+
+    <update id="updateQuota2Classes" parameterType="com.xdbigdata.subsidize_zjut.domain.Grants2Classes">
+        UPDATE `t_grants_to_classes`
+        SET
+         `classes_amount` = #{classesAmount}
+        WHERE
+            `id` = #{id}
+    </update>
+
+    <select id="listAuthGrants" resultMap="listGrantsMap">
+        SELECT
+          tg.`uuid` AS  uuid,
+          tg.`id` AS id,
+          tg.`name` AS `name`,
+          tg.`organization` AS organization,
+          tg.`school_year` AS schoolYear,
+          tg.`start_time` AS startTime,
+          tg.`end_time` AS endTime,
+          tg.`level_name` AS levelName,
+          tg.`subsidize_money` AS subsidizeMoney,
+          tg.`evaluate_condition` AS evaluateCondition,
+          tgaq.id AS applyId,
+          tgaq.apply_amount AS applyAmount,
+          tgaq.college_id AS collegeId,
+          tgaq.`status` AS `status`,
+          tgtc.`allot` AS `reserveNum`,
+          tgtc.`amount` AS `collegeAmount`,
+          A.distributeAllot AS `allot`
+        FROM t_grants tg
+        LEFT JOIN t_grants_to_college tgtc ON tg.id = tgtc.grants_id
+        LEFT JOIN t_grants_apply_quota tgaq  ON tg.id = tgaq.grants_id
+        LEFT JOIN (
+            SELECT
+              tgtg.grants_id AS grantsId,
+              SUM(tgtg.grade_amount) AS  `distributeAllot`
+            FROM t_grants_to_grade tgtg
+           LEFT JOIN (SELECT * FROM t_grants_to_college tgtc2
+            WHERE tgtc2.college_id = #{collegeId}
+            AND tgtc2.amount IS NOT NULL )AS B ON tgtg.college_quota_id = B.id
+            GROUP BY tgtg.grants_id
+                  ) AS A ON tg.id  = A.grantsId
+        WHERE tgtc.college_id = #{collegeId}
+          AND tgtc.amount IS NOT NULL
+        GROUP BY tg.id
+    </select>
+    <resultMap id="listGrantsMap" type="com.xdbigdata.subsidize_zjut.common.dto.GrantsListDto">
+        <id property="id" column="id"/>
+        <result property="uuid" column="uuid"/>
+        <result property="name" column="name"/>
+        <result property="organization" column="organization"/>
+        <result property="schoolYear" column="schoolYear"/>
+        <result property="startTime" column="startTime"/>
+        <result property="endTime" column="endTime"/>
+        <result property="levelName" column="levelName"/>
+        <result property="subsidizeMoney" column="subsidizeMoney"/>
+        <result property="subsidizeNum" column="subsidizeNum"/>
+        <result property="reserveNum" column="reserveNum"/>
+        <result property="evaluateCondition" column="evaluateCondition"/>
+        <result property="allot" column="allot"/>
+        <result property="url" column="url"/>
+        <result property="isDistribute" column="isDistribute"/>
+        <result property="collegeAmount" column="collegeAmount"/>
+        <collection property="newApplys" javaType="java.util.List" ofType="com.xdbigdata.subsidize_zjut.domain.GrantsApplyQuota">
+            <result property="id" column="applyId"/>
+            <result property="collegeId" column="collegeId"/>
+            <result property="applyAmount" column="applyAmount"/>
+            <result property="status" column="status"/>
+        </collection>
+    </resultMap>
+</mapper>

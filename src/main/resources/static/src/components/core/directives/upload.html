@@ -1,0 +1,16 @@
+<div>
+    <div class="upload-container">
+        <input type="button" value="上传" class="btn btn-primary">
+        <input type="file" id="file" nv-file-select multiple uploader="uploader"/>
+        <div ng-repeat="item in uploader.queue" class="progress-bar-wrap">
+            <div>{{ item.file.name }}</div>
+            <div class="progress">
+                                        <span class="progress-bar" role="progressbar"
+                                              ng-style="{ 'width': item.progress + '%' }"></span>
+            </div>
+            <span class="progress-percent">{{item.progress}}%</span>
+        </div>
+        <p class="upload-url" title="{{name}}"><a href="{{url}}" target="_blank">{{name}}</a></p>
+        <!--<p class="upload-url text-danger" ng-if="isEmpty">请上传文件</p>-->
+    </div>
+</div>

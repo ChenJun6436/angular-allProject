@@ -1,0 +1,15 @@
+<div ng-switch="vm.tableFlag" class="p20">
+    <div class="text-center" ng-switch-when="0">加载中……</div>
+    <div ng-switch-when="1">
+        <div class="notice-list">
+            <h3 class="page-header mt5">公告</h3>
+            <ul>
+                <li ng-repeat="notice in vm.noticeList"><a href="javascript:;" ng-click="getNoticeDetail(notice.id)">{{notice.title}}</a>
+                    <a href="javascript:;" ng-if="userRole=='1'" class="text-danger pull-right ml50"
+                       ng-click="removeNotice(notice.id)">删除</a><span class="pull-right text-muted">{{notice.noticeTime | date : 'yyyy-MM-dd HH:mm:ss'}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div ng-switch-when="2" class="text-center">暂无记录</div>
+</div>

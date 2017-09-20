@@ -1,0 +1,28 @@
+<div class="inline-block">
+    <span ng-if="materialList.length === 0">无材料</span>
+    <a href="{{materialList[0]}}"  ng-if="materialList.length === 1">查看资料</a>
+    <a href="javascript:;" ng-click="showGrantsMaterialModal()" ng-if="materialList.length > 1">查看资料</a>
+    <!-- 查看材料 -->
+    <div class="modal fade"  ng-if="materialList.length > 1" id="materialDetail" tabindex="-1" role="dialog" aria-labelledby="grantsListModal">
+        <div class="modal-dialog" role="document" style="width:320px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="grantsListModal">材料列表</h4>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li  ng-repeat="material in materialList track by $index" class="text-left ellipsis">
+                            <a title="{{material.name}}" href="{{material.url}}" target="_blank">{{material.name}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer tc">
+                    <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default">关闭
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

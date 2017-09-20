@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xdbigdata.subsidize_zjut.mapper.GrantsSchoolMapper">
+
+    <insert id="saveGrants" parameterType="com.xdbigdata.subsidize_zjut.domain.Grants" useGeneratedKeys="true"  >
+        INSERT INTO `t_grants` (
+            `name`,
+            `organization`,
+            `school_year`,
+            `start_time`,
+            `end_time`,
+            `level_name`,
+            `subsidize_money`,
+            `subsidize_num`,
+            `reserve_num`,
+            `evaluate_condition`,
+            `uuid`,
+            `url`
+        )
+        VALUES
+        <foreach collection="level" index="index" item="item" separator=",">
+            (
+            #{name},
+            #{organization},
+            #{schoolYear},
+            #{startTime},
+            #{endTime},
+            #{item.levelName},
+            #{item.subsidizeMoney},
+            #{item.subsidizeNum},
+            #{item.reserveNum},
+            #{item.evaluateCondition},
+            #{uuid},
+            #{item.url}
+            )
+        </foreach>
+    </insert>
+
+    <select id="listGrants" resultMap="listGrantsMap">
+        SELECT
+            tg.`uuid` AS  uuid,
+            tg.`id` AS id,
+            tg.`name` AS `name`,
+            tg.`organization` AS organization,
+            tg.`school_year` AS schoolYear,
+            tg.`start_time` AS startTime,
+            tg.`end_time` AS endTime,
+            tg.`level_name` AS levelName,
+            tg.`subsidize_money` AS subsidizeMoney,
+            tg.`evaluate_condition` AS evaluateCondition,
+            tg.`subsidize_num` AS subsidizeNum,
+            tg.`reserve_num` AS reserveNum,
+            tg.`url` AS  url,
+            tga.id AS applyId,
+            tga.apply_amount AS applyAmount,
+            tga.college_id AS collegeId,
+            tga.`status` AS `status`,
+            tg.subsidize_num - IFNULL(tg.reserve_num,0) - IFNULL(gtc.allot,0) AS allot,
+            SUM(tgtc.amount) AS isDistribute
+        FROM
+            `t_grants` tg
+        LEFT JOIN t_grants_apply_quota tga ON tg.id = tga.grants_id
+        LEFT JOIN (
+            SELECT
+                IFNULL(SUM(IFNULL(amount, 0)), 0) AS allot,
+                gtc.grants_id AS grantsId
+            FROM
+                t_grants_to_college gtc
+            GROUP BY
+                gtc.grants_id
+        ) AS gtc ON tg.id = gtc.grantsId
+          LEFT JOIN t_grants_to_college tgtc  ON tg.id = tgtc.grants_id
+        GROUP BY tg.id
+    </select>
+
+    <resultMap id="listGrantsMap" type="com.xdbigdata.subsidize_zjut.common.dto.GrantsListDto">
+        <id property="id" column="id"/>
+        <result property="uuid" column="uuid"/>
+        <result property="name" column="name"/>
+        <result property="organization" column="organization"/>
+        <result property="schoolYear" column="schoolYear"/>
+        <result property="startTime" column="startTime"/>
+        <result property="endTime" column="endTime"/>
+        <result property="levelName" column="levelName"/>
+        <result property="subsidizeMoney" column="subsidizeMoney"/>
+        <result property="subsidizeNum" column="subsidizeNum"/>
+        <result property="reserveNum" column="reserveNum"/>
+        <result property="evaluateCondition" column="evaluateCondition"/>
+        <result property="allot" column="allot"/>
+        <result property="url" column="url"/>
+        <result property="isDistribute" column="isDistribute"/>
+        <collection property="newApplys" javaType="java.util.List" ofType="com.xdbigdata.subsidize_zjut.domain.GrantsApplyQuota">
+            <result property="id" column="applyId"/>
+            <result property="collegeId" column="collegeId"/>
+            <result property="applyAmount" column="applyAmount"/>
+            <result property="status" column="status"/>
+        </collection>
+    </resultMap>
+
+    <update id="updateGrants" parameterType="com.xdbigdata.subsidize_zjut.common.dto.GrantsUpdateDto">
+        UPDATE t_grants
+        SET
+            `name` = #{name},
+            `organization` = #{organization},
+            `school_year` = #{schoolYear},
+            `start_time` = #{startTime},
+            `end_time` = #{endTime},
+            `level_name` = #{levelName},
+            `subsidize_money` = #{subsidizeMoney},
+            `subsidize_num` = #{subsidizeNum},
+            `reserve_num` = #{reserveNum},
+            `evaluate_condition` = #{evaluateCondition},
+            `uuid` = #{uuid}
+        where
+            id = #{id}
+    </update>
+
+    <update id="updateOtherGrantsCommonInfo" parameterType="com.xdbigdata.subsidize_zjut.common.dto.GrantsUpdateDto">
+        UPDATE t_grants
+        SET `name` = #{name},
+            `organization` = #{organization},
+            `school_year` = #{schoolYear},
+            `start_time` = #{startTime},
+            `end_time` = #{endTime}
+        WHERE `uuid` = #{uuid}
+    </update>
+
+
+    <delete id="deleteGrantsById" parameterType="Long">
+        DELETE tg.*, tga.*
+        FROM
+            t_grants tg
+        LEFT JOIN t_grants_attachment tga ON tg.id = tga.grants_id
+        WHERE
+            tg.id = #{id}
+        OR tga.grants_id = #{id}
+    </delete>
+
+
+    <select id="findCollegeConfigByGrantsId" parameterType="Long" resultMap="collegeConfigMap">
+        SELECT
+            id AS id,
+            grants_id AS grantsId,
+            college_id AS collegeId,
+            amount AS amount
+        FROM
+            t_grants_to_college
+        WHERE
+            grants_id = #{grantsId}
+    </select>
+
+    <resultMap id="collegeConfigMap" type="com.xdbigdata.subsidize_zjut.common.dto.GrantsConfigDto">
+        <result property="grantsId" column="grantsId"/>
+        <collection property="configs" javaType="java.util.List" ofType="com.xdbigdata.subsidize_zjut.common.dto.GrantsConfigDto$Config">
+            <result property="recordId" column="id"/>
+            <result property="id" column="collegeId"/>
+            <result property="amount" column="amount"/>
+        </collection>
+    </resultMap>
+
+    <insert id="saveCollegeConfig" parameterType="com.xdbigdata.subsidize_zjut.common.dto.GrantsConfigDto">
+        INSERT INTO `t_grants_to_college` (
+            `grants_id`,
+            `college_id`,
+            `amount`
+        )
+        VALUES
+        <foreach collection="configs" index="index" item="item" separator=",">
+            (#{grantsId},
+            #{item.id},
+            #{item.amount})
+        </foreach>
+    </insert>
+
+    <update id="updateCollegeConfig" parameterType="com.xdbigdata.subsidize_zjut.common.dto.GrantsConfigDto">
+        <foreach collection="configs" index="index" item="item" separator=";">
+            UPDATE t_grants_to_college
+            <set>
+              amount = #{item.amount}
+            </set>
+            <where>
+                id = #{item.recordId}
+            </where>
+        </foreach>
+    </update>
+    
+    <update id="dealNewApply">
+        UPDATE t_grants_apply_quota
+        SET status = #{pass}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findDistributeAllotByGrantsId" resultType="Long">
+        SELECT
+          IFNULL(subsidize_num,0) - IFNULL(t_grants.reserve_num,0) AS distributeNum
+        FROM t_grants
+        WHERE id = #{grantsId}
+    </select>
+
+    <select id="countCurrentSchoolYearPovertyNum" resultType="Long">
+        SELECT COUNT(1)
+        FROM t_history_result
+        WHERE `year` = #{currentSchoolYear}
+        AND poverty_level IS NOT NULL
+    </select>
+</mapper>

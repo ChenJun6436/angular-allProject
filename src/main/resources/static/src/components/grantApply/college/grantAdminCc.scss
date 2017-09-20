@@ -1,0 +1,130 @@
+.gaTopst{
+  height:40px;
+  line-height: 30px;
+  background-color: #ecf2fb;
+}
+.gaTopAgBtn{
+  height: 25px;
+  line-height: 25px;
+  color: #FFFFFF;
+  font-size: 12px;
+  background-color: #00aaff;
+  display: inline-block;
+  width: 130px;
+  border-radius: 3px;
+  text-align: center;
+  margin-right: 10px;
+}
+.gaEndTimeCc{
+  @extend .gaEndTime;
+}
+
+.agdNotAp{
+  color: #f5795f;
+}
+.gaTitleActive{
+  border-bottom: 2px solid #00AAFF;
+  color: #00AAFF;
+}
+.gaTitleS2{
+  @extend .gaTitleS1;
+}
+.gaDo{
+  height:50px;
+  font-size: 12px;
+  line-height: 50px;
+}
+.gaEndTime{
+  float: left;
+  margin: 0;
+}
+.gaSearch{
+  @extend .gaTopAgBtn;
+  float: right;
+  width: 65px;
+  margin-top: 13px;
+}
+.gadExTb{
+  tr{
+    height: 40px;
+    font-size: 12px;
+  }
+  .gadTbTt~tr:nth-child(2n+1){
+    background-color: #fafafa;
+  }
+  .gadTbTt{
+    font-size: 14px;
+    background-color: #f1f4f7;
+    input[type=text]{
+      width: 80px;
+      float: left;
+    }
+  }
+}
+.gadFoot{
+  @extend .gaFoot;
+  font-size: 15px;
+  span{
+    display: inline-block;
+    width: 25px;
+    height:20px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 2px;
+    margin-left: 5px;
+  }
+  .pageActive{
+    background-color: #00AAFF;
+    color: #ffffff;
+  }
+}
+.gadUnExTb{
+  @extend .gadExTb;
+}
+.gaPbDo{
+  margin-top: 20px;
+  line-height: 20px;
+  font-size: 11px;
+}
+.gaPbHead{
+  margin: 0;
+  line-height: 20px;
+  font-size: 12px;
+  height: 20px;
+}
+.gaPbResDo{
+  float: right;
+}
+.gaSchoolList{
+  width: 40%;
+  float: left;
+}
+.gaSchoolListName{
+  @extend .overhide;
+  display: inline-block;
+  width: 200px;
+}
+.comDeal{
+  height: 25px;
+  line-height: 25px;
+  color: #FFFFFF;
+  font-size: 12px;
+  background-color: #a0a0a0;
+  display: inline-block;
+  width: 130px;
+  border-radius: 3px;
+  text-align: center;
+  margin-right: 10px;
+}
+.huibtn{
+   height: 25px;
+   line-height: 25px;
+   color: #FFFFFF;
+   font-size: 12px;
+   display: inline-block;
+   width: 130px;
+   border-radius: 3px;
+   text-align: center;
+   margin-right: 10px;
+   background-color: #a0a0a0;
+ }

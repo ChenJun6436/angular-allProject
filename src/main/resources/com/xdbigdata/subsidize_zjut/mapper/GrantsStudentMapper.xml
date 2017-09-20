@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xdbigdata.subsidize_zjut.mapper.GrantsStudentMapper">
+
+    <select id="listApplyMaterial" resultType="com.xdbigdata.subsidize_zjut.domain.GrantsAttachment">
+        SELECT
+            id AS id,
+            grants_uuid AS grantsUuid,
+            file_name AS fileName,
+            url AS url
+        FROM
+            t_grants_attachment
+        WHERE
+            grants_uuid = #{grantsUuid}
+        AND operate_id = #{sn}
+    </select>
+
+    <delete id="deleteApplyMaterialById" parameterType="Long">
+        DELETE
+        FROM t_grants_attachment
+        WHERE id = #{id}
+    </delete>
+
+    <insert id="saveCommitDissent" parameterType="com.xdbigdata.subsidize_zjut.domain.GrantsDissent">
+        INSERT INTO `t_grants_dissent` (
+            `content`,
+            `create_time`,
+            `stage`,
+            `source_sn`,
+            `source_name`,
+            `target_sn`,
+            `target_name`
+        )
+        VALUES
+            (
+                #{content},
+                NOW(),
+                #{stage},
+                #{sourceSn},
+                #{sourceName},
+                #{targetSn},
+                #{targetName}
+            )
+    </insert>
+
+    <insert id="saveStudentGrantsApplyInfo" parameterType="com.xdbigdata.subsidize_zjut.domain.GrantsApply">
+        INSERT INTO `t_grants_apply` (
+            `grants_uuid`,
+            `bankcard`,
+            `is_agent`,
+            `agent_sn`,
+            `agent_bankcard`,
+            `apply_reason`,
+            `is_commit`,
+            `student_sn`
+        )
+        VALUES
+        (
+            #{grantsUuid},
+            #{bankcard},
+            #{isAgent},
+            #{agentSn},
+            #{agentBankcard},
+            #{applyReason},
+            #{isCommit},
+            #{studentSn}
+        )
+    </insert>
+
+    <select id="listAuthGrants" resultMap="authGrantsMap">
+        SELECT
+            tg.uuid AS uuid,
+            tg.id AS  recordId,
+            tg.name AS `name`,
+            tg.level_name AS  levelName,
+            tg.organization AS organization,
+            tg.evaluate_condition AS evaluateCondition,
+            tg.school_year AS schoolYear,
+            tg.start_time AS startTime,
+            tg.end_time AS  endTime,
+            tg.subsidize_money AS subsidizeMoney,
+            tg.subsidize_num AS subsidizeNum,
+            tg.reserve_num AS reserveNum,
+            tg.url AS url,
+            tga.file_name AS fileName
+        FROM t_grants tg
+        LEFT JOIN t_grants_to_college tgtc ON tg.id = tgtc.grants_id
+        LEFT JOIN t_grants_to_grade tgtg ON tgtc.id = tgtg.college_quota_id
+        LEFT JOIN t_grants_to_major tgtm ON tgtg.id = tgtm.grade_quota_id
+        LEFT JOIN t_grants_to_classes tgtc2 ON tgtm.id = tgtc2.major_quota_id
+        LEFT JOIN t_grants_attachment tga  ON tg.id = tga.grants_id,
+        t_history_result hr
+        WHERE
+        now() >= start_time AND now() &lt;= end_time
+        AND tgtc.college_id = #{collegeId}
+        AND tgtm.major_id = #{majorId}
+        AND tgtc2.classes_id = #{classesId}
+        AND hr.student_id = #{sn}
+        AND hr.poverty_level IS NOT NULL
+        AND hr.`year` = #{currentSchoolYear}
+    </select>
+
+    <resultMap id="authGrantsMap" type="com.xdbigdata.subsidize_zjut.common.dto.GrantsDto">
+        <id property="uuid" column="uuid"/>
+        <result property="name" column="name"/>
+        <result property="organization" column="organization"/>
+        <result property="schoolYear" column="schoolYear"/>
+        <result property="startTime" column="startTime"/>
+        <result property="endTime" column="endTime"/>
+        <collection property="level" javaType="java.util.List" ofType="java.util.Map">
+            <id property="id" column="recordId"/>
+            <result property="levelName" column="levelName"/>
+            <result property="evaluateCondition" column="evaluateCondition"/>
+            <result property="subsidizeMoney" column="subsidizeMoney"/>
+            <result property="subsidizeNum" column="subsidizeNum"/>
+            <result property="url" column="url"/>
+            <result property="fileName" column="fileName"/>
+        </collection>
+    </resultMap>
+
+    <select id="listAuthProcessGrants" resultType="com.xdbigdata.subsidize_zjut.common.dto.GrantsNameWithLevelDto">
+        SELECT
+            tg.id AS grantsId,
+            CONCAT(
+                tg.`name`,
+                IFNULL(tg.level_name, '')
+            ) AS grantsName
+        FROM t_grants tg
+        LEFT JOIN t_grants_to_college tgtc ON tg.id = tgtc.grants_id
+        LEFT JOIN t_grants_to_grade tgtg ON tgtc.id = tgtg.college_quota_id
+        LEFT JOIN t_grants_to_major tgtm ON tgtg.id = tgtm.grade_quota_id
+        LEFT JOIN t_grants_to_classes tgtc2 ON tgtm.id = tgtc2.major_quota_id
+        LEFT JOIN t_grants_attachment tga  ON tg.id = tga.grants_id,
+        t_history_result hr
+        WHERE
+        now() >= start_time AND now() &lt;= end_time
+        AND tgtc.college_id = #{collegeId}
+        AND tgtm.major_id = #{majorId}
+        AND tgtc2.classes_id = #{classesId}
+        AND hr.student_id = #{sn}
+        AND hr.poverty_level IS NOT NULL
+        AND hr.`year` = #{currentSchoolYear}
+        UNION
+        SELECT
+            - 1 AS grantsId,
+            "未通过" AS grantsName
+    </select>
+
+    <select id="listHavePovertyBuNotApply" resultType="com.xdbigdata.subsidize_zjut.common.dto.GrantsHasPovertyLevelNotApply">
+        SELECT
+          A.student_id AS sn,
+          A.college_name AS college,
+          A.major_name AS major,
+          A.grade_name AS grade,
+          A.poverty_level AS povertyLevel
+        FROM (SELECT *
+        FROM t_history_result thr
+        WHERE thr.year = #{currentSchoolYear}
+        AND thr.poverty_level IS NOT NULL
+        AND thr.student_id IN
+         <foreach collection="sns" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+         </foreach>
+         ) A LEFT JOIN t_grants_apply tga  ON A.student_id = tga.student_sn AND tga.grants_uuid= #{grantsUuid}
+        LEFT JOIN t_grants tg ON tga.grants_uuid = tg.uuid AND tg.school_year = #{currentSchoolYear}
+        WHERE tga.apply_reason IS NULL AND tga.is_commit IS NULL
+    </select>
+
+    <select id="isApply" resultType="Long">
+        SELECT
+            COUNT(1)
+        FROM
+            `t_grants_apply`
+        WHERE
+            grants_uuid = #{grantsUuid}
+        AND student_sn = #{studentSn}
+    </select>
+
+    <select id="listMyDissent" resultType="com.xdbigdata.subsidize_zjut.domain.GrantsDissent">
+      SELECT
+        `id` AS `id`,
+        `content` AS  `content`,
+        `stage` AS `stage`,
+        `source_sn` AS `sourceSn`,
+        `source_name` AS `sourceName`,
+        `target_sn` AS `targetSn`,
+        `target_name` AS `targetName`,
+        `response` AS `response`,
+        `response_sn` AS `responseSn`,
+        `response_name` AS `responseName`,
+        `deal_time` AS `dealTime`,
+        `college_id` AS `collegeId`,
+        `grants_uuid` AS `grantsUuid`
+      FROM
+        `t_grants_dissent`
+      WHERE
+         source_sn = #{sn}
+      AND grants_uuid = #{grantsUuid}
+      AND deal_time IS NOT NULL
+    </select>
+
+    
+</mapper>

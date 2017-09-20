@@ -1,0 +1,74 @@
+/*这里是学生CSS*/
+.lsTop{
+  height: 40px;
+  line-height: 40px;
+  background-color: #ecf2fb;
+  font-size: 17px;
+}
+.lsTip{
+  font-size: 12px;
+  line-height: 50px;
+}
+.lsMain{
+  margin-top: 300px;
+  text-align: center;
+}
+.lsApplyBtn{
+  @extend .gaUpFileBtn;
+  border: none;
+  height:35px;
+  line-height: 35px;
+  width: 140px;
+  font-size: 19px;
+  margin: 20px auto;
+}
+.lsApplyMoney{
+  height: 30px;
+  width: 130px;
+  border-radius: 4px;
+  border: 1px solid #e3e3e3;
+}
+/*这里是教师CSS*/
+.lsHead{
+  background-color: #ecf2fb;
+  height:28px;
+}
+.lstipBk{
+  height: 28px;
+  font-size: 13px;
+  line-height: 28px;
+  padding: 0 10px;
+  margin: 0;
+  float: left;
+  background-color: #b6c0cf;
+  color: #fff;
+}
+.lsUp{
+  @extend .gaUpFileBtn;
+  float: right;
+}
+.hideIpt{
+  position: absolute;
+  right: 25px;
+  cursor: pointer;
+  opacity:0;
+  input{
+    line-height: normal;
+    width:240px;
+    cursor: pointer;
+  }
+}
+.loanTb{
+  tr{
+    height: 40px;
+  }
+  tr:nth-child(n+2){
+    background-color: #fafafa;
+  }
+  .loanTbH{
+    border-bottom: 1px solid #e3e3e3;
+    &~tr{
+      font-size: 13px;
+    }
+  }
+}

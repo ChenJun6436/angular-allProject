@@ -1,0 +1,86 @@
+<div class="gaTitle">
+    配置管理
+</div>
+<!--border-bottom: 1px solid #e0dfe3-->
+<div class="gaBody">
+
+    <div style="border-bottom: 1px solid #e0dfe3">
+        <h5>配置各学院名额</h5>
+        <div style="overflow: hidden">
+            <div ng-repeat="i in vm.schoolData.configs" class="gaSchoolList">
+                <input style="margin: 0" type="checkbox" ng-model="i.checked" ng-change="vm.checkOne()">
+                <span class="gaSchoolListName">{{i.name}}</span>
+                <input class="w50" style="text-indent: 10px" ng-disabled="!i.checked" type="number" ng-model="i.amount">
+            </div>
+        </div>
+        <p class="gatip">已配置名额165名，剩余名额15名</p>
+    </div>
+
+    <div style="border-bottom: 1px solid #e0dfe3">
+        <h5>配置学生申请条件</h5>
+        <!--l  label for (key , value) in object-->
+        <div style="overflow: hidden">
+            <select ng-model="vm.schoolData.schoolYear"
+                    ng-options="a.name as a.name for a in vm.schoolYear"
+                    ng-change="vm.updateGrants()">
+            </select>获得以下奖学金的学生可申请国家励志奖学金{{vm.schoolData.schoolYear}}
+            <div>
+                <div style="float: left;width: 160px" ng-repeat="i in vm.grants">
+                    <input style="margin: 0"     type="checkbox" ng-model="i.grantschecked" ng-change="vm.checkGrants()">
+                    <span style="width: 100px" class="gaSchoolListName">{{i.grantsName}}</span>
+                </div>
+            </div>
+        </div>
+        <p class="gatip"></p>
+    </div>
+
+    <div style="border-bottom: 1px solid #e0dfe3">
+        <h5>配置起止时间</h5>
+        <div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label fs16 lh70">公示时间：</label>
+                <div class=" lh70">
+                    <p class="input-group inline-block vertical-middle">
+                        <input type="text" class="form-control"
+                               uib-datepicker-popup placeholder="请选择时间" datepicker-options="vm.startTimeOptions"
+                               ng-model="vm.schoolData.startDate" is-open="a"
+                               readonly ng-click="a = true" required show-button-bar="false"
+                               name="startTime"
+                               ng-class="{'border-error':vm.startTime.$invalid&&vm.grantsSubmit}">
+                        <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-icon" ng-click="startTime = true">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                            </span>
+                    </p>
+                    &nbsp;&nbsp;~&nbsp;&nbsp;
+                    <p class="input-group inline-block vertical-middle">
+                        <input type="text" class="form-control" uib-datepicker-popup placeholder="请选择时间"
+                               ng-model="vm.schoolData.endDate" is-open="b"
+                               datepicker-options="vm.endTimeOptions"
+                               readonly ng-click="b = true" required show-button-bar="false"
+                               name="endTime"
+                               ng-class="{'border-error':vm.endTime.$invalid&&vm.grantsSubmit}">
+                        <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-icon" ng-click="endTime = true">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                            </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div>
+        <button type="button" ng-click="vm.putSchoolManner()" class="btn btn-primary">保存</button>
+        <button type="button" ng-click="vm.cancel()" class="btn btn-cancel">取消</button>
+    </div>
+
+</div>
+
+

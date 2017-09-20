@@ -1,0 +1,98 @@
+<div class="row">
+    <div class="col-sm-offset-1 col-md-10 time-set">
+        <h3 class="page-header">请设置时间流程</h3>
+        <form name="processForm" novalidate>
+            <p>
+                <label for="processName">*本次认定名称：</label>
+                <input id="processName" name="processName" type="text" class="process-name" maxlength="100"
+                       ng-class="{'border-error':processForm.processName.$invalid&&vm.submit}" required
+                       ng-model="vm.processTimeList.processName">
+                <span ng-if="processForm.processName.$invalid&&vm.submit" class="text-error">流程名称必填</span>
+            </p>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>步骤</th>
+                    <th>阶段</th>
+                    <th class="w340">时间设置</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="pt15">步骤1</td>
+                    <td class="pt15">学生申请时间段</td>
+                    <td>
+                        <input placeholder="请输入日期" id="applyStart" class="form-control laydate-icon"
+                               ng-disabled="vm.applyStartDisabled" ng-model="vm.processTimeList.applyStart">&nbsp;&nbsp;~&nbsp;&nbsp;<input
+                            placeholder="请输入日期" id="applyEnd" class="form-control laydate-icon"
+                            ng-model="vm.processTimeList.applyEnd">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="pt15">步骤2</td>
+                    <td class="pt15">民主评议时间段</td>
+                    <td>
+                        <input placeholder="请输入日期" id="discussStart" class="form-control laydate-icon"
+                               ng-disabled="vm.discussStartDisabled" ng-model="vm.processTimeList.discussStart">&nbsp;&nbsp;~&nbsp;&nbsp;<input
+                            placeholder="请输入日期" id="discussEnd" class="form-control laydate-icon"
+                            ng-model="vm.processTimeList.discussEnd">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="pt15">步骤3</td>
+                    <td class="pt15">辅导员审核时间段</td>
+                    <td>
+                        <input placeholder="请输入日期" id="advisorStart" class="form-control laydate-icon"
+                               ng-disabled="vm.advisorStartDisabled" ng-model="vm.processTimeList.advisorStart">&nbsp;&nbsp;~&nbsp;&nbsp;<input
+                            placeholder="请输入日期" id="advisorEnd" class="form-control laydate-icon"
+                            ng-model="vm.processTimeList.advisorEnd">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="pt15">步骤4</td>
+                    <td class="pt15">学院审核时间段</td>
+                    <td>
+                        <input placeholder="请输入日期" id="collegeStart" class="form-control laydate-icon"
+                               ng-disabled="vm.collegeStartDisabled" ng-model="vm.processTimeList.collegeStart">&nbsp;&nbsp;~&nbsp;&nbsp;<input
+                            placeholder="请输入日期" id="collegeEnd" class="form-control laydate-icon"
+                            ng-model="vm.processTimeList.collegeEnd">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="pt15">步骤5</td>
+                    <td class="pt15">学院公示时间段</td>
+                    <td>
+                        <input placeholder="请输入日期" id="collegeOpenStart" class="form-control laydate-icon"
+                               ng-disabled="vm.collegeOpenStartDisabled" ng-model="vm.processTimeList.collegeOpenStart">&nbsp;&nbsp;~&nbsp;&nbsp;<input
+                            placeholder="请输入日期" id="collegeOpenEnd" class="form-control laydate-icon"
+                            ng-model="vm.processTimeList.collegeOpenEnd">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="pt15">步骤6</td>
+                    <td class="pt15">学校审核时间段</td>
+                    <td>
+                        <input placeholder="请输入日期" id="schoolStart" class="form-control laydate-icon"
+                               ng-disabled="vm.schoolStartDisabled" ng-model="vm.processTimeList.schoolStart">&nbsp;&nbsp;~&nbsp;&nbsp;<input
+                            placeholder="请输入日期" id="schoolEnd" class="form-control laydate-icon"
+                            ng-model="vm.processTimeList.schoolEnd">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="pt15">步骤7</td>
+                    <td class="pt15">学校公示时间段</td>
+                    <td>
+                        <input placeholder="请输入日期" id="schoolOpenStart" class="form-control laydate-icon"
+                               ng-disabled="vm.schoolOpenStartDisabled" ng-model="vm.processTimeList.schoolOpenStart">&nbsp;&nbsp;~&nbsp;&nbsp;<input
+                            placeholder="请输入日期" id="schoolOpenEnd" class="form-control laydate-icon"
+                            ng-model="vm.processTimeList.schoolOpenEnd">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+<div class="text-center pb20">
+    <input type="button" value="保存设置" ng-click="updateTime()" class="btn btn-primary h40 w180">
+</div>

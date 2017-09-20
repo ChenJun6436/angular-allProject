@@ -1,0 +1,776 @@
+<!--开发的战友们，1~5 分别代表 学校 学院 辅导员 班级用户 学生-->
+<!--学生用户-困难认定-->
+<dl ng-if="userRole === 5" ng-switch="secondClass">
+    <dd class="top-class" ng-click="shSecondClass(1)">
+        <a ng-class="{active: state.includes('main.studentInfo') || state.includes('main.povertyApply') || state.includes('main.povertyNotice')}">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-wode"></use>
+            </svg>
+            困难认定</a>
+    </dd>
+    <dd class="second-class" ng-switch-when="1">
+        <a ng-class="{active: state.includes('main.studentInfo')}" ui-sref="main.studentInfo">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+            基本信息维护</a>
+    </dd>
+
+    <dd class="second-class" ng-if="isComplete" ng-switch-when="1">
+        <a ng-class="{active: state.includes('main.paPovertyApply')}" ui-sref="main.paPovertyApply">
+
+    <dd ng-if="isComplete" class="second-class" ng-switch-when="1">
+        <a ng-class="{active: state.includes('main.povertyApply')}" ui-sref="main.povertyApply">
+
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+            困难认定申请<!-- <span ng-if="povertyBigStatus>0"
+                         class="pull-right mr20 italic">进行中</span>--></a>
+    </dd>
+    <dd class="second-class" ng-switch-when="1">
+        <a ng-class="{active: state.includes('main.povertyNotice')}" ui-sref="main.povertyNotice">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+            困难认定公示</a>
+    </dd>
+
+
+    <!--学生用户-助学金申请-->
+
+    <dd class="top-class" ng-click="shSecondClass(2)">
+        <a ng-class="{active: state.includes('main.grantApplyIndexSt')|| state.includes('main.grantApplyFill')}">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-tianxieshenqing"></use>
+            </svg>
+            助学金申请</a>
+    </dd>
+    <dd class="second-class" ng-switch-when="2">
+        <a ng-class="{active: state.includes('main.grantApplyIndexSt')}" ui-sref="main.grantApplyIndexSt">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+            助学金申请</a>
+    </dd>
+    <dd class="second-class" ng-switch-when="2">
+        <a ng-class="{active: state.includes('main.grantApplyFill')}"  ui-sref="main.grantApplyFill">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+            公示情况 <span ng-if="bigStatus>0"
+                       class="pull-right mr20 italic">进行中</span></a>
+    </dd>
+    <!--学生用户-特别困难认定-->
+    <dd class="top-class">
+        <a ng-class="{active: state.includes('')}">
+
+    <dt>助学金</dt>
+    <dd>
+        <a ng-class="{active: state.includes('main.grantsApply')}" ui-sref="main.grantsApply">
+
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-bianji"></use>
+            </svg>
+            助学金评定申请</a>
+    </dd>
+    <dd>
+        <a ng-class="{active: state.includes('main.grantsNotice')}" ui-sref="main.grantsNotice">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-tongzhi"></use>
+            </svg>
+            助学金评定公示</a>
+    </dd>
+    <dd class="top-class" ng-click="shSecondClass(4)">
+        <a ng-class="{active: state.includes('main.srGroup')}">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-wode"></use>
+            </svg>
+            资助记录</a>
+    </dd>
+    <dd class="second-class" ng-switch-when="4">
+        <a ng-class="{active: state.includes('main.srGroup.srEcon')}" ui-sref="main.srGroup.srEcon">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+            经济困难认定</a>
+    </dd>
+    <dd class="second-class" ng-switch-when="4">
+        <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+            助学金</a>
+    </dd>
+    <dd class="second-class" ng-switch-when="4">
+        <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+            国家励志奖学金</a>
+    </dd>
+    <dd class="second-class" ng-switch-when="4">
+        <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+            勤工岗位申请</a>
+    </dd>
+    <dd class="second-class" ng-switch-when="4">
+        <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+
+            岗位工作</a>
+    </dd>
+
+
+
+    <!--&lt;!&ndash;学生用户- 励志奖学金申请&ndash;&gt;-->
+
+    <!--<dd class="top-class" ng-click="shSecondClass(3)">-->
+    <!--<a ng-class="{active: state.includes('main.srGroup')}">-->
+    <!--<svg class="icon" aria-hidden="true">-->
+    <!--<use xlink:href="#icon-bianji"></use>-->
+    <!--</svg>-->
+    <!--励志奖学金申请</a>-->
+    <!--</dd>-->
+    <!--<dd class="second-class" ng-switch-when="3">-->
+    <!--<a ng-class="{active: state.includes('main.srGroup.srEcon')}" ui-sref="main.srGroup.srEcon">-->
+    <!--<svg class="icon" aria-hidden="true">-->
+    <!--<use xlink:href=""></use>-->
+    <!--</svg>-->
+    <!--励志奖学金申请</a>-->
+    <!--</dd>-->
+    <!--<dd class="second-class" ng-switch-when="3">-->
+    <!--<a ng-class="{active: state.includes('main.studentInfo')}" ui-sref="main.studentInfo">-->
+    <!--<svg class="icon" aria-hidden="true">-->
+    <!--<use xlink:href=""></use>-->
+    <!--</svg>-->
+    <!--公示情况</a>-->
+    <!--</dd>-->
+</dl>
+<!--班级用户-->
+<dl ng-if="userRole === 4">
+    <dt>贫困</dt>
+    <dd>
+        <a ng-class="{active: state.includes('main.studentInfo')}" ui-sref="main.studentInfo">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-wode"></use>
+            </svg>
+            基本信息维护</a>
+    </dd>
+    <dd ng-if="isComplete">
+
+        勤工岗位工作</a>
+    </dd>
+    <dt>更多</dt>
+    <dd>
+        <a ng-class="{active: state.includes('main.myApply')}" ui-sref="main.myApply">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-iconfontcolor33"></use>
+            </svg>
+            我的申请</a>
+    </dd>
+    <dd>
+        <a ng-class="{active: state.includes('main.messageList')}" ui-sref="main.messageList">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-iconfontcolor33"></use>
+            </svg>
+            消息提醒</a>
+    </dd>
+    <dd>
+        <a ng-class="{active: state.includes('main.noticeList')}" ui-sref="main.noticeList">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-gonggao-copy"></use>
+            </svg>
+            学校公告</a>
+    </dd>
+    <!--<dd>
+        <a ng-class="{active: state.includes('main.studentHelp')}" ui-sref="main.studentHelp">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-iconview"></use>
+            </svg>
+            使用前阅读</a>
+    </dd>-->
+</dl>
+<dl ng-if="userRole === 4" ng-switch="secondClass">
+    <dd class="top-class" ng-click="shSecondClass(1)">
+        <a ng-class="{active: state.includes('main.studentInfo') || state.includes('main.povertyApply') || state.includes('main.classAuditPovertyMaterial') || state.includes('main.classAuditPoverty') || state.includes('main.povertyNotice')}">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-wode"></use>
+            </svg>
+            困难认定</a>
+    </dd>
+    <dd class="second-class" ng-switch-when="1">
+        <a ng-class="{active: state.includes('main.studentInfo')}" ui-sref="main.studentInfo">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+            基本信息维护</a>
+    </dd>
+    <dd ng-if="isComplete" class="second-class" ng-switch-when="1">
+
+        <a ng-class="{active: state.includes('main.povertyApply')}" ui-sref="main.povertyApply">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-tianxieshenqing"></use>
+            </svg>
+            困难认定申请 <!--<span ng-if="povertyBigStatus>0"
+                         class="pull-right mr20 italic">进行中</span>--></a>
+    </dd>
+
+    <dd>
+
+    <dd class="second-class" ng-switch-when="1">
+
+        <a ng-class="{active: state.includes('main.classAuditPovertyMaterial')}" ui-sref="main.classAuditPovertyMaterial">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-tianxieshenqing"></use>
+            </svg>
+            学生材料审核 <!--<span ng-if="povertyBigStatus === 1"
+                         class="pull-right mr20 italic">进行中</span>--></a>
+    </dd>
+
+    <dd>
+
+    <dd class="second-class" ng-switch-when="1">
+
+        <a ng-class="{active: state.includes('main.classAuditPoverty')}" ui-sref="main.classAuditPoverty">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-tianxieshenqing"></use>
+            </svg>
+            困难认定评审 <!--<span ng-if="povertyBigStatus === 2"
+                         class="pull-right mr20 italic">进行中</span>--></a>
+    </dd>
+
+    <dd>
+
+    <dd class="second-class" ng-switch-when="1">
+
+        <a ng-class="{active: state.includes('main.povertyNotice')}" ui-sref="main.povertyNotice">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-gonggao1"></use>
+            </svg>
+            困难认定公示</a>
+    </dd>
+    <dt>助学金</dt>
+    <dd>
+        <a ng-class="{active: state.includes('main.grantsApply')}" ui-sref="main.grantsApply">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-bianji"></use>
+            </svg>
+            助学金评定申请</a>
+    </dd>
+    <dd>
+        <a ng-class="{active: state.includes('main.classAuditGrants')}" ui-sref="main.classAuditGrants">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-tongzhi"></use>
+            </svg>
+            助学金评定审核</a>
+    </dd>
+    <dd>
+        <a ng-class="{active: state.includes('main.grantsNotice')}" ui-sref="main.grantsNotice">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-tongzhi"></use>
+            </svg>
+            助学金评定公示</a>
+    </dd>
+    <dd class="top-class" ng-click="shSecondClass(4)">
+        <a ng-class="{active: state.includes('main.srGroup')}">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-wode"></use>
+            </svg>
+            资助记录</a>
+    </dd>
+    <dd class="second-class" ng-switch-when="4">
+        <a ng-class="{active: state.includes('main.srGroup.srEcon')}" ui-sref="main.srGroup.srEcon">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+            经济困难认定</a>
+    </dd>
+    <dd class="second-class" ng-switch-when="4">
+        <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+            助学金</a>
+    </dd>
+    <dd class="second-class" ng-switch-when="4">
+        <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+            国家励志奖学金</a>
+    </dd>
+    <dd class="second-class" ng-switch-when="4">
+        <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+            勤工岗位申请</a>
+    </dd>
+    <dd class="second-class" ng-switch-when="4">
+        <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href=""></use>
+            </svg>
+            勤工岗位工作</a>
+    </dd>
+    <dt>更多</dt>
+    <dd>
+        <a ng-class="{active: state.includes('main.myApply')}" ui-sref="main.myApply">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-iconfontcolor33"></use>
+            </svg>
+            我的申请</a>
+    </dd>
+    <dd>
+        <a ng-class="{active: state.includes('main.messageList')}" ui-sref="main.messageList">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-iconfontcolor33"></use>
+            </svg>
+            消息提醒</a>
+    </dd>
+    <dd>
+        <a ng-class="{active: state.includes('main.noticeList')}" ui-sref="main.noticeList">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-gonggao-copy"></use>
+            </svg>
+            学校公告 </a>
+    </dd>
+    <!--<dd>
+        <a ng-class="{active: state.includes('main.studentHelp')}" ui-sref="main.studentHelp">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-iconview"></use>
+            </svg>
+            使用前阅读</a>
+    </dd>-->
+</dl>
+
+<dl ng-if="userRole === 3">
+    <dt>贫困</dt>
+    <dd>
+        =======
+        <dl ng-if="userRole === 3" ng-switch="secondClass">
+            <dd class="top-class" ng-click="shSecondClass(1)">
+                <a ng-class="{active: state.includes('main.advisorAuditPovertyMaterial') || state.includes('main.advisorAuditPoverty') || state.includes('main.povertyResult') || state.includes('main.dynamicManage')}">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-wode"></use>
+                    </svg>
+                    困难认定</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="1">
+                >>>>>>> origin/master
+                <a ng-class="{active: state.includes('main.advisorAuditPovertyMaterial')}" ui-sref="main.advisorAuditPovertyMaterial">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    学生材料审核</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="1">
+                <a ng-class="{active: state.includes('main.advisorAuditPoverty')}" ui-sref="main.advisorAuditPoverty">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    困难认定评审</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="1">
+                <a ng-class="{active: state.includes('main.povertyResult')}" ui-sref="main.povertyResult">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    困难认定结果</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="1">
+                <a ng-class="{active: state.includes('main.dynamicManage')}" ui-sref="main.dynamicManage">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    动态管理</a>
+            </dd>
+            <dt>助学金</dt>
+            <dd>
+                <a ng-class="{active: state.includes('main.advisorGrantsSetting')}" ui-sref="main.advisorGrantsSetting">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-guanli"></use>
+                    </svg>
+                    助学金评定管理</a>
+            </dd>
+            <dd>
+                <a ng-class="{active: state.includes('main.advisorAuditGrants')}" ui-sref="main.advisorAuditGrants">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-shenhe"></use>
+                    </svg>
+                    助学金评定审核</a>
+            </dd>
+            <dd>
+                <a ng-class="{active: state.includes('main.grantsResult')}" ui-sref="main.grantsResult">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-biaodan"></use>
+                    </svg>
+                    助学金评定结果</a>
+            </dd>
+            <dd>
+                <a ng-class="{active: state.includes('main.advisorGrantsManage')}" ui-sref="main.advisorGrantsManage">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-1232221"></use>
+                    </svg>
+                    助学金管理</a>
+            </dd>
+            <dd class="top-class" ng-click="shSecondClass(4)">
+                <a ng-class="{active: state.includes('main.srGroup')}">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-wode"></use>
+                    </svg>
+                    资助记录</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="4">
+                <a ng-class="{active: state.includes('main.srGroup.srEcon')}" ui-sref="main.srGroup.srEcon">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    经济困难认定</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="4">
+                <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    助学金</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="4">
+                <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    国家励志奖学金</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="4">
+                <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    勤工岗位申请</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="4">
+                <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    勤工岗位工作</a>
+            </dd>
+            <dt>更多</dt>
+            <dd>
+                <a ng-class="{active: state.includes('main.messageList')}" ui-sref="main.messageList">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-iconfontcolor33"></use>
+                    </svg>
+                    消息提醒</a>
+            </dd>
+            <dd>
+                <a ng-class="{active: state.includes('main.noticeList')}" ui-sref="main.noticeList">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-gonggao-copy"></use>
+                    </svg>
+                    学校公告</a>
+            </dd>
+            <!--<dd>
+                <a ng-class="{active: state.includes('main.advisorHelp')}" ui-sref="main.advisorHelp">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-iconview"></use>
+                    </svg>
+                    使用前阅读</a>
+            </dd>-->
+        </dl>
+        <dl ng-if="userRole === 2" ng-switch="secondClass">
+            <dd class="top-class" ng-click="shSecondClass(1)">
+                <a ng-class="{active: state.includes('main.collegeAuditPoverty') || state.includes('main.povertyResult') || state.includes('main.dynamicManage')}">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-wode"></use>
+                    </svg>
+                    困难认定</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="1">
+                <a ng-class="{active: state.includes('main.collegeAuditPoverty')}" ui-sref="main.collegeAuditPoverty">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    困难认定评审</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="1">
+                <a ng-class="{active: state.includes('main.povertyResult')}" ui-sref="main.povertyResult">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    困难认定结果</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="1">
+                <a ng-class="{active: state.includes('main.dynamicManage')}" ui-sref="main.dynamicManage">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    动态管理</a>
+            </dd>
+            <dt>助学金</dt>
+            <dd>
+                <a ng-class="{active: state.includes('main.collegeGrantsSetting')}" ui-sref="main.collegeGrantsSetting">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-guanli"></use>
+                    </svg>
+                    助学金评定管理</a>
+            </dd>
+            <dd>
+                <a ng-class="{active: state.includes('main.collegeAuditGrants')}" ui-sref="main.collegeAuditGrants">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-shenhe"></use>
+                    </svg>
+                    助学金评定审核</a>
+            </dd>
+            <dd>
+                <a ng-class="{active: state.includes('main.grantsResult')}" ui-sref="main.grantsResult">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-biaodan"></use>
+                    </svg>
+                    助学金评定结果</a>
+            </dd>
+            <dd>
+                <a ng-class="{active: state.includes('main.collegeGrantsManage')}" ui-sref="main.collegeGrantsManage">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-1232221"></use>
+                    </svg>
+                    助学金管理</a>
+            </dd>
+            <dd class="top-class" ng-click="shSecondClass(4)">
+                <a ng-class="{active: state.includes('main.srGroup')}">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-wode"></use>
+                    </svg>
+                    资助记录</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="4">
+                <a ng-class="{active: state.includes('main.srGroup.srEcon')}" ui-sref="main.srGroup.srEcon">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    经济困难认定</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="4">
+                <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    助学金</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="4">
+                <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    国家励志奖学金</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="4">
+                <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    勤工岗位申请</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="4">
+                <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    勤工岗位工作</a>
+            </dd>
+            <dt>更多</dt>
+            <dd>
+                <a ng-class="{active: state.includes('main.messageList')}" ui-sref="main.messageList">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-iconfontcolor33"></use>
+                    </svg>
+                    消息提醒</a>
+            </dd>
+            <dd>
+                <a ng-class="{active: state.includes('main.noticeList')}" ui-sref="main.noticeList">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-gonggao-copy"></use>
+                    </svg>
+                    学校公告</a>
+            </dd>
+            <!--<dd>
+                <a ng-class="{active: state.includes('main.collegeHelp')}" ui-sref="main.collegeHelp">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-iconview"></use>
+                    </svg>
+                    使用前阅读</a>
+            </dd>-->
+        </dl>
+        <dl ng-if="userRole === 1" ng-switch="secondClass">
+            <dd class="top-class" ng-click="shSecondClass(1)">
+                <a ng-class="{active: state.includes('main.schoolAuditPoverty') || state.includes('main.povertyResult') || state.includes('main.dynamicManage') || state.includes('main.timeSets') || state.includes('main.timeSet')}">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-wode"></use>
+                    </svg>
+                    困难认定</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="1">
+                <a ng-class="{active: state.includes('main.schoolAuditPoverty')}" ui-sref="main.schoolAuditPoverty">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    困难认定评审</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="1">
+                <a ng-class="{active: state.includes('main.povertyResult')}" ui-sref="main.povertyResult">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    困难认定结果</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="1">
+                <a ng-class="{active: state.includes('main.dynamicManage')}" ui-sref="main.dynamicManage">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    动态管理</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="1">
+                <a ng-class="{active: state.includes('main.timeSets') || state.includes('main.timeSet')}" ui-sref="main.timeSets">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    困难认定配置</a>
+            </dd>
+            <dt>助学金</dt>
+            <dd>
+                <a ng-class="{active: state.includes('main.schoolGrantsSetting')}" ui-sref="main.schoolGrantsSetting">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-guanli"></use>
+                    </svg>
+                    助学金评定管理</a>
+            </dd>
+            <dd>
+                <a ng-class="{active: state.includes('main.schoolAuditGrants')}" ui-sref="main.schoolAuditGrants">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-shenhe"></use>
+                    </svg>
+                    助学金评定审核</a>
+            </dd>
+            <dd>
+                <a ng-class="{active: state.includes('main.grantsResult')}" ui-sref="main.grantsResult">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-biaodan"></use>
+                    </svg>
+                    助学金评定结果</a>
+            </dd>
+            <dd>
+                <a ng-class="{active: state.includes('main.schoolGrantsManage')}" ui-sref="main.schoolGrantsManage">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-1232221"></use>
+                    </svg>
+                    助学金管理</a>
+            </dd>
+            <dd class="top-class" ng-click="shSecondClass(4)">
+                <a ng-class="{active: state.includes('main.srGroup')}">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-wode"></use>
+                    </svg>
+                    资助记录</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="4">
+                <a ng-class="{active: state.includes('main.srGroup.srEcon')}" ui-sref="main.srGroup.srEcon">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    经济困难认定</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="4">
+                <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    助学金</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="4">
+                <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    国家励志奖学金</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="4">
+                <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    勤工岗位申请</a>
+            </dd>
+            <dd class="second-class" ng-switch-when="4">
+                <a ng-class="{active: state.includes('main.srGroup')}" ui-sref="main.srGroup">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href=""></use>
+                    </svg>
+                    勤工岗位工作</a>
+            </dd>
+            <dt>更多</dt>
+            <dd>
+                <a ng-class="{active: state.includes('main.analysis')}" ui-sref="main.analysis">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-fenxi"></use>
+                    </svg>
+                    资助分析</a>
+            </dd>
+            <dd>
+                <a ng-class="{active: state.includes('main.messageList')}" ui-sref="main.messageList">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-iconfontcolor33"></use>
+                    </svg>
+                    消息提醒</a>
+            </dd>
+            <dd>
+                <a ng-class="{active: state.includes('main.noticeList')}" ui-sref="main.noticeList">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-gonggao-copy"></use>
+                    </svg>
+                    学校公告</a>
+            </dd>
+            <dd>
+                <a ng-class="{active: state.includes('main.sendNotice')}" ui-sref="main.sendNotice">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-gonggao"></use>
+                    </svg>
+                    发布公告</a>
+            </dd>
+            <dd>
+                <a ng-class="{active: state.includes('main.historyApply')}" ui-sref="main.historyApply">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-jilu"></use>
+                    </svg>
+                    历史评定</a>
+            </dd>
+            <!--<dd>
+                <a ng-class="{active: state.includes('main.schoolHelp')}" ui-sref="main.schoolHelp">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-iconview"></use>
+                    </svg>
+                    使用前阅读</a>
+            </dd>-->
+        </dl>
+        <div class="modal fade" id="needEdit" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+             aria-labelledby="myModalLabelNeedEdit">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabelNeedEdit">请完善个人信息</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-danger">提示：在您第一次使用本系统时，系统将会要求您填写您的个人基本信息，请如实填写。</p>
+                        <div class="text-center">
+                            <input type="button" ng-click="goEdit()" class="btn btn-primary" value="填写个人资料">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

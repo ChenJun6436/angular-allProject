@@ -1,0 +1,134 @@
+<div>
+    <div class="gaBox">
+        <div class="gaTitle">助学金申请</div>
+
+        <div class="gaBody">
+            <div class="gaYouLv">您的经济困难认等级为:<span>{{vm.studentPoorLevel}}</span>;</div>
+            <div class="gaDo">
+                <p>当前可申请的助学金类型 <a class="gaSearch" href="javaScript:" ng-click="vm.doShowFilter()">搜索</a></p>
+            </div>
+            <div class="gaCanApply">
+                <table ng-table="vm.tableParams" class="table" show-filter="vm.showFilter">
+                    <tr ng-repeat="des in $data">
+                        <td title="'资助名称'" filter="{ name: 'text'}">
+                            {{des.name}}</td>
+                        <td title="'资助金额'" filter="{ level: 'text'}">
+                           <span ng-repeat="i in des.level">{{i.levelName}}{{i.subsidizeMoney}}元;</span> {{des.xuehao}}</td>
+                        <td title="'资助说明'">
+                            <a href="javaScript:;" ng-click="vm.showModal(des)">查看详情</a></td>
+                        <td title="'操作'">
+                            <a ng-if="des.applyStatus === 0" href="javaScript:;" ng-click="vm.goApplyst(des)">申请</a>
+                            <span ng-if="des.applyStatus === 1">已申请<a href="{{des.applyDataUrls[0]}}" ng-click="">查看材料</a></span>
+                            <span ng-if="des.applyStatus === -1">材料被驳回
+                                <a href="javaScript:;" ng-click="vm.showRejectReason(des)">驳回原因</a>&nbsp;&nbsp;
+                                <a class="text-danger" href="javaScript:;" ng-click="vm.showReUploadFile(des)">重新提交</a>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<!--查看助学金详情-->
+    <div class="modalBg"  ng-if="vm.showDetail" style="z-index: 999">
+        <div class="modalBox">
+            <div class="modalTitle">
+                <p  style="float: left" >助学金详情</p>
+                <p  style="float: right" class="cursor-pointer" ng-click="vm.doDetailNo()">×</p>
+            </div>
+            <div class="modalMain">
+                <!--奖学金详情-->
+                <div class="grantDetailBox">
+                    <table class="grantDetailSmm" cellspacing="100" >
+                        <tr>
+                            <td>是否分等级：</td>
+                            <td class="grantDetailAs">{{des.level.length>1?'是':'否'}}</td>
+                        </tr>
+                        <tr>
+                            <td>助学金名称：</td>
+                            <td class="grantDetailAs">{{des.name}}</td>
+                        </tr>
+                        <tr>
+                            <td>设立机构：</td>
+                            <td class="grantDetailAs">{{des.organization}}</td>
+                        </tr>
+                        <tr>
+                            <td>评定时间：</td>
+                            <td class="grantDetailAs">{{des.startTime | date:'yyyy-mm-dd'}}至{{des.endTime | date:'yyyy-mm-dd'}}</td>
+                        </tr>
+                    </table>
+                    <div ng-if="des.level.length>1" ng-repeat="i in des.level">
+                        <p class="grantDetailLv">{{i.levelName}}</p>
+                        <table class="grantDetailDet" >
+                            <tr>
+                                <td>助学金金额：{{i.subsidizeMoney}}</td>
+                                <td>助学金名额：{{i.subsidizeNum}}</td>
+                            </tr>
+                            <tr>
+                                <td>评定条件：</td>
+                                <td colspan="4">{{i.evaluateCondition}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div ng-if="des.level.length<1">
+                        <table class="grantDetailDet" >
+                            <tr>
+                                <td>助学金金额：{{des.level.subsidizeMoney}}</td>
+                                <td>助学金名额：{{des.level.subsidizeNum}}</td>
+                            </tr>
+                            <tr>
+                                <td>评定条件：</td>
+                                <td colspan="4">{{des.level.evaluateCondition}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modalFoot">
+                <a href="javaScript:" class="modalNo"  ng-click="vm.doDetailNo()">关闭</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--重新申请和查看原因-->
+<div class="modal fade" id="motai" tabindex="-1" role="dialog"
+     aria-labelledby="addGrantsModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addGrantsModal">{{vm.modal.title}}</h4>
+            </div>
+            <div class="modal-body">
+                <div ng-if="vm.reUp">
+                    <div class="gaFstep">
+                        <p>请选择重新上传助学金申请材料</p>
+                        <div style="height: 50px; overflow: hidden">
+                            <a style="position: absolute;left:60px;display: inline-block" class="gaUpFileBtn" href="javaScript:" ng-click="vm.upFile()">上传附件</a>
+                            <p style="opacity: 0;z-index: 5;"><input style="width: 160px;cursor: pointer" type="file"  nv-file-select  uploader ="uploader" ng-click="vm.che"/></p>
+                        </div>
+                        <div class="gaOneList" ng-repeat="file in vm.comFileList">
+                            <a href="{{file.url}}">{{file.fileName}}</a> <a href="javaScript:;" class="gaDelEle" ng-click="vm.delFile(file.id)">删除</a>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="vm.ckReason">
+                    <div class="gaFstep">
+                        <p>{{vm.RejectReason}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer tc" ng-if="vm.reUp">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default">取消
+                </button>
+                <button type="button" ng-click="vm.saveReUp()" class="btn btn-primary">保存</button>
+            </div>
+            <div class="modal-footer tc" ng-if="vm.ckReason">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default">确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

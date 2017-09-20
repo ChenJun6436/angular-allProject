@@ -1,0 +1,15 @@
+<div class="person-header">
+    <div ng-include="'dist/tpls/layout/header.html'"></div>
+</div>
+<div class="container mt40">
+
+    <student-poverty-info flag="info" student-id="vm.studentId"></student-poverty-info>
+
+    <div class="confirm-info pb0 stu-poverty-material">
+        <p>提交的材料：</p>
+        <ul>
+            <li ng-repeat="upload in vm.uploadsList">{{upload.name}}<a href="{{upload.url}}" target="_blank">下载</a>
+            </li>
+        </ul>
+    </div>
+</div>

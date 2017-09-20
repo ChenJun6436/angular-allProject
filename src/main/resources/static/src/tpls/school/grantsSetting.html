@@ -1,0 +1,288 @@
+<div class="h50 lh50 pl20">
+    助学金评定配置
+    <search-btn show="vm.showFilter"></search-btn>
+    <input type="button" class="btn btn-primary pull-right mr10 mt10" value="添加批次" ng-click="addGrantsModal()">
+</div>
+<div ng-switch="vm.tableFlag" class="p20 pt0">
+    <div class="text-center" ng-switch-when="0">加载中……</div>
+    <div ng-switch-when="1">
+
+        <table ng-table="tableParams" class="table table-bordered table-striped table-hover " show-filter="vm.showFilter">
+            <tr ng-repeat="setting in $data">
+                <td title="'序号'" filter="{ index: 'text'}" sortable="'index'">
+                    {{setting.index}}
+                </td>
+                <td title="'批次名称'" filter="{ name: 'text'}" sortable="'name'">
+                    {{setting.name}}
+                </td>
+                <td title="'奖项数量'" filter="{ num: 'text'}" sortable="'num'">
+                    {{setting.num}}级
+                </td>
+                <td title="'开始时间'" filter="{ startTime: 'text'}" sortable="'startTime'">
+                    {{setting.startTime | date : 'yyyy-MM-dd'}}
+                </td>
+                <td title="'截止时间'" filter="{ endTime: 'text'}" sortable="'endTime'">
+                    {{setting.endTime | date : 'yyyy-MM-dd'}}
+                </td>
+                <td title="'操作'" filter="{ majorName: 'text'}">
+                    <a href="javascript:;" ng-click="edit(setting.id)">修改</a>
+                    <a href="javascript:;">删除</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div ng-switch-when="2" class="text-center">暂无记录</div>
+</div>
+
+<!-- 添加批次 -->
+<div class="modal fade modal-fixed" id="addGrants" tabindex="-1" role="dialog" aria-labelledby="addGrantsModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addGrantsModal">添加批次</h4>
+            </div>
+            <div class="modal-body ">
+                <div class="row">
+                    <div class="col-md-12 time-set">
+                        <form name="processForm" novalidate>
+                            <div class="time-title">批次名</div>
+                            <div class="form-group">
+                                <input id="processName" name="processName" type="text" class="form-control" maxlength="100"
+                                       ng-class="{'border-error':processForm.processName.$invalid&&vm.submit}" required
+                                       ng-model="vm.processTimeList.processName">
+                            </div>
+                            <p ng-if="processForm.processName.$invalid&&vm.submit" class="text-error">批次名称必填</p>
+                            <div class="time-title">时间配置</div>
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>步骤</th>
+                                    <th>阶段</th>
+                                    <th class="w340">时间设置</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="pt15">步骤1</td>
+                                    <td class="pt15">学生申请时间段</td>
+                                    <td>
+                                        <input placeholder="请输入日期" id="applyStart" class="form-control laydate-icon"
+                                               ng-disabled="vm.applyStartDisabled" ng-model="vm.processTimeList.applyStart">&nbsp;&nbsp;~&nbsp;&nbsp;<input
+                                            placeholder="请输入日期" id="applyEnd" class="form-control laydate-icon"
+                                            ng-model="vm.processTimeList.applyEnd">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pt15">步骤2</td>
+                                    <td class="pt15">民主评议时间段</td>
+                                    <td>
+                                        <input placeholder="请输入日期" id="discussStart" class="form-control laydate-icon"
+                                               ng-disabled="vm.discussStartDisabled" ng-model="vm.processTimeList.discussStart">&nbsp;&nbsp;~&nbsp;&nbsp;<input
+                                            placeholder="请输入日期" id="discussEnd" class="form-control laydate-icon"
+                                            ng-model="vm.processTimeList.discussEnd">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pt15">步骤3</td>
+                                    <td class="pt15">辅导员审核时间段</td>
+                                    <td>
+                                        <input placeholder="请输入日期" id="advisorStart" class="form-control laydate-icon"
+                                               ng-disabled="vm.advisorStartDisabled" ng-model="vm.processTimeList.advisorStart">&nbsp;&nbsp;~&nbsp;&nbsp;<input
+                                            placeholder="请输入日期" id="advisorEnd" class="form-control laydate-icon"
+                                            ng-model="vm.processTimeList.advisorEnd">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pt15">步骤4</td>
+                                    <td class="pt15">学院审核时间段</td>
+                                    <td>
+                                        <input placeholder="请输入日期" id="collegeStart" class="form-control laydate-icon"
+                                               ng-disabled="vm.collegeStartDisabled" ng-model="vm.processTimeList.collegeStart">&nbsp;&nbsp;~&nbsp;&nbsp;<input
+                                            placeholder="请输入日期" id="collegeEnd" class="form-control laydate-icon"
+                                            ng-model="vm.processTimeList.collegeEnd">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pt15">步骤5</td>
+                                    <td class="pt15">学院公示时间段</td>
+                                    <td>
+                                        <input placeholder="请输入日期" id="collegeOpenStart" class="form-control laydate-icon"
+                                               ng-disabled="vm.collegeOpenStartDisabled" ng-model="vm.processTimeList.collegeOpenStart">&nbsp;&nbsp;~&nbsp;&nbsp;<input
+                                            placeholder="请输入日期" id="collegeOpenEnd" class="form-control laydate-icon"
+                                            ng-model="vm.processTimeList.collegeOpenEnd">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pt15">步骤6</td>
+                                    <td class="pt15">学校审核时间段</td>
+                                    <td>
+                                        <input placeholder="请输入日期" id="schoolStart" class="form-control laydate-icon"
+                                               ng-disabled="vm.schoolStartDisabled" ng-model="vm.processTimeList.schoolStart">&nbsp;&nbsp;~&nbsp;&nbsp;<input
+                                            placeholder="请输入日期" id="schoolEnd" class="form-control laydate-icon"
+                                            ng-model="vm.processTimeList.schoolEnd">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pt15">步骤7</td>
+                                    <td class="pt15">学校公示时间段</td>
+                                    <td>
+                                        <input placeholder="请输入日期" id="schoolOpenStart" class="form-control laydate-icon"
+                                               ng-disabled="vm.schoolOpenStartDisabled" ng-model="vm.processTimeList.schoolOpenStart">&nbsp;&nbsp;~&nbsp;&nbsp;<input
+                                            placeholder="请输入日期" id="schoolOpenEnd" class="form-control laydate-icon"
+                                            ng-model="vm.processTimeList.schoolOpenEnd">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="time-title">助学金配置</div>
+                            <ul class="member-send">
+                                <li>
+                                    <div>
+                                        <label>
+                                            <input type="checkbox">国家一等助学金
+                                        </label>
+                                        获奖总人数：2500
+                                        <a href="javascript:;" ng-click="vm.showTable = 1">分配</a>
+                                    </div>
+                                    <div class="slide-top" ng-if="vm.showTable === 1">
+                                        <div class="time-title">助学金名额分配</div>
+                                        <ul class="clearfix">
+                                            <li class="pull-left">
+                                                <span class="pull-left">通信与信息工程学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">计算机学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">外国语学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">物理学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">艺术学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <label>
+                                            <input type="checkbox">国家二等助学金
+                                        </label>
+                                        获奖总人数：2500
+                                        <a href="javascript:;" ng-click="vm.showTable = 2">分配</a>
+                                    </div>
+                                    <div class="slide-top" ng-if="vm.showTable === 2">
+                                        <div class="time-title">助学金名额分配</div>
+                                        <ul class="clearfix">
+                                            <li class="pull-left">
+                                                <span class="pull-left">通信与信息工程学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">计算机学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">外国语学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">物理学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">艺术学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <label>
+                                            <input type="checkbox">国家三等助学金
+                                        </label>
+                                        获奖总人数：2500
+                                        <a href="javascript:;" ng-click="vm.showTable = 3">分配</a>
+                                    </div>
+                                    <div class="slide-top" ng-if="vm.showTable === 3">
+                                        <div class="time-title">助学金名额分配</div>
+                                        <ul class="clearfix">
+                                            <li class="pull-left">
+                                                <span class="pull-left">通信与信息工程学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">计算机学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">外国语学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">物理学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">艺术学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <label>
+                                            <input type="checkbox">科为助学金
+                                        </label>
+                                        获奖总人数：2500
+                                        <a href="javascript:;" ng-click="vm.showTable = 4">分配</a>
+                                    </div>
+                                    <div class="slide-top" ng-if="vm.showTable === 4">
+                                        <div class="time-title">助学金名额分配</div>
+                                        <ul class="clearfix">
+                                            <li class="pull-left">
+                                                <span class="pull-left">通信与信息工程学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">计算机学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">外国语学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">物理学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                            <li class="pull-left">
+                                                <span class="pull-left">艺术学院</span>
+                                                <input class="pull-right form-control" type="text">
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer tc">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default w110 h40">取消</button>
+                <button type="button" ng-click="addGrants()" class="btn btn-primary w110 h40">保存</button>
+            </div>
+        </div>
+    </div>
+</div>

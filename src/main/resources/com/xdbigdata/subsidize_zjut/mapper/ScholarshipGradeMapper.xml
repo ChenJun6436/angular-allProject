@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xdbigdata.subsidize_zjut.mapper.ScholarshipGradeMapper">
+    <insert id="saveGradeConfig" parameterType="com.xdbigdata.subsidize_zjut.domain.Scholarship2Grade">
+    INSERT INTO `t_scholarship_to_grade` (
+    `gradeName`,
+    `amount`,
+    `college_id`
+    )
+    VALUES
+    (
+    #{gradeName},
+    #{amount},
+    #{collegeId}
+    )
+    </insert>
+
+
+    <update id="updateScholarshipGrade" parameterType="com.xdbigdata.subsidize_zjut.domain.Scholarship2Grade">
+        <foreach collection="configs" index="index" item="item" separator=";">
+            UPDATE t_scholarship_to_grade
+            <set>
+                amount = #{item.amount}
+            </set>
+            <where>
+                id = #{id}
+            </where>
+        </foreach>
+    </update>
+
+    <select id="getGradeConfigByCollegeIdAndGrade" parameterType="Map"
+            resultType="com.xdbigdata.subsidize_zjut.domain.Scholarship2Grade">
+         SELECT
+            id,gradeName,amount,college_id
+        FROM
+            `t_scholarship_to_grade`
+        WHERE
+            college_id= #{collegeId}
+            AND gradeName = #{gradeName}
+
+    </select>
+
+</mapper>

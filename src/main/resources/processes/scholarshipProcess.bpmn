@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1496995903776" name="" targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <process id="scholarshipProcess" isClosed="false" isExecutable="true" name="scholarshipProcess" processType="None">
+    <startEvent id="startevent1" name="Start"/>
+    <userTask activiti:assignee="#{studentSn}" activiti:exclusive="true" id="studentApply" name="学生申请"/>
+    <sequenceFlow id="startFlow" sourceRef="startevent1" targetRef="studentApply"/>
+    <userTask activiti:candidateUsers="#{advisorSns}" activiti:exclusive="true" id="advisorCheck" name="辅导员审核"/>
+    <sequenceFlow id="studentApplyFlow" name="通过" sourceRef="studentApply" targetRef="advisorCheck"/>
+    <userTask activiti:candidateUsers="#{collegeUserSns}" activiti:exclusive="true" id="collegeCheck" name="学院审核"/>
+    <sequenceFlow id="advisorCheckFlow" name="通过" sourceRef="advisorCheck" targetRef="collegeCheck">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${checkResult.advisorPass== 1}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask activiti:candidateUsers="#{collegeUserSns}" activiti:exclusive="true" id="collegePublicity" name="学院公示"/>
+    <sequenceFlow id="collegeCheckFlow" name="通过" sourceRef="collegeCheck" targetRef="collegePublicity">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${checkResult.collegePass== 1}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask activiti:candidateUsers="#{schoolUserSns}" activiti:exclusive="true" id="schoolCheck" name="学校审核"/>
+    <sequenceFlow id="collegePublicityFlow" name="通过" sourceRef="collegePublicity" targetRef="schoolCheck">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${checkResult.collegePublicityPass == 1}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask activiti:candidateUsers="#{schoolUserSns}" activiti:exclusive="true" id="schoolPublicity" name="学校公示"/>
+    <sequenceFlow id="schoolCheckFlow" name="通过" sourceRef="schoolCheck" targetRef="schoolPublicity">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${checkResult.schoolPass == 1}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="endevent1" name="End"/>
+    <sequenceFlow id="schoolPublicityFlow" name="通过" sourceRef="schoolPublicity" targetRef="endevent1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${checkResult.schoolPublicityPass == 1}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask activiti:assignee="#{modifyDataStudentSn}" activiti:exclusive="true" id="modifyAdvisorData" name="修改材料"/>
+    <sequenceFlow id="advisorReject" name="驳回材料" sourceRef="advisorCheck" targetRef="modifyAdvisorData">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${checkResult.advisorPass == 0}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask activiti:assignee="#{modifyDataStudentSn}" activiti:exclusive="true" id="modifyCollegeMaterial" name="修改材料"/>
+    <sequenceFlow id="collegeReject" name="驳回材料" sourceRef="collegeCheck" targetRef="modifyCollegeMaterial">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${checkResult.collegePass== 0}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask activiti:assignee="#{modifyDataStudentSn}" activiti:exclusive="true" id="modifyCollegePublicityMaterial" name="修改材料"/>
+    <sequenceFlow id="collegePublicityReject" name="驳回材料" sourceRef="collegePublicity" targetRef="modifyCollegePublicityMaterial">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${checkResult.collegePublicityPass == 0}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask activiti:assignee="#{modifyDataStudentSn}" activiti:exclusive="true" id="modifySchoolMaterial" name="修改材料"/>
+    <sequenceFlow id="schoolReject" name="驳回材料" sourceRef="schoolCheck" targetRef="modifySchoolMaterial">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${checkResult.schoolPass == 0}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask activiti:assignee="#{modifyDataStudentSn}" activiti:exclusive="true" id="modifySchoolPublicityMaterial" name="修改材料"/>
+    <sequenceFlow id="schoolPublicityReject" name="驳回材料" sourceRef="schoolPublicity" targetRef="modifySchoolPublicityMaterial">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${checkResult.schoolPublicityPass == 0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="recommitToAdvisor" name="重新提交" sourceRef="modifyAdvisorData" targetRef="advisorCheck"/>
+    <sequenceFlow id="recommitToCollege" name="重新提交" sourceRef="modifyCollegeMaterial" targetRef="collegeCheck"/>
+    <sequenceFlow id="recommitToCollegePublicity" name="重新提交" sourceRef="modifyCollegePublicityMaterial" targetRef="collegePublicity"/>
+    <sequenceFlow id="recommitToSchool" name="重新提交" sourceRef="modifySchoolMaterial" targetRef="schoolCheck"/>
+    <sequenceFlow id="recommitToSchoolPublicity" name="重新提交" sourceRef="modifySchoolPublicityMaterial" targetRef="schoolPublicity"/>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#3C3F41;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
+    <bpmndi:BPMNPlane bpmnElement="scholarshipProcess">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="Shape-startevent1">
+        <omgdc:Bounds height="32.0" width="32.0" x="107.0" y="30.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="studentApply" id="Shape-studentApply">
+        <omgdc:Bounds height="55.0" width="105.0" x="72.0" y="110.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="advisorCheck" id="Shape-advisorCheck">
+        <omgdc:Bounds height="55.0" width="105.0" x="72.0" y="200.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="collegeCheck" id="Shape-collegeCheck">
+        <omgdc:Bounds height="55.0" width="105.0" x="72.0" y="290.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="collegePublicity" id="Shape-collegePublicity">
+        <omgdc:Bounds height="55.0" width="105.0" x="72.0" y="380.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="schoolCheck" id="Shape-schoolCheck">
+        <omgdc:Bounds height="55.0" width="105.0" x="72.0" y="479.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="schoolPublicity" id="Shape-schoolPublicity">
+        <omgdc:Bounds height="55.0" width="105.0" x="72.0" y="578.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="Shape-endevent1">
+        <omgdc:Bounds height="32.0" width="32.0" x="107.0" y="680.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="modifyAdvisorData" id="Shape-modifyAdvisorData">
+        <omgdc:Bounds height="55.0" width="105.0" x="360.0" y="205.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="modifyCollegeMaterial" id="Shape-modifyCollegeMaterial">
+        <omgdc:Bounds height="55.0" width="105.0" x="360.0" y="290.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="modifyCollegePublicityMaterial" id="Shape-modifyCollegePublicityMaterial">
+        <omgdc:Bounds height="55.0" width="105.0" x="360.0" y="380.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="modifySchoolMaterial" id="Shape-modifySchoolMaterial">
+        <omgdc:Bounds height="55.0" width="105.0" x="360.0" y="479.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="modifySchoolPublicityMaterial" id="Shape-modifySchoolPublicityMaterial">
+        <omgdc:Bounds height="55.0" width="105.0" x="360.0" y="580.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="schoolReject" id="BPMNEdge_schoolReject" sourceElement="schoolCheck" targetElement="modifySchoolMaterial">
+        <omgdi:waypoint x="177.0" y="482.0"/>
+        <omgdi:waypoint x="267.0" y="482.0"/>
+        <omgdi:waypoint x="360.0" y="482.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="240.0" y="469.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="recommitToSchoolPublicity" id="BPMNEdge_recommitToSchoolPublicity" sourceElement="modifySchoolPublicityMaterial" targetElement="schoolPublicity">
+        <omgdi:waypoint x="360.0" y="628.0"/>
+        <omgdi:waypoint x="265.0" y="628.0"/>
+        <omgdi:waypoint x="177.0" y="628.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="221.0" y="626.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="recommitToCollege" id="BPMNEdge_recommitToCollege" sourceElement="modifyCollegeMaterial" targetElement="collegeCheck">
+        <omgdi:waypoint x="360.0" y="317.5"/>
+        <omgdi:waypoint x="177.0" y="317.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="231.0" y="331.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="collegeReject" id="BPMNEdge_collegeReject" sourceElement="collegeCheck" targetElement="modifyCollegeMaterial">
+        <omgdi:waypoint x="177.0" y="293.0"/>
+        <omgdi:waypoint x="268.0" y="293.0"/>
+        <omgdi:waypoint x="360.0" y="293.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="240.0" y="277.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="studentApplyFlow" id="BPMNEdge_studentApplyFlow" sourceElement="studentApply" targetElement="advisorCheck">
+        <omgdi:waypoint x="124.5" y="165.0"/>
+        <omgdi:waypoint x="124.5" y="200.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="124.0" y="165.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="advisorReject" id="BPMNEdge_advisorReject" sourceElement="advisorCheck" targetElement="modifyAdvisorData">
+        <omgdi:waypoint x="177.0" y="202.0"/>
+        <omgdi:waypoint x="266.0" y="202.0"/>
+        <omgdi:waypoint x="360.0" y="232.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="240.0" y="196.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="collegeCheckFlow" id="BPMNEdge_collegeCheckFlow" sourceElement="collegeCheck" targetElement="collegePublicity">
+        <omgdi:waypoint x="124.5" y="345.0"/>
+        <omgdi:waypoint x="124.5" y="380.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="124.0" y="345.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="schoolPublicityReject" id="BPMNEdge_schoolPublicityReject" sourceElement="schoolPublicity" targetElement="modifySchoolPublicityMaterial">
+        <omgdi:waypoint x="177.0" y="605.5"/>
+        <omgdi:waypoint x="360.0" y="607.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="230.0" y="580.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="recommitToAdvisor" id="BPMNEdge_recommitToAdvisor" sourceElement="modifyAdvisorData" targetElement="advisorCheck">
+        <omgdi:waypoint x="360.0" y="232.5"/>
+        <omgdi:waypoint x="177.0" y="227.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="242.0" y="242.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="recommitToSchool" id="BPMNEdge_recommitToSchool" sourceElement="modifySchoolMaterial" targetElement="schoolCheck">
+        <omgdi:waypoint x="360.0" y="506.5"/>
+        <omgdi:waypoint x="177.0" y="506.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="231.0" y="520.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="collegePublicityFlow" id="BPMNEdge_collegePublicityFlow" sourceElement="collegePublicity" targetElement="schoolCheck">
+        <omgdi:waypoint x="124.5" y="435.0"/>
+        <omgdi:waypoint x="124.5" y="479.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="124.0" y="435.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="schoolCheckFlow" id="BPMNEdge_schoolCheckFlow" sourceElement="schoolCheck" targetElement="schoolPublicity">
+        <omgdi:waypoint x="124.5" y="534.0"/>
+        <omgdi:waypoint x="124.5" y="578.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="124.0" y="534.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="collegePublicityReject" id="BPMNEdge_collegePublicityReject" sourceElement="collegePublicity" targetElement="modifyCollegePublicityMaterial">
+        <omgdi:waypoint x="177.0" y="380.0"/>
+        <omgdi:waypoint x="271.0" y="380.0"/>
+        <omgdi:waypoint x="360.0" y="380.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="240.0" y="377.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="advisorCheckFlow" id="BPMNEdge_advisorCheckFlow" sourceElement="advisorCheck" targetElement="collegeCheck">
+        <omgdi:waypoint x="124.5" y="255.0"/>
+        <omgdi:waypoint x="124.5" y="290.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="124.0" y="255.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="schoolPublicityFlow" id="BPMNEdge_schoolPublicityFlow" sourceElement="schoolPublicity" targetElement="endevent1">
+        <omgdi:waypoint x="123.0" y="633.0"/>
+        <omgdi:waypoint x="123.0" y="680.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="124.0" y="633.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="recommitToCollegePublicity" id="BPMNEdge_recommitToCollegePublicity" sourceElement="modifyCollegePublicityMaterial" targetElement="collegePublicity">
+        <omgdi:waypoint x="360.0" y="407.5"/>
+        <omgdi:waypoint x="177.0" y="407.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="241.0" y="421.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="startFlow" id="BPMNEdge_startFlow" sourceElement="startevent1" targetElement="studentApply">
+        <omgdi:waypoint x="123.0" y="62.0"/>
+        <omgdi:waypoint x="123.0" y="110.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

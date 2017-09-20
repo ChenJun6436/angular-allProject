@@ -1,0 +1,61 @@
+<div class="h50 lh50 pl20">
+    <search-btn show="vm.showFilter"></search-btn>
+    <a href="javascript:;" ng-if="!isDownloading" ng-click="downloadList()">下载名单</a>
+    <span ng-if="isDownloading">正在下载…</span>
+</div>
+<div ng-switch="vm.tableFlag" class="p20 pt0">
+    <div class="text-center" ng-switch-when="0">加载中……</div>
+    <div ng-switch-when="1">
+
+        <table ng-table="tableParams" class="table table-bordered table-striped table-hover "
+               show-filter="vm.showFilter">
+            <tr ng-repeat="student in $data" ng-class="{'bg-table': student.status === '休学'}">
+                <td title="'姓名'" filter="{ name: 'text'}" sortable="'name'">
+                    {{student.name}}
+                </td>
+                <td title="'学号'" filter="{ studentId: 'text'}" sortable="'studentId'">
+                    {{student.studentId}}
+                </td>
+                <td title="'年级'" filter="{ gradeName: 'text'}" sortable="'gradeName'">
+                    {{student.gradeName}}
+                </td>
+                <td title="'学院'" filter="{ collegeName: 'text'}" sortable="'collegeName'">
+                    {{student.collegeName}}
+                </td>
+                <td title="'专业'" filter="{ majorName: 'text'}" sortable="'majorName'">
+                    {{student.majorName}}
+                </td>
+                <td title="'班级'" filter="{ className: 'text'}" sortable="'className'">
+                    {{student.className}}
+                </td>
+                <td title="'申请材料'" class="col-md-1">
+                    <one-person-info id="{{student.studentId}}"></one-person-info>
+                </td>
+                <td title="'困难指数'" filter="{ povertyLevel: 'text'}" sortable="'povertyLevel'">
+                    {{student.povertyLevel}}
+                </td>
+                <td title="'建议状态'" filter="{ recommendedLevel: 'text'}" sortable="'recommendedLevel'">
+                    {{student.recommendedLevel}}
+                </td>
+                <td title="'上次认定等级'" filter="{ lastLevel: 'text'}" sortable="'lastLevel'">
+                    {{student.lastLevel}}
+                </td>
+                <td title="'当前状态'" filter="{ currentLevel: 'text'}" sortable="'currentLevel'">
+                    {{student.currentLevel}}
+                </td>
+                <td title="'修改等级'" filter="{ currentLevel: 'text'}" sortable="'currentLevel'">
+                    <select class="form-control p0 h25 w110 inline-block"
+                            ng-change="vm.changeLevel(student, student.currentLevel)"
+                            ng-options="level for level in vm.levels track by level" ng-model="student.currentLevel">
+                        <option value="" ng-show="!student.currentLevel">请选择等级</option>
+                    </select>
+                </td>
+                <td title="'学籍情况'" filter="{ status: 'text'}" sortable="'status'"
+                    ng-class="{'text-status': student.status === '休学'}">
+                    {{student.status}}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div ng-switch-when="2" class="text-center">暂无记录</div>
+</div>

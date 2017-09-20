@@ -1,0 +1,27 @@
+//sass统一入口配置
+@import "mixin";
+@import "color";
+@import "var";
+@import "reset";
+@import "component";
+
+
+
+//指令（组件）
+
+
+
+//业务
+@import "../components/layout/layout";
+@import "../components/poorAssess/school/school";
+@import "../components/poorAssess/student/student";
+@import "../components/subsidizeRecord/subsidizeRecord";
+@import "../components/grantApply/student/grantApply";
+@import "../components/grantApply/teacher/grantAdminTc";
+@import "../components/grantApply/college/grantAdminCc";
+@import "../components/grantApply/school/grantAdminSc";
+@import "../components/studentLoan/loan";
+@import "../components/statistic/statistic";
+@import "../components/scholarship/college/scholarCc";
+@import "../components/scholarship/student/scholarSt";
+

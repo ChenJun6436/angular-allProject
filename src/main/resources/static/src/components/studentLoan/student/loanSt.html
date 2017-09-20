@@ -1,0 +1,12 @@
+<div class="lsTop">
+    助学贷款预报名
+</div>
+<div class="gaBody">
+    <div class="lsTip">
+        预报名截止时间:{{vm.loanEndTime | date:'yyyy年MM月dd日'}}
+    </div>
+    <div class="lsMain">
+        <span class="fs16">请填写申请金额：</span><input ng-model="vm.loanApMoney" class="lsApplyMoney" type="text">
+        <button ng-disabled="vm.dis" class="lsApplyBtn" ng-click="vm.doApplyLoan()">报名</button>
+    </div>
+</div>

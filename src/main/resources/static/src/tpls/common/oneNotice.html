@@ -1,0 +1,13 @@
+<div class="person-header">
+    <div ng-include="'build/tpls/header.html'"></div>
+</div>
+<div class="container w700 one-notice">
+    <h3 class="page-header">{{vm.oneNotice.title}}</h3>
+    <p class="text-muted">{{vm.oneNotice.time | date : 'yyyy-MM-dd HH:mm:ss'}}</p>
+    <p class="mt20" ng-bind-html="vm.oneNotice.content | to_trusted"></p>
+    <ul ng-if="vm.oneNotice.uploadList.length>0">
+        <li ng-repeat="upload in vm.oneNotice.uploadList">{{upload.filename}}<a ng-click="download(upload.url)"
+                href="javascript:;">下载</a>
+        </li>
+    </ul>
+</div>

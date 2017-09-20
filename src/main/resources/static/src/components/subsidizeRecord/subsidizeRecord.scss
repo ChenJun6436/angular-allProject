@@ -1,0 +1,41 @@
+ .hx-header{
+	//@extend .pl30;
+	//background: $fff;
+	li{
+		a{
+			@extend .block;
+			@extend .h40;
+			@extend .lh40;
+			@extend .pl20;
+			@extend .pr20;
+			@extend .fs16;
+			@extend .relative;
+			@extend .oh;
+			@include left-to-right(2px);
+			color:$nav-color;
+			@media (max-height:768px) {
+				height: 35px;
+				line-height:35px;
+			}
+		}
+	}
+}
+ .lsTop{
+	 overflow: hidden;
+	 .fr {
+		 float: right;
+		 .collegeSelect{
+		 }
+		 .gradeSelect {
+			 margin: 5px 0 5px 5px;
+		 }
+	 }
+	 .fl {
+		 float: left;
+		 .downExcel{
+
+		 }
+	 }
+ }
+
+

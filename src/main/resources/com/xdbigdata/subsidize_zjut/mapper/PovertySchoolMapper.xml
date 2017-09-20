@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xdbigdata.subsidize_zjut.mapper.PovertySchoolMapper">
+
+    <insert id="saveNotice" parameterType="notice" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO t_notice (content,notice_time,title) VALUES (#{content},#{noticeTime},#{title})
+    </insert>
+
+    <insert id="saveProcess" parameterType="povertyProcess">
+        REPLACE INTO t_poverty_process SET
+        id = #{id},
+        apply_end = #{applyEnd},
+        apply_start = #{applyStart},
+        school_year_name = #{schoolYearName},
+        school_year_id = #{schoolYearId}
+    </insert>
+
+    <select id="getProcessTime" resultType="povertyProcess">
+        select
+         id,
+         apply_start as applyStart,
+         apply_end as applyEnd,
+         school_year_id as schoolYearId,
+         school_year_name as schoolYearName,
+         college_open_start_time as collegeOpenStartTime,
+         college_open_end_time as collegeOpenEndTime,
+         school_open_start_time as schoolOpenStartTime,
+         school_open_end_time as schoolOpenEndTime,
+         college_open_started as collegeOpenStarted,
+         school_open_started as schoolOpenStarted,
+         school_sn as schoolSn
+         from t_poverty_process limit 1;
+    </select>
+
+    <!--<select id="getProcessTime" resultType="povertyProcess">-->
+        <!--select-->
+        <!--id,-->
+        <!--apply_start as applyStart,-->
+        <!--apply_end as applyEnd,-->
+        <!--class_start as classStart,-->
+        <!--class_end as classEnd,-->
+        <!--advisor_start as advisorStart,-->
+        <!--advisor_end as advisorEnd,-->
+        <!--college_start as collegeStart,-->
+        <!--college_end as collegeEnd,-->
+        <!--college_open_start as collegeOpenStart,-->
+        <!--college_open_end as collegeOpenEnd,-->
+        <!--school_start as schoolStart,-->
+        <!--school_end as schoolEnd,-->
+        <!--`name`-->
+        <!--from t_poverty_process limit 1;-->
+    <!--</select>-->
+
+    <insert id="batchInsertHistoryResult" parameterType="historyResult">
+        <foreach collection="list" item="item" separator=";">
+            INSERT INTO t_history_result(student_id,poverty_level,date)VALUES (#{item.studentId},#{item.povertyLevel},#{item.date});
+            UPDATE t_student_info SET last_status = #{item.povertyLevel} WHERE student_id = #{item.studentId}
+        </foreach>
+    </insert>
+
+    <select id="viewHistoryApply" resultType="historyResult">
+        select student_id as studentId,poverty_level as povertyLevel,`date` from t_history_result;
+    </select>
+
+    <delete id="clearTable">
+        TRUNCATE t_dissent;
+        TRUNCATE t_public_poverty;
+        TRUNCATE t_reject;
+        TRUNCATE t_poverty_process;
+        TRUNCATE t_poverty_open_time;
+    </delete>
+
+    <update id="updateOpenTime">
+        <if test="type==1">
+            UPDATE t_poverty_process SET (college_open_start_time,college_open_end_time)
+            VALUES (#{startTime},#{endTime})
+        </if>
+        <if test="type==2">
+            UPDATE t_poverty_process SET school_open_start_time=#{startTime},school_open_end_time=#{endTime},school_sn=#{userName}
+        </if>
+
+    </update>
+
+</mapper>

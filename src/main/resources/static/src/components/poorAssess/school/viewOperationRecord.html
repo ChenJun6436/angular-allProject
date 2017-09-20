@@ -1,0 +1,22 @@
+<div class="person-header">
+    <div ng-include="'dist/tpls/layout/header.html'"></div>
+</div>
+<div class="record">
+    <ul class="record-ul clearfix">
+        <li ng-class="{active:vm.status===1}"><a href="javascript:;" ng-click="init(1)">学校审核</a></li>
+        <li ng-class="{active:vm.status===2}"><a href="javascript:;" ng-click="init(2)">学院审核</a></li>
+        <li ng-class="{active:vm.status===3}"><a href="javascript:;" ng-click="init(3)">辅导员审核</a></li>
+        <li ng-class="{active:vm.status===4}"><a href="javascript:;" ng-click="init(4)">班级用户审核</a></li>
+        <li ng-class="{active:vm.status===5}"><a href="javascript:;" ng-click="init(5)">学生</a></li>
+    </ul>
+    <ul class="cbp_tmtimeline ">
+        <li ng-repeat="record in vm.recordList">
+            <!--<time class="cbp_tmtime" datetime="2013-04-10 18:30"><span>{{record.time}}</span> <span>{{record.time}}</span></time>-->
+            <div class="cbp_tmicon cbp_tmicon-phone">{{$index+1}}</div>
+            <div class="cbp_tmlabel">
+                <h2>{{record.dateTime | date : 'yyyy/MM/dd'}}</h2>
+                <p><span class="mr10">{{record.dateTime | date : 'HH:mm:ss'}}</span>{{record.content}}</p>
+            </div>
+        </li>
+    </ul>
+</div>

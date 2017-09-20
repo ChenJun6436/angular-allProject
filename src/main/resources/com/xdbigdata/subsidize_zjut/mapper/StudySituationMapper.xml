@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xdbigdata.subsidize_zjut.mapper.StudySituationMapper">
+
+    <insert id="saveStudySituation" parameterType="com.xdbigdata.subsidize_zjut.domain.StudySituation">
+        INSERT INTO t_scholarship_studySituation (
+            `scoreRank`,
+            `totalStudents`,
+            `requiredCourse`,
+            `passCourse`,
+            `isComprehensiveAppraisal`,
+            `comprehensiveRank`,
+            `comprehensiveNum`,
+            `student_id`
+        )
+        VALUES
+        (
+            #{scoreRank},
+            #{totalStudents},
+            #{requiredCourse},
+            #{passCourse},
+            #{isComprehensiveAppraisal},
+            #{comprehensiveRank},
+            #{comprehensiveNum},
+            #{studentId}
+        )
+    </insert>
+
+    <update id="updateStudySituation" parameterType="com.xdbigdata.subsidize_zjut.domain.StudySituation">
+        UPDATE t_scholarship_studySituation
+        SET
+        `scoreRank` = #{scoreRank},
+        `totalStudents` = #{totalStudents},
+        `requiredCourse` = #{requiredCourse},
+        `passCourse` = #{passCourse},
+        `isComprehensiveAppraisal` = #{isComprehensiveAppraisal},
+        `comprehensiveRank` = #{comprehensiveRank},
+        `comprehensiveNum` = #{comprehensiveNum},
+        `student_id` = #{studentId},
+        where
+        id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,62 @@
+<div class="clearfix h50 lh50 pl20 pr20 border-bottom">
+    <span class="pull-left">特别困难补助申请</span>
+</div>
+<div class="clearfix h50 lh50 pl20 pr20">
+    <span>申请截止时间：{{vm.endTime | date : 'yyyy-MM-dd'}}</span>
+    <input ng-if="vm.studentList.length>0" type="button" class="btn btn-primary h40" value="提交至学校审核" ng-disabled="vm.submitFlag" ng-click="confirmSubmit()">
+</div>
+<div ng-if="vm.studentList.length>0">
+    <span class="pt10 pl20 inline-block">特别困难补助申请{{vm.studentList.length}}人</span>
+    <search-btn show="vm.showFilter"></search-btn>
+</div>
+<div ng-switch="vm.tableFlag" class="p20 pt0">
+    <div class="text-center" ng-switch-when="0">加载中……</div>
+    <div ng-switch-when="1">
+        <table ng-table="tableParams" class="table table-bordered table-striped table-hover "
+               show-filter="vm.showFilter">
+            <tr ng-repeat="student in $data">
+                <td title="'姓名'" filter="{ name: 'text'}" sortable="'name'">
+                    {{student.name}}
+                </td>
+                <td title="'学号'" filter="{ studentId: 'text'}" sortable="'studentId'">
+                    {{student.studentId}}
+                </td>
+                <td title="'学院'" filter="{ college: 'text'}" sortable="'college'">
+                    {{student.college}}
+                </td>
+                <td title="'申请学年'" filter="{ year: 'text'}" sortable="'year'">
+                    {{student.year}}学年
+                </td>
+                <td title="'辅导员审核'" filter="{ instructorPass: 'text'}" sortable="'instructorPass'">
+                    <span ng-if="student.step<=0">未进行</span>
+                    <span ng-if="student.step>0">{{student.instructorPass}}</span>
+
+                </td>
+                <td title="'学院审核'" filter="{ collegePass: 'text'}" sortable="'collegePass'"
+                   >
+                    <difficult-level-select
+                            this-step="1"
+                            student-id="student.applyId"
+                            default-level="student.collegePass"
+                            step="student.step"
+                    ></difficult-level-select>
+                      </td>
+                <td title="'学校审核'" filter="{ schoolPass: 'text'}" sortable="'schoolPass'"
+                >
+                    <span ng-if="student.step<=2">未进行</span>
+                    <span ng-if="student.step>2">{{student.schoolPass}}</span>
+                </td>
+                <td title="'认定结果'" filter="{ finalPass: 'text'}" sortable="'finalPass'"
+                >
+                    <span ng-if="student.step<=3">未进行</span>
+                    <span ng-if="student.step>3">{{student.finalPass}}</span>
+                </td>
+                <td title="'申请次数'" filter="{ applyCount: 'text'}" sortable="'applyCount'"
+                >
+                    <span>{{student.applyCount}}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div ng-switch-when="2" class="text-center">暂无记录</div>
+</div>

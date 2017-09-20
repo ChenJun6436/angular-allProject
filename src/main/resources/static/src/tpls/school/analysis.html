@@ -1,0 +1,130 @@
+<div class="analysis">
+    <div class="analysis-header">
+        <h3>贫困学生特征分析</h3>
+        <ul class="list-inline">
+            <li>
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-di"></use>
+                </svg>
+                低保家庭
+            </li>
+            <li>
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-icon_tuopinzhifu"></use>
+                </svg>
+                贫困县
+            </li>
+            <li>
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-zhai"></use>
+                </svg>
+                家庭负债
+            </li>
+            <li>
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-zixunwenzitubiao04"></use>
+                </svg>
+                务农
+            </li>
+            <li>
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-bingzhong"></use>
+                </svg>
+                家人病重
+            </li>
+            <li>
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-weibiaoti-"></use>
+                </svg>
+                非独生子女
+            </li>
+            <li>
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-jiatingpiao"></use>
+                </svg>
+                单亲家庭
+            </li>
+            <li>
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-xuelirenzheng"></use>
+                </svg>
+                父母低学历
+            </li>
+            <li>
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-tuandui"></use>
+                </svg>
+                家庭人口多
+            </li>
+        </ul>
+    </div>
+    <div class="analysis-content clearfix">
+        <div class="echarts-wrap h455 pull-left">
+            <h3>贫困学生家庭分析</h3>
+            <table class="w100 mb20 analysis-table">
+                <tbody>
+                <tr>
+                    <td>贫困家庭平均年收入</td>
+                    <td>3000元</td>
+                    <td>全校家庭平均年收入</td>
+                    <td>23000元</td>
+                </tr>
+                <tr>
+                    <td>贫困家庭平均固定支出</td>
+                    <td>12800元</td>
+                    <td>入不敷出家庭比例</td>
+                    <td>65%</td>
+                </tr>
+                <tr>
+                    <td>贫困家庭平均负债金额</td>
+                    <td>8544元</td>
+                    <td>贫困家庭负债比例</td>
+                    <td>74%</td>
+                </tr>
+                </tbody>
+            </table>
+            <h3>贫困学生的所在省分布</h3>
+            <div class="echarts" id="origin"></div>
+        </div>
+        <div class="echarts-wrap h455 pull-left">
+            <h3>消费情况</h3>
+            <div class="echarts" id="consumption"></div>
+            <h3>消费分布</h3>
+            <div class="echarts" id="distribution"></div>
+        </div>
+        <div class="echarts-wrap h234 pull-left">
+            <h3>资助分析</h3>
+            <div class="clearfix">
+                <div class="pull-left">
+                    <div class="echarts h150" id="analysis"></div>
+                    <p>贫困学生参与勤工助学比例</p>
+                </div>
+                <div class="pull-left">
+                    <div class="h150 analysis-money">{{vm.analysisMoney}}元</div>
+                    <p>平均每个学生受助金额</p>
+                </div>
+            </div>
+        </div>
+        <div class="echarts-wrap h234 pull-left">
+            <h3>受助金额分配</h3>
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>受助金额(元)</th>
+                    <th>名额</th>
+                    <th>占比</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="money in vm.moneyList">
+                    <td>{{money.value}}</td>
+                    <td>{{money.num}}</td>
+                    <td>{{money.percent}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+

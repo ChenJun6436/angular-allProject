@@ -1,0 +1,164 @@
+.fl{
+  float: left;
+}
+.fr{
+  float: right;
+}
+.tc{
+  text-align: center;
+}
+.oh {
+  overflow: hidden !important;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.clearfix {
+  &:before,
+  &:after {
+    content: "";
+    display: table;
+    font: 0/0 a;
+  }
+  &:after {
+    clear: both;
+  }
+}
+.st-header{
+  height: 40px;
+  line-height: 30px;
+  font-size: 16px;
+  background-color: #ecf2fb;
+  @media (max-height:768px) {
+    height: 35px;
+    line-height: 20px;
+    font-size: 14px;
+  }
+  li{
+    margin-right: 20px;
+  }
+  li a{
+    color: $nav-color;
+  }
+  .active{
+    color: $active-color;
+  }
+}
+.st-content{
+  display: block;
+  height: calc(100% - 75px);
+  padding: 20px;
+  width: calc(100% - 40px);
+  position: absolute;
+  @media (max-height: 768px) {
+    padding: 10px;
+    p{
+      margin:0;
+    }
+  }
+  .st-select{
+    margin-bottom: 20px;
+    @media (max-height: 768px) {
+      margin-bottom: 10px;
+    }
+    select{
+      height: 26px;
+      line-height: 26px;
+      border-radius: 3px;
+      border: 1px solid #afb2b9;
+    }
+  }
+  .col-3-1, .col-2-1, .col-1-1{
+    @extend .fl;
+    @extend .oh;
+    height: calc(50% - 35px);
+    background: $fff;
+    /*margin: 20px 10px 10px;*/
+    /*padding: 20px;*/
+    @media (max-height: 768px) {
+      /*padding: 5px 20px;*/
+      height: calc(50% - 25px);
+    }
+    .col-header {
+      @extend .relative;
+      h3 {
+        height: 20px;
+        line-height: 20px;
+        font-size: 14px;
+        display: inline-block;
+        margin-top: 10px;
+        span {
+          margin-right: 20px;
+          display: inline-block;
+          position: relative;
+          @extend .oh;
+          @extend .cursor-pointer;
+          &.active, &:hover {
+            background: transparent;
+          }
+        }
+      }
+    }
+    .col-content {
+      height: calc(100% - 40px);
+      background-color: #f3f3f3;
+      @at-root .list-horizontal {
+        width: 50px;
+        a {
+          height: 30px;
+          @media (max-height: 768px) {
+            height: 16px;
+          }
+          @extend .block;
+          transition: color .3s;
+          &:hover, &.active {
+            color: $active-color;
+          }
+        }
+      }
+      @at-root .echarts {
+        height: 100%;
+        width: 100%;
+      }
+      @at-root .col-content-top {
+        @extend .tc;
+        height: 30px;
+        line-height:30px;
+        @media (max-height: 768px) {
+          margin-top: -10px;
+        }
+        span {
+          margin-right: 10px;
+        }
+      }
+      @at-root .col-content-bottom {
+        height: calc(100% - 30px);
+      }
+    }
+    &:hover .change-mode {
+      display: block;
+      animation: right-to-left .3s;
+    }
+    @keyframes right-to-left {
+      from {
+        transform: translate(20px, -20px);
+      }
+      to {
+        transform: translate(0, 0);
+      }
+    }
+  }
+
+
+  .col-3-1 {
+    width: calc(33.3% - 13px);
+  }
+
+  .col-2-1 {
+    width: calc(100% / 2 - 10px);
+  }
+  .col-1-1{
+    width: 100%;
+  }
+}
+

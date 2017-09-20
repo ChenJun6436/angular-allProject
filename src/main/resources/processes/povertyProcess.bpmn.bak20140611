@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="povertyProcess" name="povertyProcess" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <userTask id="submitMaterial" name="提交困难认定材料" activiti:assignee="${studentId}"></userTask>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="submitMaterial"></sequenceFlow>
+    <userTask id="advisorReviewMaterial" name="辅导员审核材料" activiti:candidateUsers="${advisorUserId}"></userTask>
+    <userTask id="classReview" name="班级用户填写民主评议" activiti:candidateUsers="${classUserId}"></userTask>
+    <sequenceFlow id="advisorIsPass" name="通过" sourceRef="advisorReviewMaterial" targetRef="classReview">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${advisorMaterialPass==1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="advisorMaterialNotPass" name="不通过" sourceRef="advisorReviewMaterial" targetRef="submitMaterial">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${advisorMaterialPass==0}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="advisorReview" name="辅导员审核" activiti:candidateUsers="${advisorUserId}"></userTask>
+    <sequenceFlow id="flow8" name="通过" sourceRef="classReview" targetRef="advisorReview">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${classPass==1}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="collegeReview" name="学院审核" activiti:candidateUsers="${collegeUserId}"></userTask>
+    <sequenceFlow id="flow9" name="通过" sourceRef="advisorReview" targetRef="collegeReview">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${advisorPass==1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow10" name="不通过" sourceRef="collegeReview" targetRef="advisorReview">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${collegePass==0}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="collegeOpen" name="学院公示" activiti:candidateUsers="${collegeUserId}"></userTask>
+    <sequenceFlow id="flow11" name="通过" sourceRef="collegeReview" targetRef="collegeOpen">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${collegePass==1}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="schoolReview" name="学校审核" activiti:candidateUsers="${schoolUserId}"></userTask>
+    <sequenceFlow id="flow12" name="通过" sourceRef="collegeOpen" targetRef="schoolReview">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${collegeOpenPass==1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow14" name="不通过" sourceRef="schoolReview" targetRef="collegeReview">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${schoolPass==0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow16" name="快速通过" sourceRef="collegeReview" targetRef="schoolReview">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${collegePass == 2}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow17" name="驳回到辅导员" sourceRef="collegeOpen" targetRef="advisorReview">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${collegeOpenPass == 0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow18" sourceRef="submitMaterial" targetRef="advisorReviewMaterial"></sequenceFlow>
+    <userTask id="schoolOpen" name="学校公示" activiti:candidateUsers="${schoolUserId}"></userTask>
+    <userTask id="usertask1" name="完成认定" activiti:candidateUsers="${schoolUserId}"></userTask>
+    <sequenceFlow id="flow19" name="通过" sourceRef="schoolOpen" targetRef="usertask1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${collegeOpenPass==1}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="endevent2" name="End"></endEvent>
+    <sequenceFlow id="flow21" sourceRef="usertask1" targetRef="endevent2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${collegeOpenPass==1}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_povertyProcess">
+    <bpmndi:BPMNPlane bpmnElement="povertyProcess" id="BPMNPlane_povertyProcess">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="710.0" y="20.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="submitMaterial" id="BPMNShape_submitMaterial">
+        <omgdc:Bounds height="55.0" width="105.0" x="675.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="advisorReviewMaterial" id="BPMNShape_advisorReviewMaterial">
+        <omgdc:Bounds height="55.0" width="105.0" x="675.0" y="220.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="classReview" id="BPMNShape_classReview">
+        <omgdc:Bounds height="55.0" width="105.0" x="675.0" y="320.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="advisorReview" id="BPMNShape_advisorReview">
+        <omgdc:Bounds height="55.0" width="105.0" x="675.0" y="430.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="collegeReview" id="BPMNShape_collegeReview">
+        <omgdc:Bounds height="55.0" width="105.0" x="675.0" y="530.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="collegeOpen" id="BPMNShape_collegeOpen">
+        <omgdc:Bounds height="55.0" width="105.0" x="675.0" y="640.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="schoolReview" id="BPMNShape_schoolReview">
+        <omgdc:Bounds height="55.0" width="105.0" x="675.0" y="760.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="schoolOpen" id="BPMNShape_schoolOpen">
+        <omgdc:Bounds height="55.0" width="105.0" x="675.0" y="880.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="675.0" y="990.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent2" id="BPMNShape_endevent2">
+        <omgdc:Bounds height="35.0" width="35.0" x="820.0" y="1000.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="727.0" y="55.0"></omgdi:waypoint>
+        <omgdi:waypoint x="727.0" y="100.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="advisorIsPass" id="BPMNEdge_advisorIsPass">
+        <omgdi:waypoint x="727.0" y="275.0"></omgdi:waypoint>
+        <omgdi:waypoint x="727.0" y="320.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="690.0" y="279.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="advisorMaterialNotPass" id="BPMNEdge_advisorMaterialNotPass">
+        <omgdi:waypoint x="675.0" y="247.0"></omgdi:waypoint>
+        <omgdi:waypoint x="614.0" y="247.0"></omgdi:waypoint>
+        <omgdi:waypoint x="614.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="675.0" y="127.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="36.0" x="579.0" y="170.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="727.0" y="375.0"></omgdi:waypoint>
+        <omgdi:waypoint x="727.0" y="430.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="690.0" y="389.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="727.0" y="485.0"></omgdi:waypoint>
+        <omgdi:waypoint x="727.0" y="530.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="690.0" y="489.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="780.0" y="557.0"></omgdi:waypoint>
+        <omgdi:waypoint x="845.0" y="557.0"></omgdi:waypoint>
+        <omgdi:waypoint x="845.0" y="457.0"></omgdi:waypoint>
+        <omgdi:waypoint x="780.0" y="457.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="36.0" x="889.0" y="500.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="727.0" y="585.0"></omgdi:waypoint>
+        <omgdi:waypoint x="727.0" y="640.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="690.0" y="599.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="727.0" y="695.0"></omgdi:waypoint>
+        <omgdi:waypoint x="727.0" y="760.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="690.0" y="719.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="780.0" y="787.0"></omgdi:waypoint>
+        <omgdi:waypoint x="840.0" y="787.0"></omgdi:waypoint>
+        <omgdi:waypoint x="840.0" y="557.0"></omgdi:waypoint>
+        <omgdi:waypoint x="780.0" y="557.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="36.0" x="850.0" y="653.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+        <omgdi:waypoint x="675.0" y="557.0"></omgdi:waypoint>
+        <omgdi:waypoint x="511.0" y="557.0"></omgdi:waypoint>
+        <omgdi:waypoint x="511.0" y="787.0"></omgdi:waypoint>
+        <omgdi:waypoint x="675.0" y="787.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="573.0" y="540.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
+        <omgdi:waypoint x="675.0" y="667.0"></omgdi:waypoint>
+        <omgdi:waypoint x="535.0" y="667.0"></omgdi:waypoint>
+        <omgdi:waypoint x="535.0" y="457.0"></omgdi:waypoint>
+        <omgdi:waypoint x="675.0" y="457.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="72.0" x="561.0" y="640.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
+        <omgdi:waypoint x="727.0" y="155.0"></omgdi:waypoint>
+        <omgdi:waypoint x="727.0" y="220.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="727.0" y="935.0"></omgdi:waypoint>
+        <omgdi:waypoint x="727.0" y="990.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="690.0" y="959.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
+        <omgdi:waypoint x="780.0" y="1017.0"></omgdi:waypoint>
+        <omgdi:waypoint x="820.0" y="1017.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

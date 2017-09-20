@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xdbigdata.subsidize_zjut.mapper.PovertyStudentMapper">
+    <insert id="updateStudentInfo" parameterType="studentInfo">
+        REPLACE INTO t_student_info
+        SET
+        id = #{id},
+        student_id = #{studentId},
+        name = #{name},
+        class_name = #{className},
+        grade_name = #{gradeName},
+        college_name = #{collegeName},
+        major_name = #{majorName},
+        gender = #{gender},
+        birthday = #{birthday},
+        nation_name = #{nationName},
+        party_name = #{partyName},
+        native_place = #{nativePlace},
+        id_card = #{idCard},
+        dorm = #{dorm},
+        school_tel = #{schoolTel},
+        home_tel = #{homeTel},
+        account = #{account},
+        health_status = #{healthStatus},
+        member_size = #{memberSize},
+        studying_size = #{studyingSize},
+        family_liabilities = #{familyLiabilities},
+        income = #{income},
+        monthly_cost = #{monthlyCost},
+        address = #{address},
+        description = #{description},
+        is_filing_card = #{isFilingCard},
+        is_disability = #{isDisability},
+        is_low_field = #{isLowField},
+        is_martyr = #{isMartyr},
+        is_rural_infirm = #{isRuralInfirm},
+        is_orphan = #{isOrphan},
+        is_accident = #{isAccident},
+        is_complete = #{isComplete},
+        status = #{status},
+        last_status = #{lastStatus},
+        home_type = #{homeType},
+        month_income = #{monthIncome},
+        source_income = #{sourceIncome}
+    </insert>
+    <resultMap id="studentInfoResultMap" type="studentInfo">
+        <id property="id" column="id"/>
+        <result property="address" column="address"/>
+        <result property="account" column="account"/>
+        <result property="birthday" column="birthday"/>
+        <result property="className" column="class_name"/>
+        <result property="collegeName" column="college_name"/>
+        <result property="highSchoolGraduate" column="high_school_graduate"/>
+        <result property="description" column="description"/>
+        <result property="dorm" column="dorm"/>
+        <result property="familyLiabilities" column="family_liabilities"/>
+        <result property="gender" column="gender"/>
+        <result property="gradeName" column="grade_name"/>
+        <result property="healthStatus" column="health_status"/>
+        <result property="homeTel" column="home_tel"/>
+        <result property="idCard" column="id_card"/>
+        <result property="income" column="income"/>
+        <result property="isAccident" column="is_accident"/>
+        <result property="isDisability" column="is_disability"/>
+        <result property="isFilingCard" column="is_filing_card"/>
+        <result property="isLowField" column="is_low_field"/>
+        <result property="isMartyr" column="is_martyr"/>
+        <result property="isOrphan" column="is_orphan"/>
+        <result property="isRuralInfirm" column="is_rural_infirm"/>
+        <result property="majorName" column="major_name"/>
+        <result property="memberSize" column="member_size"/>
+        <result property="monthlyCost" column="monthly_cost"/>
+        <result property="name" column="name"/>
+        <result property="nationName" column="nation_name"/>
+        <result property="nativePlace" column="native_place"/>
+        <result property="partyName" column="party_name"/>
+        <result property="schoolTel" column="school_tel"/>
+        <result property="studentId" column="student_Id"/>
+        <result property="studyingSize" column="studying_size"/>
+        <result property="homeType" column="home_type"/>
+        <result property="monthIncome" column="month_income"/>
+        <result property="sourceIncome" column="source_income"/>
+    </resultMap>
+
+    <select id="getStudent" resultMap="studentInfoResultMap">
+        select * from t_student_info WHERE student_id = #{studentId}
+    </select>
+
+    <insert id="saveStudentSubsidy" parameterType="studentSubsidy">
+        insert into t_student_subsidy (amount,`level`,`name`,student_id,subsidy_date)
+        values (#{amount},#{level},#{name},#{studentId},#{subsidyDate});
+    </insert>
+
+    <select id="listStudentSubsidy" resultType="studentSubsidy">
+        select id,amount,`level`,`name`,subsidy_date as subsidyDate from t_student_subsidy where student_id = #{studentId}
+    </select>
+
+    <select id="listStudentFamily" resultMap="studentFamilyResultMap">
+        select * from t_student_family where student_id = #{studentId}
+    </select>
+    <resultMap id="studentFamilyResultMap" type="studentFamily">
+        <id column="id" property="id"/>
+        <result column="age" property="age"/>
+        <result column="phone" property="phone"/>
+        <result column="heath_status" property="heathStatus"/>
+        <result column="name" property="name"/>
+        <result column="relation" property="relation"/>
+        <result column="job" property="job"/>
+        <result column="monthly_income" property="monthlyIncome"/>
+        <result column="student_id" property="studentId"/>
+    </resultMap>
+
+    <insert id="saveStudentFamily" parameterType="studentFamily">
+        insert into t_student_family (age,phone,health_status,`name`,student_id,`relation`,`job`,monthly_income)
+        values (#{age},#{phone},#{healthStatus},#{name},#{studentId},#{relation},#{job},#{monthlyIncome});
+    </insert>
+
+    <select id="validateUpload" resultType="int">
+        select count(*) from t_poverty_attachment
+        <where>
+            <if test="studentId != null">
+                student_id = #{studentId}
+            </if>
+            <if test="name != null">
+                AND `name` = #{name}
+            </if>
+        </where>
+    </select>
+
+    <insert id="saveAttachment" keyProperty="id" useGeneratedKeys="true" parameterType="povertyAttachment">
+        insert into t_poverty_attachment (student_id,url,`name`) values (#{studentId},#{url},#{name})
+    </insert>
+
+    <select id="getStudentStatus" resultType="studentStatusDto">
+        select IFNULL(status,0) as status,last_status as result from t_student_info where student_id = #{studentId}
+    </select>
+
+    <select id="isComplete" resultType="int">
+        select is_complete from t_student_info where student_id = #{studentId};
+    </select>
+
+    <select id="listPublicPoverty" resultType="publicPoverty">
+        select
+        class_name as className,
+        college_name as collegeName,
+        grade_name as gradeName,
+        major_name as majorName,
+        `name`,
+        result,
+        student_id as studentId
+        from t_public_poverty WHERE college_name = #{collegeName} AND is_school IS NULL
+    </select>
+
+    <select id="listPublicPovertySchool" resultType="publicPoverty">
+        select
+        class_name as className,
+        college_name as collegeName,
+        grade_name as gradeName,
+        major_name as majorName,
+        `name`,
+        result,
+        student_id as studentId
+        from t_public_poverty WHERE is_school = 1
+    </select>
+
+    <insert id="saveDissent" parameterType="dissent">
+        INSERT INTO t_dissent(content,plaintiff,defendant,plaintiff_name,`type`)
+        VALUES (#{content},#{plaintiff},#{defendant},#{plaintiffName},#{type})
+    </insert>
+
+    <select id="validateDissent" resultType="int">
+        select count(1) from t_dissent where plaintiff = #{studentId}
+        <choose>
+            <when test="type==0">
+                AND `type` is null;
+            </when>
+            <when test="type==1">
+                AND `type` = 1
+            </when>
+        </choose>
+    </select>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="specialPovertyProcess" name="specialPovertyProcess" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <userTask id="submitMaterial" name="提交困难认定材料" activiti:assignee="${studentId}"></userTask>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="submitMaterial"></sequenceFlow>
+    <userTask id="advisorReview" name="辅导员审核" activiti:candidateUsers="${advisorUserId}"></userTask>
+    <userTask id="collegeReview" name="学院审核" activiti:candidateUsers="${collegeUserId}"></userTask>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <userTask id="usertask3" name="学校审核" activiti:candidateUsers="${schoolUserId}"></userTask>
+    <sequenceFlow id="flow20" sourceRef="submitMaterial" targetRef="advisorReview"></sequenceFlow>
+    <sequenceFlow id="flow21" sourceRef="advisorReview" targetRef="collegeReview"></sequenceFlow>
+    <sequenceFlow id="flow22" sourceRef="collegeReview" targetRef="usertask3"></sequenceFlow>
+    <sequenceFlow id="flow23" sourceRef="usertask3" targetRef="endevent1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_specialPovertyProcess">
+    <bpmndi:BPMNPlane bpmnElement="specialPovertyProcess" id="BPMNPlane_specialPovertyProcess">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="730.0" y="10.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="submitMaterial" id="BPMNShape_submitMaterial">
+        <omgdc:Bounds height="55.0" width="105.0" x="695.0" y="90.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="advisorReview" id="BPMNShape_advisorReview">
+        <omgdc:Bounds height="55.0" width="105.0" x="695.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="collegeReview" id="BPMNShape_collegeReview">
+        <omgdc:Bounds height="55.0" width="105.0" x="695.0" y="420.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="100.0" y="430.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask3" id="BPMNShape_usertask3">
+        <omgdc:Bounds height="55.0" width="105.0" x="500.0" y="420.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="747.0" y="45.0"></omgdi:waypoint>
+        <omgdi:waypoint x="747.0" y="90.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
+        <omgdi:waypoint x="747.0" y="145.0"></omgdi:waypoint>
+        <omgdi:waypoint x="747.0" y="260.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
+        <omgdi:waypoint x="747.0" y="315.0"></omgdi:waypoint>
+        <omgdi:waypoint x="747.0" y="420.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
+        <omgdi:waypoint x="695.0" y="447.0"></omgdi:waypoint>
+        <omgdi:waypoint x="605.0" y="447.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow23" id="BPMNEdge_flow23">
+        <omgdi:waypoint x="500.0" y="447.0"></omgdi:waypoint>
+        <omgdi:waypoint x="135.0" y="447.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

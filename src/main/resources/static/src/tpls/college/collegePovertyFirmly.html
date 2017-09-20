@@ -1,0 +1,280 @@
+<div class="left-top-bar">
+    <input type="button" class="btn btn-primary mr10"
+           ng-if="vm.statusCode>3&&(vm.studentMaxStatus==7||vm.studentMaxStatus==8||vm.studentMaxStatus==101)"
+           value="提交至学院公示" ng-click="commitToCollegeNotice()">
+        <span ng-if="vm.statusCode>4&&(vm.studentMaxStatus==9||vm.studentMaxStatus==102||vm.studentMaxStatus==103)">
+            <span ng-if="vm.showFeedBack=='true'">
+                <input type="button" class="btn btn-primary mr10" value="提交至学校审核" ng-click="commitToSchoolCheck()">
+                <input ng-if="vm.studentMaxStatus==102||vm.studentMaxStatus==103" type="button"
+                       class="btn btn-primary mr10" value="审核驳回名单" ng-click="getRejectLists()">
+            </span>
+            <span ng-if="vm.showFeedBack=='false'">
+                <input ng-if="vm.studentMaxStatus!=9" type="button" class="btn btn-primary mr10" value="提交至学院公示"
+                       ng-click="commitToCollegeNotice()">
+                <input type="button" class="btn btn-primary mr10" value="处理公示" ng-click="getFeedBackShow()">
+            </span>
+        </span>
+    <input ng-if="vm.studentMaxStatus==104||vm.studentMaxStatus==105||vm.studentMaxStatus==107||vm.studentMaxStatus==108||vm.studentMaxStatus==109||vm.studentMaxStatus==111||vm.studentMaxStatus==112||vm.studentMaxStatus==113"
+           type="button" class="btn btn-primary mr10" value="提交至学校审核" ng-click="commitToSchoolCheck()">
+    <input ng-if="vm.studentMaxStatus==104||vm.studentMaxStatus==105||vm.studentMaxStatus==107||vm.studentMaxStatus==108||vm.studentMaxStatus==109||vm.studentMaxStatus==111||vm.studentMaxStatus==112||vm.studentMaxStatus==113"
+           type="button" class="btn btn-primary mr10" value="查看驳回原因" ng-click="getRejectReason()">
+    <input type="button" class="btn btn-warning "
+           ng-if="vm.statusCode>3&&(vm.studentMaxStatus==7||vm.studentMaxStatus==8||vm.studentMaxStatus==101)||vm.statusCode>4&&(vm.studentMaxStatus==9||vm.studentMaxStatus==102||vm.studentMaxStatus==103||vm.studentMaxStatus==104||vm.studentMaxStatus==105||vm.studentMaxStatus==107||vm.studentMaxStatus==108||vm.studentMaxStatus==109||vm.studentMaxStatus==112||vm.studentMaxStatus==113)"
+           value="驳回至辅导员" ng-click="rejectToAdvisor()">
+</div>
+<div class="h50 lh50 pl20 border-bottom text-status" ng-if="vm.statusCode>0">
+    <span ng-if="vm.statusCode==1">状态：正在进行学生申请</span>
+    <span ng-if="vm.statusCode==2">状态：正在进行民主评议</span>
+    <span ng-if="vm.statusCode==3">状态：正在进行辅导员审核</span>
+    <span ng-if="vm.statusCode==4">状态：正在进行学院审核</span>
+    <span ng-if="vm.statusCode==5">状态：正在进行学院公示</span>
+    <span ng-if="vm.statusCode==6">状态：正在进行学校审核</span>
+    <span ng-if="vm.statusCode==7">状态：正在进行学校公示</span>
+</div>
+<div class="h50 lh50 pl20 clearfix">
+    <span class="pull-left">
+        <span ng-if="vm.statusCode>=1">截止时间：{{vm.lastTime | date : 'yyyy-MM-dd'}}</span>
+        <span ng-if="vm.statusCode==1" class="ml10">当前已提交{{vm.totalNum}}人</span>
+            <a href="javascript:;" class="ml10"
+               ng-if="vm.statusCode==1||vm.statusCode==2||vm.statusCode==3||vm.statusCode==5||vm.statusCode==7||vm.statusCode==0"
+               ng-click="downloadList()">下载名单</a>
+
+    </span>
+    <search-btn show="vm.showFilter"></search-btn>
+    <select ng-if="(vm.statusCode>=5&&vm.studentMaxStatus==9)&&vm.showFeedBack=='true'"
+            class="pull-right mr10 mt10 h30 lh30 pt0 pb0 form-control w110"
+            name="mySelect" id="status" ng-change="init()"
+            ng-options="option.name for option in vm.statusData.availableOptions track by option.id"
+            ng-model="vm.statusData.selectedOption"></select>
+</div>
+<div ng-if="vm.statusCode!=5&&vm.studentMaxStatus!=9&&vm.studentMaxStatus!=102&&vm.studentMaxStatus!=103||(vm.statusCode==5&&(vm.studentMaxStatus==7||vm.studentMaxStatus==8||vm.studentMaxStatus==101))||(vm.statusCode==4&&vm.studentMaxStatus==9)">
+    <div ng-switch="vm.tableFlag" class="p20 pt0">
+        <div class="text-center" ng-switch-when="0">加载中……</div>
+        <div ng-switch-when="1">
+            <table ng-table="tableParams" class="table table-bordered table-striped table-hover "
+                   show-filter="vm.showFilter">
+                <tr ng-repeat="poorInfo in $data">
+                    <td title="'姓名'" filter="{ name: 'text'}" sortable="'name'">
+                        {{poorInfo.name}}
+                    </td>
+                    <td title="'学号'" filter="{ studentId: 'number'}" sortable="'studentId'">
+                        {{poorInfo.studentId}}
+                    </td>
+                    <td title="'年级'" filter="{ gradeName: 'text'}" sortable="'gradeName'">
+                        {{poorInfo.gradeName}}
+                    </td>
+                    <td title="'学院'" filter="{ collegeName: 'text'}" sortable="'collegeName'">
+                        {{poorInfo.collegeName}}
+                    </td>
+                    <td title="'专业'" filter="{ majorName: 'text'}" sortable="'majorName'">
+                        {{poorInfo.majorName}}
+                    </td>
+                    <td title="'班级'" filter="{ className: 'text'}" sortable="'className'">
+                        {{poorInfo.className}}
+                    </td>
+                    <td title="'申请材料'" class="col-md-1">
+                        <one-person-info id="{{poorInfo.studentId}}"></one-person-info>
+                    </td>
+                    <td title="'建议等级'" filter="{ suggestLevel: 'text'}" sortable="'suggestLevel'">
+                        {{poorInfo.suggestLevel}}
+                    </td>
+                    <td title="'民主评议'" filter="{ democracyAudit: 'text'}" sortable="'democracyAudit'"
+                        ng-class="{'未进行': 'bg-c9ebf7', '正在进行': 'bg-a7c07f', '已驳回': 'bg-f5795f'}[poorInfo.democracyAudit]">
+                        {{poorInfo.democracyAudit}}
+                    </td>
+                    <td title="'辅导员审核'" filter="{ advisorAudit: 'text'}" sortable="'advisorAudit'"
+                        ng-class="{'未进行': 'bg-c9ebf7', '正在进行': 'bg-a7c07f', '已驳回': 'bg-f5795f'}[poorInfo.advisorAudit]">
+                        {{poorInfo.advisorAudit}}
+                    </td>
+                    <td title="'学院审核'" filter="{ collegeAudit: 'text'}" sortable="'collegeAudit'"
+                        ng-if="vm.statusCode>3&&(poorInfo.status==8||poorInfo.status==104||poorInfo.status==105||poorInfo.status==108||poorInfo.status==109||poorInfo.status==112||poorInfo.status==113)">
+                        <select class="form-control p0 h25 w110 inline-block"
+                                ng-change="changeLevel(poorInfo.studentId,poorInfo.selected.name)"
+                                ng-options="option.name for option in vm.povertyLevelList track by option.name"
+                                ng-model="poorInfo.selected"></select>
+                    </td>
+                    <td title="'学院审核'" filter="{ collegeAudit: 'text'}" sortable="'collegeAudit'"
+                        ng-if="(vm.statusCode<4&&poorInfo.status==8)||(poorInfo.status!=8&&poorInfo.status!=104&&poorInfo.status!=105&&poorInfo.status!=108&&poorInfo.status!=109&&poorInfo.status!=112&&poorInfo.status!=113)"
+                        ng-class="{'未进行': 'bg-c9ebf7', '正在进行': 'bg-a7c07f', '已驳回': 'bg-f5795f'}[poorInfo.collegeAudit]">
+                        {{poorInfo.collegeAudit}}
+                    </td>
+                    <td title="'学院公示'" filter="{ collegeAnno: 'text'}" sortable="'collegeAnno'"
+                        ng-class="{'未进行': 'bg-c9ebf7', '正在进行': 'bg-a7c07f', '已驳回': 'bg-f5795f'}[poorInfo.collegeAnno]">
+                        {{poorInfo.collegeAnno}}
+                    </td>
+                    <td title="'学校审核'" sortable="'schoolAudit'" filter="{ schoolAudit: 'text'}"
+                        ng-class="{'未进行': 'bg-c9ebf7', '正在进行': 'bg-a7c07f', '已驳回': 'bg-f5795f'}[poorInfo.schoolAudit]">
+                        {{poorInfo.schoolAudit}}
+                    </td>
+                    <td title="'学校公示'" filter="{ schoolAnno: 'text'}" sortable="'schoolAnno'"
+                        ng-class="{'未进行': 'bg-c9ebf7', '正在进行': 'bg-a7c07f', '已驳回': 'bg-f5795f'}[poorInfo.schoolAnno]">
+                        {{poorInfo.schoolAnno}}
+                    </td>
+                    <td title="'认定结果'" filter="{ result: 'text'}" sortable="'result'"
+                        ng-class="{'未进行': 'bg-c9ebf7', '正在进行': 'bg-a7c07f', '已驳回': 'bg-f5795f'}[poorInfo.result]">
+                        {{poorInfo.result}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div ng-switch-when="2" class="text-center">暂无记录</div>
+    </div>
+</div>
+<div ng-if="vm.statusCode==5&&vm.studentMaxStatus!=7&&vm.studentMaxStatus!=8&&vm.studentMaxStatus!=101||(vm.statusCode>4&&(vm.studentMaxStatus==9||vm.studentMaxStatus==102||vm.studentMaxStatus==103))">
+    <div ng-switch="vm.tableFlag" class="p20 pt0">
+        <div class="text-center" ng-switch-when="0">加载中……</div>
+        <div ng-switch-when="1" class="mb20">
+            <div ng-if="vm.showFeedBack=='true'" class="feed-back">
+                <table ng-table="tableParams" class="table table-hover th-no-padding">
+                    <tr ng-repeat="feedback in $data">
+                        <td class="w50">
+                            <img class="pull-left" src="build/images/face.png" alt=""/>
+                        </td>
+                        <td>
+                            <p class="mb5">{{feedback.name}}
+                                {{feedback.studentId}}
+                                {{feedback.collegeName}}</p>
+                            <p class="small text-muted">{{feedback.time | date : 'yyyy-MM-dd HH:mm:ss'}}</p>
+                            <p class="feedback-content">{{feedback.content}}</p>
+                        </td>
+                        <td>
+                            <span ng-if="feedback.isDeal==0">
+                                <a href="javascript:;" ng-click="dealFeedbackShow(feedback.studentId)">处理</a>
+                            </span>
+                            <span ng-if="feedback.isDeal==1" class="text-muted">
+                                已处理
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div ng-if="vm.showFeedBack=='false'">
+                <table ng-table="tableParams" class="table table-bordered table-striped table-hover "
+                       show-filter="vm.showFilter">
+                    <tr ng-repeat="poorInfo in $data" class="slide-top-only-enter">
+                        <td title="'姓名'" filter="{ name: 'text'}" sortable="'name'">
+                            {{poorInfo.name}}
+                        </td>
+                        <td title="'学号'" filter="{ studentId: 'number'}" sortable="'studentId'">
+                            {{poorInfo.studentId}}
+                        </td>
+                        <td title="'年级'" filter="{ gradeName: 'text'}" sortable="'gradeName'">
+                            {{poorInfo.gradeName}}
+                        </td>
+                        <td title="'学院'" filter="{ collegeName: 'text'}" sortable="'collegeName'">
+                            {{poorInfo.collegeName}}
+                        </td>
+                        <td title="'专业'" filter="{ majorName: 'text'}" sortable="'majorName'">
+                            {{poorInfo.majorName}}
+                        </td>
+                        <td title="'班级'" filter="{ className: 'text'}" sortable="'className'">
+                            {{poorInfo.className}}
+                        </td>
+                        <td title="'申请材料'" class="col-md-1">
+                            <one-person-info id="{{poorInfo.studentId}}"></one-person-info>
+                        </td>
+                        <td title="'建议等级'" filter="{ suggestLevel: 'text'}" sortable="'suggestLevel'">
+                            {{poorInfo.suggestLevel}}
+                        </td>
+                        <td title="'民主评议'" filter="{ democracyAudit: 'text'}" sortable="'democracyAudit'"
+                            ng-class="{'未进行': 'bg-c9ebf7', '正在进行': 'bg-a7c07f', '已驳回': 'bg-f5795f'}[poorInfo.democracyAudit]">
+                            {{poorInfo.democracyAudit}}
+                        </td>
+                        <td title="'辅导员审核'" filter="{ advisorAudit: 'text'}" sortable="'advisorAudit'"
+                            ng-class="{'未进行': 'bg-c9ebf7', '正在进行': 'bg-a7c07f', '已驳回': 'bg-f5795f'}[poorInfo.advisorAudit]">
+                            {{poorInfo.advisorAudit}}
+                        </td>
+                        <td title="'学院审核'" filter="{ collegeAudit: 'text'}" sortable="'collegeAudit'"
+                            ng-if="vm.statusCode>3&&(poorInfo.status==7||poorInfo.status==8||poorInfo.status==9||poorInfo.status==103||poorInfo.status==104||poorInfo.status==105||poorInfo.status==108||poorInfo.status==109||poorInfo.status==112||poorInfo.status==113)">
+                            <select class="form-control p0 h25 w110 inline-block"
+                                    ng-change="changeLevel(poorInfo.studentId,poorInfo.selected.name)"
+                                    ng-options="option.name for option in vm.povertyLevelList track by option.name"
+                                    ng-model="poorInfo.selected"></select>
+                        </td>
+                        <td title="'学院审核'" filter="{ collegeAudit: 'text'}" sortable="'collegeAudit'"
+                            ng-if="(vm.statusCode<4&&poorInfo.status==7)||(poorInfo.status!=7&&poorInfo.status!=8&&poorInfo.status!=9&&poorInfo.status!=103&&poorInfo.status!=104&&poorInfo.status!=105&&poorInfo.status!=108&&poorInfo.status!=109&&poorInfo.status!=112&&poorInfo.status!=113)"
+                            ng-class="{'未进行': 'bg-c9ebf7', '正在进行': 'bg-a7c07f', '已驳回': 'bg-f5795f'}[poorInfo.collegeAudit]">
+                            {{poorInfo.collegeAudit}}
+                        </td>
+                        <td title="'学院公示'" filter="{ collegeAnno: 'text'}" sortable="'collegeAnno'"
+                            ng-class="{'未进行': 'bg-c9ebf7', '正在进行': 'bg-a7c07f', '已驳回': 'bg-f5795f'}[poorInfo.collegeAnno]">
+                            {{poorInfo.collegeAnno}}
+                        </td>
+                        <td title="'学校审核'" sortable="'schoolAudit'" filter="{ schoolAudit: 'text'}"
+                            ng-class="{'未进行': 'bg-c9ebf7', '正在进行': 'bg-a7c07f', '已驳回': 'bg-f5795f'}[poorInfo.schoolAudit]">
+                            {{poorInfo.schoolAudit}}
+                        </td>
+                        <td title="'学校公示'" filter="{ schoolAnno: 'text'}" sortable="'schoolAnno'"
+                            ng-class="{'未进行': 'bg-c9ebf7', '正在进行': 'bg-a7c07f', '已驳回': 'bg-f5795f'}[poorInfo.schoolAnno]">
+                            {{poorInfo.schoolAnno}}
+                        </td>
+                        <td title="'认定结果'" filter="{ result: 'text'}" sortable="'result'"
+                            ng-class="{'未进行': 'bg-c9ebf7', '正在进行': 'bg-a7c07f', '已驳回': 'bg-f5795f'}[poorInfo.result]">
+                            {{poorInfo.result}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div ng-switch-when="2" class="text-center">暂无记录</div>
+    </div>
+</div>
+<!-- rejectToAdvisor -->
+<div class="modal fade" id="rejectToAdvisor" tabindex="-1" role="dialog" aria-labelledby="myModalLabelfamily">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabelfamily">驳回至辅导员</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="" class="col-sm-3 control-label">驳回至辅导员</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" id="advisor">
+                                <option ng-repeat="advisor in vm.advisorList" value="{{advisor.advisorId}}">
+                                    {{advisor.advisorName}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-3 control-label">驳回原因</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" name="" id="" cols="30" rows="5"
+                                      ng-model="vm.rejectToAdvisor.content"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="addReject()" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- dealFeedback -->
+<div class="modal fade" id="dealFeedback" tabindex="-1" role="dialog" aria-labelledby="dealFeedback1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="dealFeedback1">处理描述</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <textarea class="form-control w80 margin-auto" name="" cols="30" rows="5" maxlength="1000"
+                                  ng-model="vm.remark"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="dealFeedback()" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

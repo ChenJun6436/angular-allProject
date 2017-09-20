@@ -1,0 +1,88 @@
+<div class="h40 lh40 pl20 border-bottom text-status">
+    <span>状态：{{processName}}</span>
+    <a href="/#/showRejectReason" target="_blank" ng-if="vm.isRejected" class="btn btn-warning h30 lh30">驳回原因</a>
+</div>
+<div class="h50 lh50 pl20 clearfix">
+        <span class="pull-left">
+            <span ng-if="povertyBigStatus>=1">截止时间：{{lastTime | date : 'yyyy-MM-dd'}}</span>
+            <download  class="ml10"></download>
+        </span>
+    <search-btn show="vm.showFilter"></search-btn>
+</div>
+<div ng-switch="vm.tableFlag" class="p20 pt0">
+    <div class="text-center" ng-switch-when="0">加载中……</div>
+    <div ng-switch-when="1">
+        <table ng-table="tableParams" class="table table-bordered table-striped table-hover "
+               show-filter="vm.showFilter">
+            <tr ng-repeat="student in $data">
+                <td title="'姓名'" filter="{ name: 'text'}" sortable="'name'">
+                    {{student.name}}
+                </td>
+                <td title="'学号'" filter="{ studentId: 'text'}" sortable="'studentId'">
+                    {{student.studentId}}
+                </td>
+                <td title="'年级'" filter="{ gradeName: 'text'}" sortable="'gradeName'">
+                    {{student.gradeName}}
+                </td>
+                <td title="'学院'" filter="{ collegeName: 'text'}" sortable="'collegeName'">
+                    {{student.collegeName}}
+                </td>
+                <td title="'专业'" filter="{ majorName: 'text'}" sortable="'majorName'">
+                    {{student.majorName}}
+                </td>
+                <td title="'班级'" filter="{ className: 'text'}" sortable="'className'">
+                    {{student.className}}
+                </td>
+                <td title="'申请材料'">
+                    <one-person-info id="{{student.studentId}}"></one-person-info>
+                </td>
+                <td title="'民主评议'" filter="{ classResult: 'text'}" sortable="'classResult'"
+                    ng-class="{'未进行': 'bg-c9ebf7', '驳回': 'bg-f5795f'}[student.classResult]">
+                    {{student.classResult}}
+                </td>
+                <td title="'辅导员审核'" filter="{ advisorResult: 'text'}" sortable="'advisorResult'"
+                    ng-class="{'未进行': 'bg-c9ebf7', '驳回': 'bg-f5795f'}[student.advisorResult]">
+                    <poverty-level-select
+                            process-instance-id="{{student.processInstanceId}}"
+                            edit="student.taskId"
+                            default-level="student.advisorResult"
+                            step="advisor"
+                            is-commiting="vm.inCommiting"
+                    ></poverty-level-select>
+                </td>
+                <td title="'学院审核'" filter="{ collegeResult: 'text'}" sortable="'collegeResult'"
+                    ng-class="{'未进行': 'bg-c9ebf7', '驳回': 'bg-f5795f'}[student.collegeResult]">
+                    {{student.collegeResult}}
+                </td>
+                <td title="'学院公示'" filter="{ collegeOpenResult: 'text'}" sortable="'collegeOpenResult'"
+                    ng-class="{'未进行': 'bg-c9ebf7', '驳回': 'bg-f5795f'}[student.collegeOpenResult]">
+                    {{student.collegeOpenResult}}
+                </td>
+                <td title="'学校审核'" filter="{ schoolResult: 'text'}" sortable="'schoolResult'"
+                    ng-class="{'未进行': 'bg-c9ebf7', '驳回': 'bg-f5795f'}[student.schoolResult]">
+                    {{student.schoolResult}}
+                </td>
+                <td title="'学校公示'" filter="{ schoolOpenResult: 'text'}" sortable="'schoolOpenResult'"
+                    ng-class="{'未进行': 'bg-c9ebf7', '驳回': 'bg-f5795f'}[student.schoolOpenResult]">
+                    {{student.schoolOpenResult}}
+                </td>
+
+                <td title="'认定结果'" filter="{ result: 'text'}" sortable="'result'"
+                    ng-class="{'未进行': 'bg-c9ebf7', '驳回': 'bg-f5795f'}[student.result]">
+                    {{student.result}}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div ng-switch-when="2" class="text-center">暂无记录</div>
+</div>
+<div class="footer-bar" ng-if="vm.commitBtnShow">
+    <ul class="clearfix">
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <div class="text-center mt20">
+        <operate-process  class="btn btn-warning h40 w180" is-commiting="vm.inCommiting" btn-value="提交至学院审核" step="advisor" is-pass="1" refresh="init()"></operate-process>
+    </div>
+</div>
